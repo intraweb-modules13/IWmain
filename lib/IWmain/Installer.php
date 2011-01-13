@@ -19,14 +19,14 @@ class IWmain_Installer extends Zikula_Installer
      */
     public function install() {
         // Create module table
-        if (!DBUtil::createTable('iw_main')) return false;
+        if (!DBUtil::createTable('IWmain')) return false;
 
         //Create indexes
         $pntable = DBUtil::getTables();
-        $c = $pntable['iw_main_column'];
-        if (!DBUtil::createIndex($c['module'], 'iw_main', 'module')) return false;
-        if (!DBUtil::createIndex($c['name'], 'iw_main', 'name')) return false;
-        if (!DBUtil::createIndex($c['uid'], 'iw_main', 'uid')) return false;
+        $c = $pntable['IWmain_column'];
+        if (!DBUtil::createIndex($c['module'], 'IWmain', 'module')) return false;
+        if (!DBUtil::createIndex($c['name'], 'IWmain', 'name')) return false;
+        if (!DBUtil::createIndex($c['uid'], 'IWmain', 'uid')) return false;
 
         //Create module vars
         $this->setVar('url', 'http://phobos.xtec.net/intraweb')
@@ -55,7 +55,7 @@ class IWmain_Installer extends Zikula_Installer
      */
     public function uninstall() {
         // Delete module table
-        DBUtil::dropTable('iw_main');
+        DBUtil::dropTable('IWmain');
 
         //Delete module vars
         $this->delVar('url')
