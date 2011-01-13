@@ -1,5 +1,5 @@
 // **************************************************
-// IW_main module
+// IWmain module
 // This module contains some functions and complements (javascripts, images,
 // configuration parameters...) that are used in the Intraweb modules. The most for modules that
 // are associated with the Intraweb project needs this module to run. This module have a navigation
@@ -28,11 +28,11 @@
 //************************
 // Module installation
 //************************
-Locate the files of the modules IW_main in the modules directory, install and active it following the usual methods used in Zikula modules.
+Locate the files of the modules IWmain in the modules directory, install and active it following the usual methods used in Zikula modules.
 
 Remember that the follow permission is necessary:
 
-group  IW_main           ::     read
+group  IWmain           ::     read
 
 to make possible users access to this module.
 

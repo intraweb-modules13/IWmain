@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: iw_main module\n"
+"Project-Id-Version: IWmain module\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-10 13:41+0200\n"
 "PO-Revision-Date: 2010-09-01 14:20+0100\n"
@@ -21,13 +21,13 @@ msgstr ""
 
 #: pninit.php:41
 #: pninit.php:101
-#: pntemplates/iw_main_admin_conf.htm:87
+#: pntemplates/IWmain_admin_conf.htm:87
 msgid "Header text of the cron automatic emails with the new things to see"
 msgstr "Text de l'encapçalament dels missatges automàtics amb les novetats"
 
 #: pninit.php:42
 #: pninit.php:102
-#: pntemplates/iw_main_admin_conf.htm:92
+#: pntemplates/IWmain_admin_conf.htm:92
 msgid "Footer text of the email"
 msgstr "Text del peu del missatge"
 
@@ -136,11 +136,11 @@ msgid "The configuration have been updated"
 msgstr "S'ha modificat la configuració"
 
 #: pnadmin.php:276
-msgid "The current version of iw_main module is incorrect. You must upgrade it before install, upgrade or use this module."
-msgstr "La versió actual del mòdul iw_main module no és vàlida. L'heu d'actualitzar per poder instal·lar, actualitzar i utilitzar aquest mòdul."
+msgid "The current version of IWmain module is incorrect. You must upgrade it before install, upgrade or use this module."
+msgstr "La versió actual del mòdul IWmain module no és vàlida. L'heu d'actualitzar per poder instal·lar, actualitzar i utilitzar aquest mòdul."
 
 #: pntemplates/plugins/function.iwmainmenulinks.php:22
-#: pntemplates/iw_main_admin_main.htm:4
+#: pntemplates/IWmain_admin_main.htm:4
 msgid "Programmed sequences information"
 msgstr "Informació de les seqüències programades"
 
@@ -149,7 +149,7 @@ msgid "Configure parameters"
 msgstr "Paràmetres de configuració"
 
 #: pntemplates/plugins/function.iwmainmenulinks.php:24
-#: pntemplates/iw_main_admin_changeAvatarView.htm:4
+#: pntemplates/IWmain_admin_changeAvatarView.htm:4
 msgid "Avatar change request"
 msgstr "Sol·licituds de canvi d'avatar"
 
@@ -191,7 +191,7 @@ msgid "It has worked incorrectly"
 msgstr "Ha funcionat de forma incorrecta"
 
 #: iwcron.php:72
-#: pntemplates/iw_main_user_main.htm:14
+#: pntemplates/IWmain_user_main.htm:14
 msgid "It has not worked"
 msgstr "No ha funcionat"
 
@@ -237,13 +237,13 @@ msgid "All the tries of sending messages have failed. The number of tries has be
 msgstr "Tots els intents d'enviament de missatges han fallat. El nombre de vegades que s'ha provat ha estat de"
 
 #: pnversion.php:13
-#: pntemplates/iw_main_user_module_info.htm:14
+#: pntemplates/IWmain_user_module_info.htm:14
 msgid "Module description"
 msgstr "Funcionalitats base utilitzades per la resta de mòduls IW"
 
 #: pnversion.php:15
-msgid "iw_main"
-msgstr "iw_main"
+msgid "IWmain"
+msgstr "IWmain"
 
 #: pnblocks/iwnews.php:29
 msgid "Show news of the user"
@@ -283,7 +283,7 @@ msgid "Form"
 msgstr "Formulari"
 
 #: pnuser.php:623
-#: pntemplates/iw_main_user_main.htm:33
+#: pntemplates/IWmain_user_main.htm:33
 msgid "Avatar replacement"
 msgstr "Canvi d'avatar"
 
@@ -338,275 +338,275 @@ msgid "Failed to deleted"
 msgstr "S'ha produït un error en esborrar un fitxer del servidor."
 
 #: pnaccountapi.php:22
-#: pntemplates/iw_main_block_iwnews.htm:29
+#: pntemplates/IWmain_block_iwnews.htm:29
 msgid "Configure"
 msgstr "Configura"
 
-#: pntemplates/iw_main_admin_main.htm:7
+#: pntemplates/IWmain_admin_main.htm:7
 msgid "The cron.php file does not exists in the root directory of your site. The programmed sequences are not available. The programmed sequences improve the work of Intraweb modules."
 msgstr "El fitxer cron.php no existeix a l'arrel del teu portal. No es poden portar a terme seqüències programades. Es recomana l'us de les seqüències programades perquè optimitzen el funcionament dels portals basats en Intraweb."
 
-#: pntemplates/iw_main_admin_main.htm:11
+#: pntemplates/IWmain_admin_main.htm:11
 msgid "The Mailer module is not active and the cron can not be executed. You should active the Mailer module and configure it properly."
 msgstr "No tens activat el mòdul Mailer i el cron no es pot executar. Tingués present que a part d'activar-lo també l'hauràs de configurar."
 
-#: pntemplates/iw_main_admin_main.htm:17
+#: pntemplates/IWmain_admin_main.htm:17
 msgid "The cron has not been executed for long time. Now could be a good moment to execute it."
 msgstr "Fa massa temps que no s'executa el cron. Ara, podria ser un bon moment per fer-ho."
 
-#: pntemplates/iw_main_admin_main.htm:21
+#: pntemplates/IWmain_admin_main.htm:21
 msgid "Execute the cron now"
 msgstr "Executa el cron ara"
 
-#: pntemplates/iw_main_admin_main.htm:25
-#: pntemplates/iw_main_user_module_info.htm:2
-#: pntemplates/iw_main_user_module_info.htm:43
-#: pntemplates/iw_main_user_main.htm:111
-#: pntemplates/iw_main_admin_conf.htm:99
-#: pntemplates/iw_main_admin_changeAvatarView.htm:49
+#: pntemplates/IWmain_admin_main.htm:25
+#: pntemplates/IWmain_user_module_info.htm:2
+#: pntemplates/IWmain_user_module_info.htm:43
+#: pntemplates/IWmain_user_main.htm:111
+#: pntemplates/IWmain_admin_conf.htm:99
+#: pntemplates/IWmain_admin_changeAvatarView.htm:49
 msgid "About this module"
 msgstr "Pel que fa a aquest mòdul"
 
-#: pntemplates/iw_main_block_iwnews.htm:9
+#: pntemplates/IWmain_block_iwnews.htm:9
 msgid "Flagged items"
 msgstr "Elements marcats"
 
-#: pntemplates/iw_main_block_iwnews.htm:24
+#: pntemplates/IWmain_block_iwnews.htm:24
 msgid "Regenerate"
 msgstr "Regenera"
 
-#: pntemplates/iw_main_user_file_not_found.htm:2
+#: pntemplates/IWmain_user_file_not_found.htm:2
 msgid "File not found"
 msgstr "No s'ha trobat el fitxer"
 
-#: pntemplates/iw_main_user_file_not_found.htm:3
+#: pntemplates/IWmain_user_file_not_found.htm:3
 msgid "File name"
 msgstr "Nom del fitxer"
 
-#: pntemplates/iw_main_user_file_not_found.htm:5
-#: pntemplates/iw_main_user_module_info.htm:49
+#: pntemplates/IWmain_user_file_not_found.htm:5
+#: pntemplates/IWmain_user_module_info.htm:49
 msgid "Go back"
 msgstr "Torna enrere"
 
-#: pntemplates/iw_main_admin_menu.htm:4
-#: pntemplates/iw_main_user_menu.htm:2
+#: pntemplates/IWmain_admin_menu.htm:4
+#: pntemplates/IWmain_user_menu.htm:2
 msgid "Intraweb"
 msgstr "Intraweb"
 
-#: pntemplates/iw_main_admin_menu.htm:4
-#: pntemplates/iw_main_user_menu.htm:2
-#: pntemplates/iw_main_user_main.htm:2
+#: pntemplates/IWmain_admin_menu.htm:4
+#: pntemplates/IWmain_user_menu.htm:2
+#: pntemplates/IWmain_user_main.htm:2
 msgid "Intraweb main module"
 msgstr "Mòdul principal Intraweb"
 
-#: pntemplates/iw_main_user_module_info.htm:6
+#: pntemplates/IWmain_user_module_info.htm:6
 msgid "Module name"
 msgstr "Nom del mòdul"
 
-#: pntemplates/iw_main_user_module_info.htm:22
+#: pntemplates/IWmain_user_module_info.htm:22
 msgid "Version"
 msgstr "Versió"
 
-#: pntemplates/iw_main_user_module_info.htm:30
+#: pntemplates/IWmain_user_module_info.htm:30
 msgid "Author"
 msgstr "Autor/a"
 
-#: pntemplates/iw_main_user_module_info.htm:43
+#: pntemplates/IWmain_user_module_info.htm:43
 msgid "This is a"
 msgstr "Aquest és un"
 
-#: pntemplates/iw_main_user_module_info.htm:45
+#: pntemplates/IWmain_user_module_info.htm:45
 msgid "Contact us through the email address"
 msgstr "Contacta amb nosaltres per mitjà de l'adreça de correu"
 
-#: pntemplates/iw_main_user_main.htm:3
+#: pntemplates/IWmain_user_main.htm:3
 msgid "User configurable blocks values"
 msgstr "Configuració dels paràmetres de comportament dels blocs."
 
-#: pntemplates/iw_main_user_main.htm:7
+#: pntemplates/IWmain_user_main.htm:7
 msgid "News and marked blocks"
 msgstr "Bloc de novetats i marcats"
 
-#: pntemplates/iw_main_user_main.htm:9
+#: pntemplates/IWmain_user_main.htm:9
 msgid "I want that block will show details"
 msgstr "Vull que en el bloc d'elements marcats es mostrin els detalls"
 
-#: pntemplates/iw_main_user_main.htm:18
+#: pntemplates/IWmain_user_main.htm:18
 msgid "If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"
 msgstr "Si volguessis el sistema et podria donar la possibilitat de rebre per correu electrònic resums diàris de les novetats, pero no s'ha trobat el teu correu electrònic. Pots definir la teva adreça de correu electrònic des"
 
-#: pntemplates/iw_main_user_main.htm:19
+#: pntemplates/IWmain_user_main.htm:19
 msgid "this link."
 msgstr "d'aquest enllaç."
 
-#: pntemplates/iw_main_user_main.htm:23
+#: pntemplates/IWmain_user_main.htm:23
 msgid "I want to be subscribed to thinks to see"
 msgstr "Vull estar subscrit a les novetats"
 
-#: pntemplates/iw_main_user_main.htm:25
+#: pntemplates/IWmain_user_main.htm:25
 msgid "The subscrition mail is:"
 msgstr "L'adreça de la subscripció és:"
 
-#: pntemplates/iw_main_user_main.htm:41
-#: pntemplates/iw_main_admin_changeAvatarView.htm:36
+#: pntemplates/IWmain_user_main.htm:41
+#: pntemplates/IWmain_admin_changeAvatarView.htm:36
 msgid "Delete"
 msgstr "Esborrament"
 
-#: pntemplates/iw_main_user_main.htm:47
+#: pntemplates/IWmain_user_main.htm:47
 msgid "Upload your avatar"
 msgstr "Puja el teu avatar"
 
-#: pntemplates/iw_main_user_main.htm:49
+#: pntemplates/IWmain_user_main.htm:49
 msgid "If you want, you cam change your avatar from here:"
 msgstr "Si vols pots canviar el teu avatar des d'aquí:"
 
-#: pntemplates/iw_main_user_main.htm:53
+#: pntemplates/IWmain_user_main.htm:53
 msgid "(The avatar change required administrator validation)"
 msgstr "(El canvi d'avatar requereix la validació d'un administrador/a)"
 
-#: pntemplates/iw_main_user_main.htm:59
+#: pntemplates/IWmain_user_main.htm:59
 msgid "Your avatar's image sizes must be 90x120 px aproximately with one of the next formats: jpg, gif or png."
 msgstr "La imatge del teu avatar ha de ser d'aproximadament 90x120 px, en els formats jpg, gif o png."
 
-#: pntemplates/iw_main_user_main.htm:64
+#: pntemplates/IWmain_user_main.htm:64
 msgid "Your avatar changement request is waiting for an administrator validation."
 msgstr "La teva sol·licitud de canvi d'avatar està pendent de validació."
 
-#: pntemplates/iw_main_user_main.htm:75
+#: pntemplates/IWmain_user_main.htm:75
 msgid "Google account"
 msgstr "Compte de Google"
 
-#: pntemplates/iw_main_user_main.htm:77
+#: pntemplates/IWmain_user_main.htm:77
 msgid "Sincronize agenda with Google calendar"
 msgstr "Sincronitza l'agenda amb Google calendar"
 
-#: pntemplates/iw_main_user_main.htm:82
+#: pntemplates/IWmain_user_main.htm:82
 msgid "Google e-mail"
 msgstr "Correu electrònic a Google"
 
-#: pntemplates/iw_main_user_main.htm:86
+#: pntemplates/IWmain_user_main.htm:86
 msgid "Google password"
 msgstr "Contrasenya a Google"
 
-#: pntemplates/iw_main_user_main.htm:90
+#: pntemplates/IWmain_user_main.htm:90
 msgid "Refresh time for gCalendar sincronitation"
 msgstr "Temps de refresc per a la sincronització en minuts"
 
-#: pntemplates/iw_main_user_main.htm:99
+#: pntemplates/IWmain_user_main.htm:99
 msgid "As many small this value the navigation into agendas will be slower. In any moment the automatical sincronization is possible"
 msgstr "Com més petit sigui aquest valor més lenta serà la navegació pel calendari. En tot moment es pot fer una sincronització no automàtica"
 
-#: pntemplates/iw_main_user_main.htm:107
+#: pntemplates/IWmain_user_main.htm:107
 msgid "OK"
 msgstr "D'acord"
 
-#: pntemplates/iw_main_admin_conf.htm:4
+#: pntemplates/IWmain_admin_conf.htm:4
 msgid "Modify the configuration"
 msgstr "Modifica la configuració"
 
-#: pntemplates/iw_main_admin_conf.htm:9
+#: pntemplates/IWmain_admin_conf.htm:9
 msgid "Server files directori"
 msgstr "Directori dels fitxers al servidor"
 
-#: pntemplates/iw_main_admin_conf.htm:14
+#: pntemplates/IWmain_admin_conf.htm:14
 msgid "Attached files directory hasn't been found"
 msgstr "El directori pels fitxers adjunts no s'ha trobat"
 
-#: pntemplates/iw_main_admin_conf.htm:19
-#: pntemplates/iw_main_admin_conf.htm:34
-#: pntemplates/iw_main_admin_conf.htm:70
+#: pntemplates/IWmain_admin_conf.htm:19
+#: pntemplates/IWmain_admin_conf.htm:34
+#: pntemplates/IWmain_admin_conf.htm:70
 msgid "This folder is not writeable."
 msgstr "Aquest directori ha de tenir permisos d'escriptura."
 
-#: pntemplates/iw_main_admin_conf.htm:24
+#: pntemplates/IWmain_admin_conf.htm:24
 msgid "Folder where to look for the users pictures"
 msgstr "Directori on buscar les fotos dels usuaris"
 
-#: pntemplates/iw_main_admin_conf.htm:29
+#: pntemplates/IWmain_admin_conf.htm:29
 msgid "Users pictures directori hasn't been found"
 msgstr "El directori de fotos dels usuaris no s'ha trobat"
 
-#: pntemplates/iw_main_admin_conf.htm:40
+#: pntemplates/IWmain_admin_conf.htm:40
 msgid "The user can change theirs avatars"
 msgstr "Els usuaris es poden canviar l'avatar."
 
-#: pntemplates/iw_main_admin_conf.htm:44
+#: pntemplates/IWmain_admin_conf.htm:44
 msgid "The avatar replacement needs validation"
 msgstr "El canvi d'avatar requereix validació per part d'un administrador/a."
 
-#: pntemplates/iw_main_admin_conf.htm:50
+#: pntemplates/IWmain_admin_conf.htm:50
 msgid "The users can change theirs avatars because the directori of pictures or the temporal directori don' exist or them have not got the correct permissions."
 msgstr "Els usuaris no es poden canviar l'avatar perquè el directori de fotos o el directori temporal no existeixen o no tenen permisos d'escriptura."
 
-#: pntemplates/iw_main_admin_conf.htm:55
+#: pntemplates/IWmain_admin_conf.htm:55
 msgid "The users can change theirs avatars because the php's gd extensión is not available"
 msgstr "Els usuaris no es poden canviar l'avatar perquè la llibreria de php gd no està disponible."
 
-#: pntemplates/iw_main_admin_conf.htm:60
+#: pntemplates/IWmain_admin_conf.htm:60
 msgid "Folder for temporal files"
 msgstr "Directori de fitxers temporals"
 
-#: pntemplates/iw_main_admin_conf.htm:65
+#: pntemplates/IWmain_admin_conf.htm:65
 msgid "Temporal files directory hasn't been found"
 msgstr "El directori de fitxers temporals no s'ha trobat"
 
-#: pntemplates/iw_main_admin_conf.htm:74
+#: pntemplates/IWmain_admin_conf.htm:74
 msgid "Extensions allowed"
 msgstr "Extensions permeses"
 
-#: pntemplates/iw_main_admin_conf.htm:78
+#: pntemplates/IWmain_admin_conf.htm:78
 msgid "Maximum size for uploaded files"
 msgstr "Mida màxima dels fitxers"
 
-#: pntemplates/iw_main_admin_conf.htm:82
+#: pntemplates/IWmain_admin_conf.htm:82
 msgid "Life time of users vars (days)"
 msgstr "Temps de vida de les variables d'usuari (dies)"
 
-#: pntemplates/iw_main_admin_conf.htm:96
+#: pntemplates/IWmain_admin_conf.htm:96
 msgid "Execute"
 msgstr "Executa"
 
-#: pntemplates/iw_main_admin_conf.htm:96
+#: pntemplates/IWmain_admin_conf.htm:96
 msgid "Save the changes"
 msgstr "Desa els canvis"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:9
+#: pntemplates/IWmain_admin_changeAvatarView.htm:9
 msgid "User"
 msgstr "Usuari/ària"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:10
+#: pntemplates/IWmain_admin_changeAvatarView.htm:10
 msgid "Current avatar"
 msgstr "Avatar actual"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:11
+#: pntemplates/IWmain_admin_changeAvatarView.htm:11
 msgid "New avatar"
 msgstr "Avatar nou"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:12
+#: pntemplates/IWmain_admin_changeAvatarView.htm:12
 msgid "Options"
 msgstr "Opcions"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:32
+#: pntemplates/IWmain_admin_changeAvatarView.htm:32
 msgid "Confirm the avatar change"
 msgstr "Confirma que permets canviar"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:33
+#: pntemplates/IWmain_admin_changeAvatarView.htm:33
 msgid "Approve the avatar changer"
 msgstr "Aprova el canvi d'avatar"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:35
+#: pntemplates/IWmain_admin_changeAvatarView.htm:35
 msgid "Confirm the deletion"
 msgstr "Confirma que vols esborrar"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:43
+#: pntemplates/IWmain_admin_changeAvatarView.htm:43
 msgid "Not requests found"
 msgstr "No s'han trobat sol·licituds"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:52
+#: pntemplates/IWmain_admin_changeAvatarView.htm:52
 msgid "--- Deleting the avatar ---"
 msgstr "--- Esborrant l'avatar ---"
 
-#: pntemplates/iw_main_admin_changeAvatarView.htm:53
+#: pntemplates/IWmain_admin_changeAvatarView.htm:53
 msgid "--- Changing the avatar ---"
 msgstr "--- Canviant l'avatar ---"
 
