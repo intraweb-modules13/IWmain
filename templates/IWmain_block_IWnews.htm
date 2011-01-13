@@ -1,0 +1,34 @@
+{ajaxheader modname=IWmain filename=IWmain.js}
+<div id="IWmain_block_news">
+    <table width="100%">
+        {$news}
+    </table>
+</div>
+
+<div style="margin-top: 20px;">
+    {gt text="Flagged items" domain="module_IWmain"}
+    {img modname='core' src='flag.gif' set='icons/extrasmall'}
+</div>
+{if $flags neq ''}
+    <div id="IWmain_block_flagged">
+        <table width="100%">
+            {$flags}
+        </table>
+    </div>
+{else}
+    <div id="IWmain_block_flagged"></div>
+{/if}
+<br />
+<div style="float: left;">
+    <a href="{modurl modname="IWmain" type="user" func="regenBlockNews"}">
+        {gt text="Regenerate" domain="module_IWmain"} {img modname='core' src='recur.gif' set='icons/extrasmall'   __alt="Regenerate" __title="Regenerate"}
+    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+<div style="float: left;">
+    <a href="{modurl modname="IWmain" type="user" func="main"}">
+        {gt text="Configure" domain="module_IWmain"} {img modname='core' src='package_settings.gif' set='icons/extrasmall'   __alt="Configure" __title="Configure"}
+    </a>
+</div>
+<div style="clear: both;">
+    &nbsp;
+</div>
