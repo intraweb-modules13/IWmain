@@ -1212,8 +1212,9 @@ class IWmain_Controller_User extends Zikula_Controller
                                     array('sv' => $args['sv']));
         if (!empty($args['plus'])) {$items[] = array('id'=>0,
                                                      'name' => $args['plus']);}
+        $less = (isset($args['less'])) ? $args['less'] : 0;
         foreach ($groups as $group) {
-            if ($group['gid'] != $args['less']) {
+            if ($group['gid'] != $less) {
                 $items[$group['gid']] = array('id' => $group['gid'],
                                               'name' => $group['name']);
             }
