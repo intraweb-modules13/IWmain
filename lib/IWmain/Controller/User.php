@@ -1804,7 +1804,8 @@ class IWmain_Controller_User extends Zikula_Controller
                            'xml'  => array('type' => 'application/xml', 'icon' => 'xml.gif'),
                            'xsl'  => array('type' => 'text/xml', 'icon' => 'xml.gif'),
                            'zip'  => array('type' => 'application/zip', 'icon' => 'zip.gif'));
-        $return = $mimeTypes[$extension];
+        $return = ($extension != null) ? $mimeTypes[$extension] : false;
+
         if ($return['type'] == '') {$return = $mimeTypes['xxx'];}
         return $return;
     }
