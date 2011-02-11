@@ -44,7 +44,7 @@ class IWmain_Api_User extends Zikula_Api
     }
 
     /**
-     * Get information from iw_users of all users
+     * Get information from IWusers of all users
      * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @return:	And array with the users
     */
@@ -55,7 +55,7 @@ class IWmain_Api_User extends Zikula_Api
         $items = array();
         $pntable = DBUtil::getTables();
         $where = "";
-        $c = $pntable['iw_users_column'];
+        $c = $pntable['IWusers_column'];
         if ($fromArray != null && count($fromArray) > 0) {
             foreach ($fromArray as $f) {
                 $where .= " $c[uid] = $f[uid] OR";
@@ -72,7 +72,7 @@ class IWmain_Api_User extends Zikula_Api
             $where = substr($where,0,-3);
         }
         // get the objects from the db
-        $items = DBUtil::selectObjectArray('iw_users', $where);
+        $items = DBUtil::selectObjectArray('IWusers', $where);
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
         if ($items === false) {
@@ -110,7 +110,7 @@ class IWmain_Api_User extends Zikula_Api
     }
 
     /**
-     * Get information from iw_users of an users
+     * Get information from IWusers of an users
      * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   id of the user
      * @return:	And array with the user information
@@ -124,10 +124,10 @@ class IWmain_Api_User extends Zikula_Api
             return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
         }
         $pntable = DBUtil::getTables();
-        $c = $pntable['iw_users_column'];
+        $c = $pntable['IWusers_column'];
         $where = "$c[uid]=$uid";
         // get the objects from the db
-        $items = DBUtil::selectObjectArray('iw_users', $where);
+        $items = DBUtil::selectObjectArray('IWusers', $where);
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
         if ($items === false) {

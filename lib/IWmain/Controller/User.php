@@ -81,18 +81,18 @@ class IWmain_Controller_User extends Zikula_Controller
                 $canChangeAvatar = false;
             }
         }
-        // Checks if module iw_agendas is installed. If it exists and the zend functions are available the google options are available
-        $modid = ModUtil::getIdFromName('iw_agendas');
+        // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
+        $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
         $zendFuncAvailable = ($modinfo['state'] == 3 &&
             $modinfo['version'] > '1.3' &&
-            ModUtil::getVar('iw_agendas','allowGCalendar') == 1 &&
-            ModUtil::func('iw_agendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
+            ModUtil::getVar('IWagendas','allowGCalendar') == 1 &&
+            ModUtil::func('IWagendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $gCalendarUse = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
                                           array('name' => 'gCalendarUse',
-                                                'module' => 'iw_agendas',
+                                                'module' => 'IWagendas',
                                                 'uid' => $uid,
                                                 'sv' => $sv));
         //get the last cron successfull response
@@ -100,14 +100,14 @@ class IWmain_Controller_User extends Zikula_Controller
         $gUserName = ModUtil::func('IWmain', 'user', 'userGetVar',
                                     array('uid' => $uid,
                                           'name' => 'gUserName',
-                                          'module' => 'iw_agendas',
+                                          'module' => 'IWagendas',
                                           'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $gRefreshTime = ModUtil::func('IWmain', 'user', 'userGetVar',
                                        array('uid' => $uid,
                                              'name' => 'gRefreshTime',
-                                             'module' => 'iw_agendas',
+                                             'module' => 'IWagendas',
                                              'sv' => $sv));
 
         $view->assign('cronNotWorks', $cronNotWorks);
@@ -170,21 +170,21 @@ class IWmain_Controller_User extends Zikula_Controller
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
                                      array('uid' => $uid,
                                            'name' => 'gCalendarUse',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv,
                                            'value' => '1'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
                                      array('uid' => $uid,
                                            'name' => 'gUserName',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv,
                                            'value' => $gUserName));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
                                      array('uid' => $uid,
                                            'name' => 'gRefreshTime',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv,
                                            'value' => $gRefreshTime));
             if ($gUserPass != '') {
@@ -192,7 +192,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 $result = ModUtil::func('IWmain', 'user', 'userSetVar',
                                          array('uid' => $uid,
                                                'name' => 'gUserPass',
-                                               'module' => 'iw_agendas',
+                                               'module' => 'IWagendas',
                                                'sv' => $sv,
                                                'value' => base64_encode($gUserPass)));
             }
@@ -201,25 +201,25 @@ class IWmain_Controller_User extends Zikula_Controller
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
                                      array('uid' => $uid,
                                            'name' => 'gCalendarUse',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
                                      array('uid' => $uid,
                                            'name' => 'gUserName',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
                                      array('uid' => $uid,
                                            'name' => 'gUserPass',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
                                      array('uid' => $uid,
                                            'name' => 'gRefreshTime',
-                                           'module' => 'iw_agendas',
+                                           'module' => 'IWagendas',
                                            'sv' => $sv));
         }
         if ($cronWorks != null) {
@@ -432,25 +432,25 @@ class IWmain_Controller_User extends Zikula_Controller
             $after = substr($news, - $calc);
         }
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have news in the module
-        //iw_noteboard
-        $modid = ModUtil::getIdFromName('iw_noteboard');
+        //IWnoteboard
+        $modid = ModUtil::getIdFromName('IWnoteboard');
         $modinfo = ModUtil::getInfo($modid);
         //if module is active
         if ($modinfo['state'] == 3 && ($where == 'ta' || $where == '')) {
             //Check that user can access the module
-            if (SecurityUtil::checkPermission('iw_noteboard::', "::", ACCESS_READ) || $requestByCron) {
+            if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ) || $requestByCron) {
                 //Get news of the user
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('iw_noteboard','user','noves',
+                $noves = ModUtil::apiFunc('IWnoteboard','user','noves',
                                            array('uid' => $uid,
                                                  'sv' => $sv));
                 if ($noves['nombre'] > 0) {
                     $out .= '<!---ta--->';
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_noteboard&func=main">' . $this->__('Noteboard notes') . '</a>';
+                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWnoteboard&func=main">' . $this->__('Noteboard notes') . '</a>';
                     $out .= '</td>';
                     $out .= '<td align="right" valign="top">';
                     $out .= $noves['nombre'];
@@ -460,17 +460,17 @@ class IWmain_Controller_User extends Zikula_Controller
                 }
             }
         }
-        //iw_agendas
-        $modid = ModUtil::getIdFromName('iw_agendas');
+        //IWagendas
+        $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
         //if module is active
         if ($modinfo['state'] == 3 && ($where == 'ag' || $where == '')) {
             //Check that user can access the module
-            if (SecurityUtil::checkPermission('iw_agendas::', "::", ACCESS_READ) || $requestByCron) {
+            if (SecurityUtil::checkPermission('IWagendas::', "::", ACCESS_READ) || $requestByCron) {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('iw_agendas','user','new',
+                $noves = ModUtil::apiFunc('IWagendas','user','new',
                                            array('uid' => $uid,
                                                  'sv' => $sv));
                 //Get user news in agendas
@@ -478,7 +478,7 @@ class IWmain_Controller_User extends Zikula_Controller
                     $out .= '<!---ag--->';
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_agendas">' . $this->__('Personal agenda') . '</a>';
+                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWagendas">' . $this->__('Personal agenda') . '</a>';
                     $out .= ('</td>');
                     $out .= '<td align="right" valign="top">';
                     $out .= $noves;
@@ -489,15 +489,15 @@ class IWmain_Controller_User extends Zikula_Controller
             }
         }
         //Private messages
-        $modid = ModUtil::getIdFromName('iw_messages');
+        $modid = ModUtil::getIdFromName('IWmessages');
         $modinfo = ModUtil::getInfo($modid);
         //if module is active
         if ($modinfo['state'] == 3 && ($where == 'me' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_messages::', "::", ACCESS_READ) || $requestByCron) {
+            if (SecurityUtil::checkPermission('IWmessages::', "::", ACCESS_READ) || $requestByCron) {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('iw_messages', 'user', 'countitems',
+                $noves = ModUtil::apiFunc('IWmessages', 'user', 'countitems',
                                            array('uid' => $uid,
                                                  'unread' => true,
                                                  'sv' =>$sv));
@@ -505,7 +505,7 @@ class IWmain_Controller_User extends Zikula_Controller
                     $out .= '<!---me--->';
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_messages&func=main">' . $this->__('Private messages') . '</a>';
+                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWmessages&func=main">' . $this->__('Private messages') . '</a>';
                     $out .= '</td>';
                     $out .= '<td align="right" valign="top">';
                     $out .= $noves;
@@ -515,15 +515,15 @@ class IWmain_Controller_User extends Zikula_Controller
                 }
             }
         }
-        //iw_forums
-        $modid = ModUtil::getIdFromName('iw_forums');
+        //IWforums
+        $modid = ModUtil::getIdFromName('IWforums');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3 && ($where == 'fo' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_forums::', "::", ACCESS_READ) || $requestByCron) {
+            if (SecurityUtil::checkPermission('IWforums::', "::", ACCESS_READ) || $requestByCron) {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $registres = ModUtil::apiFunc('iw_forums', 'user', 'getall',
+                $registres = ModUtil::apiFunc('IWforums', 'user', 'getall',
                                                array('uid' => $uid,
                                                      'sv' => $sv));
                 $out .= '<!---fo--->';
@@ -531,13 +531,13 @@ class IWmain_Controller_User extends Zikula_Controller
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
-                    if ($registre['actiu'] == 1 && ModUtil::func('iw_forums', 'user', 'access',
+                    if ($registre['actiu'] == 1 && ModUtil::func('IWforums', 'user', 'access',
                                                               array('fid' => $registre['fid'],
                                                                     'uid' => $uid,    'sv' => $sv)) > 0) {
                         if ($uid != $realUid) {
                             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                         }
-                        $noves = ModUtil::apiFunc('iw_forums', 'user', 'compta_msg',
+                        $noves = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
                                                    array('fid' => $registre['fid'],
                                                          'tots' => true,
                                                          'uid' => $uid,
@@ -545,7 +545,7 @@ class IWmain_Controller_User extends Zikula_Controller
                         if ($noves['nollegits'] > 0) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top">';
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_forums&func=forum&fid=' . $registre['fid'] . '">' . $this->__('Forum') . ' - ' . $registre['nom_forum'] . '</a>';
+                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforums&func=forum&fid=' . $registre['fid'] . '">' . $this->__('Forum') . ' - ' . $registre['nom_forum'] . '</a>';
                             $out .= '</td>';
                             $out .= '<td align="right" valign="top">';
                             $out .= $noves['nollegits'];
@@ -557,16 +557,16 @@ class IWmain_Controller_User extends Zikula_Controller
                 $out .= '<!---/fo--->';
             }
         }
-        //iw_forms
-        $modid = ModUtil::getIdFromName('iw_forms');
+        //IWforms
+        $modid = ModUtil::getIdFromName('IWforms');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3 && ($where == 'fu' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_forms::', "::", ACCESS_READ) || $requestByCron) {
+            if (SecurityUtil::checkPermission('IWforms::', "::", ACCESS_READ) || $requestByCron) {
                 //get all the active forms
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $forms = ModUtil::apiFunc('iw_forms', 'user', 'getAllForms',
+                $forms = ModUtil::apiFunc('IWforms', 'user', 'getAllForms',
                                            array('user' => 1,
                                                  'sv' => $sv));
                 //get all the groups of the user
@@ -582,7 +582,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $access = ModUtil::func('iw_forms', 'user', 'access',
+                $access = ModUtil::func('IWforms', 'user', 'access',
                                          array('fid' => $form['fid'],
                                                'userGroups' => $userGroupsArray,
                                                'uid' => $uid,
@@ -593,7 +593,7 @@ class IWmain_Controller_User extends Zikula_Controller
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
-                    $nNotes = ModUtil::apiFunc('iw_forms', 'user', 'getNewNotes',
+                    $nNotes = ModUtil::apiFunc('IWforms', 'user', 'getNewNotes',
                                                 array('fid' => $form['fid'],
                                                       'uid' => $uid,
                                                       'sv' => $sv));
@@ -603,10 +603,10 @@ class IWmain_Controller_User extends Zikula_Controller
                         $out .= '<td align="left" valign="top">';
                         if ($access['level'] == 7) {
                             // user is validator and it is sended to manage page
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_forms&func=manage&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
+                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
                         } else {
                             // user is not validator an it is sended to read page
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=iw_forms&func=read&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
+                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=read&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
                         }
                         $out .= '</td>';
                         $out .= '<td align="right" valign="top">';
@@ -707,17 +707,17 @@ class IWmain_Controller_User extends Zikula_Controller
                                                        'uid' => $uid,
                                                        'sv' => $sv));
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have flagged posts in the module
-        //iw_noteboard
-        $modid = ModUtil::getIdFromName('iw_noteboard');
+        //IWnoteboard
+        $modid = ModUtil::getIdFromName('IWnoteboard');
         $modinfo = ModUtil::getInfo($modid);
         //if module is active
         if ($modinfo['state'] == 3 && ($where == 'ta' || $where == '')) {
             //Check that user can access the module
-            if (SecurityUtil::checkPermission('iw_noteboard::', "::", ACCESS_READ)) {
+            if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
                 //Get the notes that user has flagged
-                $flagged = ModUtil::apiFunc('iw_noteboard','user','getFlagged');
+                $flagged = ModUtil::apiFunc('IWnoteboard','user','getFlagged');
                 // Get the user permissions in noteboard
-                $permissions = ModUtil::apiFunc('iw_noteboard', 'user', 'permisos',
+                $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
                                                  array('uid' => $uid));
                 //Check if user can access the notes
                 foreach ($flagged as $registre) {
@@ -738,7 +738,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 if (count($flaggedArray) > 0) {
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="index.php?module=iw_noteboard&func=main">' . $this->__('Noteboard notes') . '</a>';
+                    $out .= '<a href="index.php?module=IWnoteboard&func=main">' . $this->__('Noteboard notes') . '</a>';
                     $out .= '</td>';
                     $out .= '<td align="right" valign="top">';
                     $out .= count($flaggedArray);
@@ -748,7 +748,7 @@ class IWmain_Controller_User extends Zikula_Controller
                         foreach ($flaggedArray as $flagged) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top" colspan ="2">';
-                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=iw_noteboard&nid=' . $flagged['nid'] . '">' . $flagged['noticia'] . '</a>';
+                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWnoteboard&nid=' . $flagged['nid'] . '">' . $flagged['noticia'] . '</a>';
                             $out .= '</td>';
                             $out .= '</tr>';
                         }
@@ -758,12 +758,12 @@ class IWmain_Controller_User extends Zikula_Controller
             }
         }
         //Private messages
-        $modid = ModUtil::getIdFromName('iw_messages');
+        $modid = ModUtil::getIdFromName('IWmessages');
         $modinfo = ModUtil::getInfo($modid);
         //if module is active
         if ($modinfo['state'] == 3 && ($where == 'me' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_messages::', "::", ACCESS_READ)) {
-                $flagged = ModUtil::apiFunc('iw_messages', 'user', 'getFlagged');
+            if (SecurityUtil::checkPermission('IWmessages::', "::", ACCESS_READ)) {
+                $flagged = ModUtil::apiFunc('IWmessages', 'user', 'getFlagged');
                 $flaggedArray = array();
                 foreach ($flagged as $flag) {
                     $flaggedArray[] = array('subject' => $flag['subject'],
@@ -773,7 +773,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 if (count($flaggedArray) > 0) {
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="index.php?module=iw_messages">' . $this->__('Private messages') . '</a>';
+                    $out .= '<a href="index.php?module=IWmessages">' . $this->__('Private messages') . '</a>';
                     $out .= '</td>';
                     $out .= '<td align="right" valign="top">';
                     $out .= count($flaggedArray);
@@ -783,7 +783,7 @@ class IWmain_Controller_User extends Zikula_Controller
                         foreach ($flaggedArray as $flagged) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top" colspan ="2">';
-                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=iw_messages&func=display&msgid=' . $flagged['msgid'] . '&qui=d">' . cutTextFlagged($flagged['subject'], $chars) . '</a>';
+                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWmessages&func=display&msgid=' . $flagged['msgid'] . '&qui=d">' . cutTextFlagged($flagged['subject'], $chars) . '</a>';
                             $out .= '</td>';
                             $out .= '</tr>';
                         }
@@ -792,16 +792,16 @@ class IWmain_Controller_User extends Zikula_Controller
                 $out .= '<!---/me--->';
             }
         }
-        //iw_forums
-        $modid = ModUtil::getIdFromName('iw_forums');
+        //IWforums
+        $modid = ModUtil::getIdFromName('IWforums');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3 && ($where == 'fo' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_forums::', "::", ACCESS_READ)) {
+            if (SecurityUtil::checkPermission('IWforums::', "::", ACCESS_READ)) {
                 //get all forums
-                $forums = ModUtil::apiFunc('iw_forums','user','getall',
+                $forums = ModUtil::apiFunc('IWforums','user','getall',
                                             array('filter' => '1'));
                 foreach ($forums as $forum) {
-                    $n_msg = ModUtil::apiFunc('iw_forums', 'user', 'compta_msg',
+                    $n_msg = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
                                                array('fid' => $forum['fid'],
                                                      'tots' => true));
                     $marcats = $n_msg['marcats'];
@@ -812,11 +812,11 @@ class IWmain_Controller_User extends Zikula_Controller
                 $out .= '<!---fo--->';
                 foreach ($forumsArray as $forum) {
                     if ($forum['marcats'] > 0) {
-                        $flagged = ModUtil::apiFunc('iw_forums','user','getFlagged',
+                        $flagged = ModUtil::apiFunc('IWforums','user','getFlagged',
                                                      array('fid' => $forum['fid']));
                         $flaggedArray = array();
                         foreach ($flagged as $registre) {
-                            if (ModUtil::func('iw_forums', 'user', 'access',
+                            if (ModUtil::func('IWforums', 'user', 'access',
                                                array('fid' => $registre['fid']))) {
                                 $oid = ($registre['idparent'] == 0) ? $registre['fmid'] : $registre['idparent'];
                                 $flaggedArray[] = array('titol' => trim(cutTextFlagged(strip_tags($registre['titol']),$chars)),
@@ -828,7 +828,7 @@ class IWmain_Controller_User extends Zikula_Controller
                         }
                         $out .= '<tr>';
                         $out .= '<td align="left" valign="top">';
-                        $out .= '<a href="index.php?module=iw_forums&func=forum&fid=' . $forum['fid'] . '">' . $this->__('Forum') . ' - ' . $forum['name'] . '</a>';
+                        $out .= '<a href="index.php?module=IWforums&func=forum&fid=' . $forum['fid'] . '">' . $this->__('Forum') . ' - ' . $forum['name'] . '</a>';
                         $out .= '</td>';
                         $out .= '<td align="right" valign="top">';
                         $out .= $forum['marcats'];
@@ -838,7 +838,7 @@ class IWmain_Controller_User extends Zikula_Controller
                             foreach ($flaggedArray as $flagged) {
                                 $out .= '<tr>';
                                 $out .= '<td align="left" valign="top" colspan ="2">';
-                                $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=iw_forums&func=msg&fmid=' . $flagged['fmid'] . '&ftid=' . $flagged['ftid'] . '&fid=' . $flagged['fid'] . '&oid=' . $flagged['oid'] . '">' . $flagged['titol'] . '</a>';
+                                $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWforums&func=msg&fmid=' . $flagged['fmid'] . '&ftid=' . $flagged['ftid'] . '&fid=' . $flagged['fid'] . '&oid=' . $flagged['oid'] . '">' . $flagged['titol'] . '</a>';
                                 $out .= '</td>';
                                 $out .= '</tr>';
                             }
@@ -848,27 +848,27 @@ class IWmain_Controller_User extends Zikula_Controller
                 $out .= '<!---/fo--->';
             }
         }
-        //iw_forms
-        $modid = ModUtil::getIdFromName('iw_forms');
+        //IWforms
+        $modid = ModUtil::getIdFromName('IWforms');
         $modinfo = ModUtil::getInfo($modid);
         //Si el mòdul està actiu
         if ($modinfo['state'] == 3 && ($where == 'fr' || $where == '')) {
-            if (SecurityUtil::checkPermission('iw_forms::', "::", ACCESS_READ)) {
+            if (SecurityUtil::checkPermission('IWforms::', "::", ACCESS_READ)) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
                                                 array('info' => 'ccn',
                                                       'sv' => $sv));
                 //Get the notes that user has flagged
-                $flagged = ModUtil::apiFunc('iw_forms','user','getWhereFlagged');
+                $flagged = ModUtil::apiFunc('IWforms','user','getWhereFlagged');
                 $flaggedArray = array();
                 $formsArray = array();
                 //Check if user can access the forms as validator
                 foreach ($flagged as $flag) {
                         //get form information
-                        $access = ModUtil::func('iw_forms', 'user', 'access',
+                        $access = ModUtil::func('IWforms', 'user', 'access',
                                                  array('fid' => $flag['fid']));
                         if ($access['level'] == 7) {
-                                $formx = ModUtil::apiFunc('iw_forms', 'user', 'getFormDefinition',
+                                $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition',
                                                            array('fid' => $flag['fid']));
                                 $formsArray[] = array('name' => trim(cutTextFlagged(strip_tags($formx['formName']), $chars)),
                                                       'fid' => $formx['fid']);
@@ -876,11 +876,11 @@ class IWmain_Controller_User extends Zikula_Controller
                 }
                 $out .= '<!---fr--->';
                 foreach ($formsArray as $form) {
-                        $flaggeds = ModUtil::apiFunc('iw_forms', 'user', 'getFlagged',
+                        $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged',
                                                       array('fid' => $form['fid']));
                         $out .= '<tr>';
                         $out .= '<td align="left" valign="top">';
-                        $out .= '<a href="index.php?module=iw_forms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
+                        $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
                         $out .= '</td>';
                         $out .= '<td align="right" valign="top">';
                         $out .= count($flaggeds);
@@ -890,7 +890,7 @@ class IWmain_Controller_User extends Zikula_Controller
                                 foreach ($flaggeds as $flagged) {
                                         $out .= '<tr>';
                                         $out .= '<td align="left" valign="top" colspan ="2">';
-                                        $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=iw_forms&func=manage&fid=' . $form['fid'] . '&fmid=' . $flagged['fmid'] . '">' . $this->__("sent at ") . ' '. date('d/m/Y',$flagged['time']) . ' ' . $this->__("by ") . ' ' . $usersFullname[$flagged['user']] . '</a>';
+                                        $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '&fmid=' . $flagged['fmid'] . '">' . $this->__("sent at ") . ' '. date('d/m/Y',$flagged['time']) . ' ' . $this->__("by ") . ' ' . $usersFullname[$flagged['user']] . '</a>';
                                         $out .= '</td>';
                                         $out .= '</tr>';
                                 }
@@ -943,7 +943,7 @@ class IWmain_Controller_User extends Zikula_Controller
         // File name with the path
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : 0, 'GET');
         // Security check
-        if (!SecurityUtil::checkPermission('iw_noteboard::', "::", ACCESS_READ)) {
+        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -1048,8 +1048,8 @@ class IWmain_Controller_User extends Zikula_Controller
                 $usersName[$user['uid']] = $user['uname'];
             }
         }
-        // Checks if module iw_users is installed. In this case get the users extra information
-        $modid = ModUtil::getIdFromName('iw_users');
+        // Checks if module IWusers is installed. In this case get the users extra information
+        $modid = ModUtil::getIdFromName('IWusers');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3) {
             // Get users extra information because it probably exists
@@ -1151,8 +1151,8 @@ class IWmain_Controller_User extends Zikula_Controller
         $user = ModUtil::apiFunc('IWmain', 'user', 'getUser',
                                   array('uid' => $args['uid'],
                                         'sv' => $args['sv']));
-        // Checks if module iw_users is installed. In this case get the users extra information
-        $modid = ModUtil::getIdFromName('iw_users');
+        // Checks if module IWusers is installed. In this case get the users extra information
+        $modid = ModUtil::getIdFromName('IWusers');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3) {
             // Get users extra information because it probably exists

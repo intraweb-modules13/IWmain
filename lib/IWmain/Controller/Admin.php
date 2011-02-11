@@ -297,7 +297,7 @@ class IWmain_Controller_Admin extends Zikula_Controller
      */
     public function checkVersion($args)
     {
-        // Checks if module iw_msin is installed. If not returns error
+        // Checks if module IWmain is installed. If not returns error
         $modid = ModUtil::getIdFromName('IWmain');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['version'] < $args['version']) {
@@ -308,7 +308,7 @@ class IWmain_Controller_Admin extends Zikula_Controller
     }
 
     /**
-     * redirect administrator to iw_files modules. The management files has been removed from the IWmain module
+     * redirect administrator to IWfiles modules. The management files has been removed from the IWmain module
      * @author:	Robert Barrera (rbarrer5@xtec.cat)
      * @param:	args   Array with the folder name where list the files and subfolders
      * @return:	The list of files and folders
@@ -329,7 +329,7 @@ class IWmain_Controller_Admin extends Zikula_Controller
         $folder = FormUtil::getPassedValue('folder', isset($args['folder']) ? $args['folder'] : null, 'POST');
 
         // Security check
-        if (!SecurityUtil::checkPermission('iw_files::', '::', ACCESS_ADMIN)) {
+        if (!SecurityUtil::checkPermission('IWfiles::', '::', ACCESS_ADMIN)) {
             return LogUtil::registerPermissionError();
         }
         $initFolderPath = ModUtil::getVar('IWmain', 'documentRoot');
@@ -352,10 +352,10 @@ class IWmain_Controller_Admin extends Zikula_Controller
                 // Get file extension
                 $fileExtension = strtolower(substr(strrchr($filename, "."), 1));
                 // get file icon
-                $ctypeArray = ModUtil::func('iw_files', 'user', 'getMimetype',
+                $ctypeArray = ModUtil::func('IWfiles', 'user', 'getMimetype',
                                              array('extension' => $fileExtension));
                 $fileIcon = $ctypeArray['icon'];
-                if (substr($filename, strrpos($filename, '/') + 1, 1) != '.' || ModUtil::getVar('iw_files', 'showHideFiles') == 1) {
+                if (substr($filename, strrpos($filename, '/') + 1, 1) != '.' || ModUtil::getVar('IWfiles', 'showHideFiles') == 1) {
                     $file_object = array('name' => $object,
                                          'size' => filesize($filename),
                                          'type' => filetype($filename),
