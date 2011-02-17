@@ -77,7 +77,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller
         $dom = ZLanguage::getModuleDomain('IWmain');
 
         // Security check
-        if (!SecurityUtil::checkPermission('IWmain:newsBlock:', $row['title'] . "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
+        if (!SecurityUtil::checkPermission('IWmain:newsBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this module.', $dom)));
         }
 
@@ -133,7 +133,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller
     public function reloadFlaggedBlock() {
         $dom = ZLanguage::getModuleDomain('IWmain');
         // Security check
-        if (!SecurityUtil::checkPermission('IWmain:flaggedBlock:', $row['title'] . "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
+        if (!SecurityUtil::checkPermission('IWmain:flaggedBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this module.', $dom)));
         }
 
