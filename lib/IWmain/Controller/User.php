@@ -409,7 +409,6 @@ class IWmain_Controller_User extends Zikula_Controller
         if ($uid == null) {
             $uid = UserUtil::getVar('uid');
         }
-        $out = '';
         $before = '';
         $after = '';
         $realUid = UserUtil::getVar('uid');
@@ -431,6 +430,7 @@ class IWmain_Controller_User extends Zikula_Controller
             $before = substr($news, 0, $pos_init);
             $after = substr($news, - $calc);
         }
+        $out = '<table width="100%">';
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have news in the module
         //IWnoteboard
         $modid = ModUtil::getIdFromName('IWnoteboard');
@@ -638,16 +638,17 @@ class IWmain_Controller_User extends Zikula_Controller
         $out = $before . $out . $after;
         $out = str_replace('\'', '&acute;', $out);
         //if not there are news is it writed in the block
-        if (strpos($out,'<tr>') == '0') {$out = $this->__('Nothing to show');}
-            //Emmagatzemem la variable d'usuari
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::func('IWmain', 'user', 'userSetVar',
-                           array('uid' => $uid,
-                                 'name' => 'news',
-                                 'module' => 'IWmain_block_news',
-                                 'sv' => $sv,
-                                 'value' => $out,
-                                 'lifetime' => '700'));
+        if (strpos($out,'<tr>') == '0') $out = $this->__('Nothing to show');
+        $out .= '</table>';
+        //Emmagatzemem la variable d'usuari
+        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+        ModUtil::func('IWmain', 'user', 'userSetVar',
+                       array('uid' => $uid,
+                             'name' => 'news',
+                             'module' => 'IWmain_block_news',
+                             'sv' => $sv,
+                             'value' => $out,
+                             'lifetime' => '700'));
         return true;
     }
 
@@ -677,7 +678,6 @@ class IWmain_Controller_User extends Zikula_Controller
     public function flagged($args) {
         $where = FormUtil::getPassedValue('where', isset($args['where']) ? $args['where'] : null, 'POST');
         $chars = FormUtil::getPassedValue('chars', isset($args['chars']) ? $args['chars'] : null, 'POST');
-        $out = '';
         $before = '';
         $after = '';
 
@@ -706,6 +706,7 @@ class IWmain_Controller_User extends Zikula_Controller
                                                        'module' => 'IWmain_block_news',
                                                        'uid' => $uid,
                                                        'sv' => $sv));
+        $out = '<table width="100%">';
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have flagged posts in the module
         //IWnoteboard
         $modid = ModUtil::getIdFromName('IWnoteboard');
@@ -902,7 +903,11 @@ class IWmain_Controller_User extends Zikula_Controller
         $out = $before . $out . $after;
         $out = str_replace('\'','&acute;',$out);
         //Si no hi ha novetats no mostrem el bloc
-        if (strpos($out, '<tr>') == '0') {$out = '';}
+        if (strpos($out, '<tr>') == '0') {
+            $out = '';
+        } else {
+            $out .= '</table>';
+        }
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         ModUtil::func('IWmain', 'user', 'userSetVar',
