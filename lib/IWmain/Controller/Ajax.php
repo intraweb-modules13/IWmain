@@ -8,9 +8,8 @@ class IWmain_Controller_Ajax extends Zikula_Controller
      * @return:	the activity id removed from database
      */
     public function change($args) {
-        $dom = ZLanguage::getModuleDomain('IWmain');
         if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this module.', $dom)));
+            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! No authorization to access this module.')));
         }
 
         $chid = FormUtil::getPassedValue('chid', -1, 'GET');
@@ -27,7 +26,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller
                                       'extensions' => array('jpg',
                                                             'png',
                                                             'gif')))) {
-                $error = __('Error deleting avatar', $dom);
+                $error = $this->__('Error deleting avatar');
             }
 
             //delete the small picture
@@ -50,7 +49,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller
                                array('avatarName' => substr($chid, 1, -4),
                                      'extensions' => $formatsArray));
             } else {
-                $error = __('Error changing avatar', $dom);
+                $error = $this->__('Error changing avatar');
             }
 
             //Change small pictures
@@ -74,11 +73,11 @@ class IWmain_Controller_Ajax extends Zikula_Controller
     }
 
     public function reloadNewsBlock() {
-        $dom = ZLanguage::getModuleDomain('IWmain');
+
 
         // Security check
         if (!SecurityUtil::checkPermission('IWmain:newsBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this module.', $dom)));
+            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! No authorization to access this module.')));
         }
 
         $uid = UserUtil::getVar('uid');
@@ -131,10 +130,10 @@ class IWmain_Controller_Ajax extends Zikula_Controller
     }
 
     public function reloadFlaggedBlock() {
-        $dom = ZLanguage::getModuleDomain('IWmain');
+
         // Security check
         if (!SecurityUtil::checkPermission('IWmain:flaggedBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this module.', $dom)));
+            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! No authorization to access this module.')));
         }
 
         //get the headlines saved in the user vars. It is renovate every 10 minutes

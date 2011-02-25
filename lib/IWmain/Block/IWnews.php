@@ -1,5 +1,4 @@
 <?php
-
 class IWmain_Block_IWnews extends Zikula_Controller_Block {
 
     /**

@@ -1,77 +1,60 @@
 {include file="IWmain_admin_menu.htm"}
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='package_settings.gif' set='icons/large' __alt="Configure module"}</div>
+    <div class="z-adminpageicon">{img modname='core' src='configure.png' set='icons/large' __alt="Configure module"}</div>
     <h2>{gt text="Modify the configuration"}</h2>
     <form  class="z-form" enctype="application/x-www-form-urlencoded" method="post" name="conf" id="conf" action="{modurl modname="IWmain" type="admin" func="updateconfig"}">
-        <input type="hidden" name="authid" value="{insert name="generateauthkey" module="IWmain"}" />
-        {if not $multizk}
-            <div class="z-formrow">
-                <label for="documentRoot">{gt text="Server files directori"}</label>
-                <input type="text" name="documentRoot" value="{$documentRoot}" size="50" maxlength="255" />
-                {if $noFolder}
-                    <div class="z-errormsg z-formnote">
-                        {gt text="Attached files directory hasn't been found"}
-                    </div>
-                {/if}
-                {if $noWriteabledocumentRoot}
-                    <div class="z-errormsg z-formnoteo">
-                        {gt text="This folder is not writeable."}
-                    </div>
-                {/if}
+           <input type="hidden" name="authid" value="{insert name="generateauthkey" module="IWmain"}" />
+           {if not $multizk}
+           <div class="z-formrow">
+            <label for="documentRoot">{gt text="Server files directori"}</label>
+            <input type="text" name="documentRoot" value="{$documentRoot}" size="50" maxlength="255" />
+            {if $noFolder}
+            <div class="z-errormsg z-formnote">
+                {gt text="Attached files directory has not been found"}
             </div>
+            {/if}
+            {if $noWriteabledocumentRoot}
+            <div class="z-errormsg z-formnoteo">
+                {gt text="This folder is not writeable."}
+            </div>
+            {/if}
+        </div>
         {/if}
-
         <div class="z-formrow">
             <label for="usersPictureFolder">{gt text="Folder where to look for the users pictures"}{if not $multizk} <span><strong>{$documentRoot}/</strong></span>{/if}</label>
             <input type="text" name="usersPictureFolder" value="{$usersPictureFolder}" size="30" maxlength="30" />
             {if $noPictureFolder}
-                <div class="z-errormsg z-formnote">
-                    {gt text="Users pictures directori hasn't been found"}
-                </div>
+            <div class="z-errormsg z-formnote">
+                {gt text="Users pictures directori hasn't been found"}
+            </div>
             {/if}
             {if $noWriteablePictureFolder}
-                <div class="z-errormsg z-formnote">
-                    {gt text="This folder is not writeable."}
-                </div>
+            <div class="z-errormsg z-formnote">
+                {gt text="This folder is not writeable."}
+            </div>
             {/if}
         </div>
-        {if $gdAvailable && !$noPictureFolder && !$noWriteablePictureFolder && !$noTempFolder && !$noWriteableTempFolder}
-            <div class="z-formrow">
-                <label for="allowUserChangeAvatar">{gt text="The user can change theirs avatars"}</label>
-                <input type="checkbox" {if $allowUserChangeAvatar eq 1}checked{/if} name="allowUserChangeAvatar" value="1" />
-            </div>
-            <div class="z-formrow">
-                <label for="avatarChangeValidationNeeded">{gt text="The avatar replacement needs validation"}</label>
-                <input type="checkbox" {if $avatarChangeValidationNeeded eq 1}checked{/if} name="avatarChangeValidationNeeded" value="1" />
-            </div>
-        {else}
-            {if $noPictureFolder || $noWriteablePictureFolder || $noTempFolder || $noWriteableTempFolder}
-                <div class="z-errormsg">
-                    {gt text="The users can change theirs avatars because the directori of pictures or the temporal directori don't exist or them have not got the correct permissions."}
-                </div>
-            {/if}
-            {if not $gdAvailable}
-                <div class="z-errormsg">
-                    {gt text="The users can change theirs avatars because the php's gd extensión is not available"}
-                </div>
-            {/if}
-        {/if}
-
-
+        {if $gdAvailable && !$noPictureFolder && !$noWriteablePictureFolder}
         <div class="z-formrow">
-            <label for="tempFolder">{gt text="Folder for temporal files"}{if  not $multizk} <span><strong>{$documentRoot}/</strong></span>{/if}</label>
-            <input type="text" name="tempFolder" value="{$tempFolder}" size="30" maxlength="30" />
-            {if $noTempFolder}
-                <div class="z-errormsg z-formnote">
-                    {gt text="Temporal files directory hasn't been found"}
-                </div>
-            {/if}
-            {if $noWriteableTempFolder}
-                <div class="z-errormsg z-formnote">
-                    {gt text="This folder is not writeable."}
-                </div>
-            {/if}
+            <label for="allowUserChangeAvatar">{gt text="The users can change theirs avatars"}</label>
+            <input type="checkbox" {if $allowUserChangeAvatar eq 1}checked{/if} name="allowUserChangeAvatar" value="1" />
         </div>
+        <div class="z-formrow">
+            <label for="avatarChangeValidationNeeded">{gt text="The avatar replacement needs validation"}</label>
+            <input type="checkbox" {if $avatarChangeValidationNeeded eq 1}checked{/if} name="avatarChangeValidationNeeded" value="1" />
+        </div>
+        {else}
+        {if $noPictureFolder || $noWriteablePictureFolder}
+        <div class="z-formnote z-errormsg">
+            {gt text="The users can not change theirs avatars because the directori of pictures does not exist or it has not the correct permissions."}
+        </div>
+        {/if}
+        {if not $gdAvailable}
+        <div class="z-errormsg">
+            {gt text="The users can change theirs avatars because the php's gd extensión is not available."}
+        </div>
+        {/if}
+        {/if}
         <div class="z-formrow">
             <label for="extensions">{gt text="Allowed extensions"}</label>
             <input type="text" name="extensions" value="{$extensions}" size="50" maxlength="255" />
@@ -86,15 +69,14 @@
         </div>
         <div class="z-formrow">
             <label for="cronHeaderText">{gt text="Header text of the cron automatic emails with the new things to see"}</label>
-            <textarea name="cronHeaderText" style="width: 370px;" cols="70" rows="5">{$cronHeaderText}</textarea>
+            <textarea name="cronHeaderText" cols="70" rows="5">{$cronHeaderText}</textarea>
         </div>
         <div class="z-formrow">
             <label for="cronFooterText">{gt text="Footer text of the email"}</label>
-            <textarea name="cronFooterText" style="width: 370px;" cols="70" rows="5">{$cronFooterText}</textarea>
+            <textarea name="cronFooterText" cols="70" rows="5">{$cronFooterText}</textarea>
         </div>
         <div style="text-align: center;">
             {button src='button_ok.gif' set='icons/small' __alt="Execute" __title="Execute"} {gt text="Save the changes"}
         </div>
     </form>
-    <a href="{modurl modname=IWmain type=admin func=module}">{gt text="About this module"}</a>
 </div>

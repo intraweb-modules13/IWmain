@@ -90,16 +90,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
             }
         }
 
-        $noWriteableTempFolder = false;
-        $noTempFolder = false;
-        //Check if the temp folder exists
-        if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'tempFolder')) || ModUtil::getVar('IWmain', 'tempFolder') == '') {
-            $noTempFolder = true;
-        } else {
-            if (!is_writeable(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'tempFolder'))) {
-                $noWriteableTempFolder = true;
-            }
-        }
         $multizk = (isset($GLOBALS['PNConfig']['Multisites']['multi']) && $GLOBALS['PNConfig']['Multisites']['multi'] == 1) ? 1 : 0;
         if (extension_loaded('gd')) $gdAvailable = true;
 
@@ -110,8 +100,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
         $view->assign('noFolder', $noFolder);
         $view->assign('noPictureFolder', $noPictureFolder);
         $view->assign('noWriteablePictureFolder', $noWriteablePictureFolder);
-        $view->assign('noTempFolder', $noTempFolder);
-        $view->assign('noWriteableTempFolder', $noWriteableTempFolder);
         $view->assign('multizk', $multizk);
         $view->assign('extensions', ModUtil::getVar('IWmain', 'extensions'));
         $view->assign('extensions', ModUtil::getVar('IWmain', 'extensions'));
@@ -119,7 +107,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
         $view->assign('usersvarslife', ModUtil::getVar('IWmain', 'usersvarslife'));
         $view->assign('documentRoot', ModUtil::getVar('IWmain', 'documentRoot'));
         $view->assign('usersPictureFolder', ModUtil::getVar('IWmain', 'usersPictureFolder'));
-        $view->assign('tempFolder', ModUtil::getVar('IWmain', 'tempFolder'));
         $view->assign('cronHeaderText', ModUtil::getVar('IWmain', 'cronHeaderText'));
         $view->assign('cronFooterText', ModUtil::getVar('IWmain', 'cronFooterText'));
         $view->assign('allowUserChangeAvatar', ModUtil::getVar('IWmain', 'allowUserChangeAvatar'));
@@ -143,26 +130,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
     }
 
     /**
-     * Show the module information
-     * @author	Albert Pérez Monfort (aperezm@xtec.cat)
-     * @return	The module information
-     */
-    public function module()
-    {
-        // Security check
-        if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-        // Create output object
-        $view = Zikula_View::getInstance('IWmain', false);
-        $module = ModUtil::func('IWmain', 'user', 'module_info',
-                             array('module_name' => 'IWmain',
-                                   'type' => 'admin'));
-        $view->assign('module', $module);
-        return $view->fetch('IWmain_admin_module.htm');
-    }
-
-    /**
      * Update the module configuration
      * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @return:	True if success or false in other case
@@ -175,7 +142,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
         $maxsize = FormUtil::getPassedValue('maxsize', isset($args['maxsize']) ? $args['maxsize'] : null, 'POST');
         $usersvarslife = FormUtil::getPassedValue('usersvarslife', isset($args['usersvarslife']) ? $args['usersvarslife'] : null, 'POST');
         $usersPictureFolder = FormUtil::getPassedValue('usersPictureFolder', isset($args['usersPictureFolder']) ? $args['usersPictureFolder'] : null, 'POST');
-        $tempFolder = FormUtil::getPassedValue('tempFolder', isset($args['tempFolder']) ? $args['tempFolder'] : null, 'POST');
         $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
         $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
         $allowUserChangeAvatar = FormUtil::getPassedValue('allowUserChangeAvatar', isset($args['allowUserChangeAvatar']) ? $args['allowUserChangeAvatar'] : 0, 'POST');
@@ -202,7 +168,6 @@ class IWmain_Controller_Admin extends Zikula_Controller
         ModUtil::setVar('IWmain', 'maxsize', $maxsize);
         ModUtil::setVar('IWmain', 'usersvarslife', $usersvarslife);
         ModUtil::setVar('IWmain', 'usersPictureFolder', $usersPictureFolder);
-        ModUtil::setVar('IWmain', 'tempFolder', $tempFolder);
         ModUtil::setVar('IWmain', 'cronHeaderText', $cronHeaderText);
         ModUtil::setVar('IWmain', 'cronFooterText', $cronFooterText);
         ModUtil::setVar('IWmain', 'allowUserChangeAvatar', $allowUserChangeAvatar);
@@ -333,13 +298,7 @@ class IWmain_Controller_Admin extends Zikula_Controller
             return LogUtil::registerPermissionError();
         }
         $initFolderPath = ModUtil::getVar('IWmain', 'documentRoot');
-        //needed arguments
-        //Check if the directory of document root files exists
-        if (!file_exists($folder)) {
-            //main logical functionality
-            $folderName = str_replace($initFolderPath . '/', '', $folder);
-            return LogUtil::registerError(__("Not folder found") . ': ' . $folderName);
-        }
+
         //Check is the last character is a /
         if (substr($folder, strlen($folder) - 1 ,1) != '/') $folder .= '/';
         //Check is a directory

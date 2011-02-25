@@ -73,14 +73,6 @@ class IWmain_Controller_User extends Zikula_Controller
                 $canChangeAvatar = false;
             }
         }
-        //Check if the temp folder exists
-        if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'tempFolder')) || ModUtil::getVar('IWmain', 'tempFolder') == '') {
-            $canChangeAvatar = false;
-        } else {
-            if (!is_writeable(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'tempFolder'))) {
-                $canChangeAvatar = false;
-            }
-        }
         // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
         $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
@@ -364,25 +356,6 @@ class IWmain_Controller_User extends Zikula_Controller
                                  'extensions' => $formats));
         }
         return '';
-    }
-
-    /**
-     * Show the module information
-     * @author	Albert Pérez Monfort (aperezm@xtec.cat)
-     * @return	The module information
-     */
-    public function module() {
-        // Security check
-        if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-        // Create output object
-        $view = Zikula_View::getInstance('IWmain',false);
-        $module = ModUtil::func('IWmain', 'user', 'module_info',
-                                 array('module_name' => 'IWmain',
-                                       'type' => 'user'));
-        $view->assign('module', $module);
-        return $view->fetch('IWmain_user_module.htm');
     }
 
     /**
@@ -967,10 +940,14 @@ class IWmain_Controller_User extends Zikula_Controller
         $rand = rand();
         $value = md5($rand);
         $_SESSION['iwSecure'] = $value;
+        return $_SESSION['iwSecure'] = md5($rand);
+
+
+        
         return $value;
         return 1;
 
-
+        // TODO: Important!
 
 
 
