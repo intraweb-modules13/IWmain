@@ -11,11 +11,11 @@
         </div>
         {if isset($cronNotWorks)}
             <div style="background-color: #FFE1DA; padding: 10px;">
-                {img modname='core' src='error.gif' set='icons/small'} {gt text="It has not worked"}
+                {img modname='core' src='error.png' set='icons/small'} {gt text="It has not worked"}
             </div>
         {elseif $userMail == ''}
             <div style="background-color: #FDD994; padding: 10px;">
-                {img modname='core' src='error.gif' set='icons/small'} {gt text="If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"}
+                {img modname='core' src='error.png' set='icons/small'} {gt text="If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"}
                 <a href="{modurl modname=profile func=modify}">{gt text="this link."}</a>
             </div>
         {else}
@@ -103,8 +103,10 @@
         <div style="clear:both; height: 20px">&nbsp;</div>
     {/if}
     {* soon available *}
-    <div style="text-align: center;">
-        {button src='button_ok.gif' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}
+    <div class="z-center">
+        <div class="z-button" style="text-align: center">
+            {button src='button_ok.png' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}
+        </div>
     </div>
 </form>
 <div style="height: 20px">&nbsp;</div>
