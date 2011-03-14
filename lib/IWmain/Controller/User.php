@@ -1295,6 +1295,7 @@ class IWmain_Controller_User extends Zikula_Controller
         if (!isset($uid) || !is_numeric($uid)) {
             return false;
         }
+        $items = array();
         $userGroups = ModUtil::apiFunc('IWmain', 'user', 'getAllUserGroups',
                                         array('sv' => $sv,
                                               'uid' => $uid));
