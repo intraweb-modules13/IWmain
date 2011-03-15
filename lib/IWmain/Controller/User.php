@@ -1085,34 +1085,6 @@ class IWmain_Controller_User extends Zikula_Controller
     }
 
     /**
-     * Show the information about a module
-     * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
-     * @param:	args   Array with the module about which the information page is needed
-     * @return:	An information page about the module
-    */
-    public function module_info($args)
-    {
-        $module_name = FormUtil::getPassedValue('module_name');
-        $type = FormUtil::getPassedValue('type');
-        extract($args);
-        // Gets module information
-        $modid = ModUtil::getIdFromName($module_name);
-        $moduleInfo = ModUtil::getInfo($modid);
-        // Create output object
-        $view = Zikula_View::getInstance('IWmain',false);
-        $view->assign('module_name', $moduleInfo['name']);
-        $view->assign('displayname', $moduleInfo['displayname']);
-        $view->assign('version', $moduleInfo['version']);
-        $view->assign('description', $moduleInfo['description']);
-        //$view->assign('author', $moduleInfo['author']);
-        $email = ModUtil::getVar('IWmain', 'email');
-        $view->assign('email', $email);
-        $view->assign('url', ModUtil::getVar('IWmain','url'));
-        $view->assign('type',$type);
-        return $view->fetch('IWmain_user_module_info.htm');
-    }
-
-    /**
      * get the information of an users
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the information needed and user id and the security value.
@@ -1217,6 +1189,8 @@ class IWmain_Controller_User extends Zikula_Controller
         if (!isset($gid) || !is_numeric($gid)) {
             return false;
         }
+        $membersArray = array();
+        
         $members = ModUtil::apiFunc('IWmain', 'user', 'getMembersGroup',
                                      array('gid' => $gid,
                                            'sv' => $sv));

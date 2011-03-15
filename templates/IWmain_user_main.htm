@@ -104,8 +104,8 @@
     {/if}
     {* soon available *}
     <div class="z-center">
-        <div class="z-button" style="text-align: center">
-            {button src='button_ok.png' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}
+        <div class="z-button">
+            <a onclick="javascript: forms['conf'].submit();">{img modname='core' src='button_ok.png' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}</a>
         </div>
     </div>
 </form>
