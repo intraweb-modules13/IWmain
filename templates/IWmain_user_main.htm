@@ -84,7 +84,7 @@
                 </div>
                 <div>
                     {gt text="Google password"}
-                    <input type="password" name="gUserPass" value="" autocomplete="off"/>
+                    <input type="password" name="gUserPass" value="" autocomplete="off" />
                 </div>
                 <div>
                     {gt text="Refresh time for gCalendar sincronitation"}
@@ -103,10 +103,8 @@
         <div style="clear:both; height: 20px">&nbsp;</div>
     {/if}
     {* soon available *}
-    <div class="z-center">
-        <div class="z-button">
-            <a onclick="javascript: forms['conf'].submit();">{img modname='core' src='button_ok.png' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}</a>
-        </div>
+    <div class="z-center z-buttons">
+        <a onclick="javascript: forms['conf'].submit();">{img modname='core' src='button_ok.png' set='icons/small' __alt="OK" __title="OK"} {gt text="OK"}</a>
     </div>
 </form>
 <div style="height: 20px">&nbsp;</div>

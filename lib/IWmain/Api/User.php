@@ -56,6 +56,7 @@ class IWmain_Api_User extends Zikula_Api
         $pntable = DBUtil::getTables();
         $where = "";
         $c = $pntable['IWusers_column'];
+        //die('tt');
         if ($fromArray != null && count($fromArray) > 0) {
             foreach ($fromArray as $f) {
                 $where .= " $c[uid] = $f[uid] OR";

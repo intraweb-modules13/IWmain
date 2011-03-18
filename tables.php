@@ -30,6 +30,16 @@ function IWmain_tables()
     ObjectUtil::addStandardFieldsToTableDefinition($table['IWmain_column'], 'pn_');
     ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWmain_column_def'], 'iw_');
 
+    // IWusers table definition
+    $table['IWusers'] = DBUtil::getLimitedTablename('IWusers');
+    $table['IWusers_column'] = array('suid' => 'iw_suid',
+                                            'uid' => 'iw_uid',
+                                            'id' => 'iw_id',
+                                            'nom' => 'iw_nom',
+                                            'cognom1' => 'iw_cognom1',
+                                            'cognom2' => 'iw_cognom2',
+                                            'naixement' => 'iw_naixement',
+                                            'accio' => 'iw_accio');
     // Return the table information
     return $table;
 }
