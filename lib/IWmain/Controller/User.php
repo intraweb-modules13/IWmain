@@ -1647,6 +1647,7 @@ class IWmain_Controller_User extends Zikula_Controller
                            'eps'  => array('type' => 'application/postscript', 'icon' => 'pdf.gif'),
                            'fdf'  => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
                            'flv'  => array('type' => 'video/x-flv', 'icon' => 'video.gif'),
+                            'gpx'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
                            'gif'  => array('type' => 'image/gif', 'icon' => 'image.gif'),
                            'gtar' => array('type' => 'application/x-gtar', 'icon' => 'zip.gif'),
                            'tgz'  => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
