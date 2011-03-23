@@ -1,6 +1,6 @@
 {getstatusmsg}
 <h1>{gt text="Intraweb main module"}</h1>
-<h2>{gt text="User configurable blocks values"}</h2>
+<h2>{gt text="User configurable values"}</h2>
 <form  class="z-form" enctype="multipart/form-data" method="post" name="conf" id="conf" action="{modurl modname="IWmain" type="user" func="updateconfig"}">
     <input type="hidden" name="authid" value="{insert name="generateauthkey" module="IWmain"}" />
     <fieldset>
@@ -28,6 +28,23 @@
         {/if}
     </fieldset>
     <div>
+        {if $usersCanManageName}
+            <fieldset>
+                <legend>{gt text="Change your real name"}</legend>
+                <div class="z-formrow">
+                    <label for="name">{gt text="Name"}</label>
+                    <input type="text" name="userName" value="{$userName}" />
+                </div>
+                <div class="z-formrow">
+                    <label for="name">{gt text="1st surname"}</label>
+                    <input type="text" name="userSurname1" value="{$userSurname1}" />
+                </div>
+                <div class="z-formrow">
+                    <label for="name">{gt text="2nd surname"}</label>
+                    <input type="text" name="userSurname2" value="{$userSurname2}" />
+                </div>
+            </fieldset>
+        {/if}
         {if $canChangeAvatar}
             <fieldset>
                 <legend>{gt text="Avatar replacement"}</legend>
@@ -35,7 +52,7 @@
                     {if $photo neq ''}
                         <img src="{modurl modname=IWmain type=user func=getPhoto fileName=$photo}" alt="" />
                     {else}
-                        {img modname='IWmain' src='noImage.jpg' set='images'}
+                        {img modname='IWmain' src='noImage.png' set='images'}
                     {/if}
                     <div>
                         <input type="checkbox" name="deleteAvatar" value="1" />{gt text="Delete"}

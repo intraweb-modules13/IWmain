@@ -1,47 +1,47 @@
 <?php
-class IWmain_Controller_User extends Zikula_Controller
-{
+
+class IWmain_Controller_User extends Zikula_Controller {
+
     /**
      * Show a form for some user configurable parameters
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
      * @return: Show the form with the configurable parameters
-    */
-    public function main()
-    {
+     */
+    public function main() {
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
         $uid = UserUtil::getVar('uid');
         // Create output object
-        $view = Zikula_View::getInstance('IWmain',false);
+        $view = Zikula_View::getInstance('IWmain', false);
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                                                 array('name' => 'blockFlaggedDetails',
-                                                       'module' => 'IWmain_block_news',
-                                                       'uid' => $uid,
-                                                       'sv' => $sv));
+                        array('name' => 'blockFlaggedDetails',
+                            'module' => 'IWmain_block_news',
+                            'uid' => $uid,
+                            'sv' => $sv));
 
         //get the headlines saved in the user vars. It is renovate every 10 minutes
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $subscribeNews = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                                           array('name' => 'subscribeNews',
-                                                 'module' => 'IWmain_cron',
-                                                 'uid' => $uid,
-                                                 'sv' => $sv));
+                        array('name' => 'subscribeNews',
+                            'module' => 'IWmain_cron',
+                            'uid' => $uid,
+                            'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                              array('uid' => -100,
-                                                    'name' => 'lastCronSuccessfull',
-                                                    'module' => 'IWmain_cron',
-                                                    'sv' => $sv));
+                        array('uid' => -100,
+                            'name' => 'lastCronSuccessfull',
+                            'module' => 'IWmain_cron',
+                            'sv' => $sv));
         $lastCronSuccessfullTime = ($lastCronSuccessfull <> '') ? date('M, d Y - H.i', $lastCronSuccessfull) : '';
         $time = time();
 
         $cronNotWorks = 0;
-        if ($lastCronSuccessfullTime == '' || $lastCronSuccessfull < $time - 5*24*60*60) {
+        if ($lastCronSuccessfullTime == '' || $lastCronSuccessfull < $time - 5 * 24 * 60 * 60) {
             $cronNotWorks = 1;
         }
 
@@ -49,17 +49,17 @@ class IWmain_Controller_User extends Zikula_Controller
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $userMail = ModUtil::func('IWmain', 'user', 'getUserInfo',
-                                   array('uid' => $uid,
-                                         'sv' => $sv,
-                                         'info' => 'e'));
+                        array('uid' => $uid,
+                            'sv' => $sv,
+                            'info' => 'e'));
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $photo = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                                array('uname' => UserUtil::getVar('uname'),
-                                      'sv' => $sv));
+                        array('uname' => UserUtil::getVar('uname'),
+                            'sv' => $sv));
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $photo_s = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                                  array('uname' => '_' . UserUtil::getVar('uname'),
-                                        'sv' => $sv));
+                        array('uname' => '_' . UserUtil::getVar('uname'),
+                            'sv' => $sv));
         //Check if gd library is available
         if (extension_loaded('gd') && ModUtil::getVar('IWmain', 'allowUserChangeAvatar') == 1) {
             $canChangeAvatar = true;
@@ -73,34 +73,56 @@ class IWmain_Controller_User extends Zikula_Controller
                 $canChangeAvatar = false;
             }
         }
+        // checks if user can change their real names
+        $modid = ModUtil::getIdFromName('IWusers');
+        $modinfo = ModUtil::getInfo($modid);
+        $usersCanManageName = (ModUtil::getVar('IWusers', 'usersCanManageName') == 1 && $modinfo['state'] == 3) ? true : false;
+        $userName = '';
+        if ($modinfo['state'] == 3) {
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $userName = ModUtil::func('IWmain', 'user', 'getUserInfo',
+                            array('uid' => UserUtil::getVar('uid'),
+                                  'info' => 'n',
+                                'sv' => $sv));
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $userSurname1 = ModUtil::func('IWmain', 'user', 'getUserInfo',
+                            array('uid' => UserUtil::getVar('uid'),
+                                  'info' => 'c1',
+                                'sv' => $sv));
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $userSurname2 = ModUtil::func('IWmain', 'user', 'getUserInfo',
+                            array('uid' => UserUtil::getVar('uid'),
+                                  'info' => 'c2',
+                                'sv' => $sv));
+        }
         // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
         $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
         $zendFuncAvailable = ($modinfo['state'] == 3 &&
-            $modinfo['version'] > '1.3' &&
-            ModUtil::getVar('IWagendas','allowGCalendar') == 1 &&
-            ModUtil::func('IWagendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
+                $modinfo['version'] > '1.3' &&
+                ModUtil::getVar('IWagendas', 'allowGCalendar') == 1 &&
+                ModUtil::func('IWagendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $gCalendarUse = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                                          array('name' => 'gCalendarUse',
-                                                'module' => 'IWagendas',
-                                                'uid' => $uid,
-                                                'sv' => $sv));
+                        array('name' => 'gCalendarUse',
+                            'module' => 'IWagendas',
+                            'uid' => $uid,
+                            'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $gUserName = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                    array('uid' => $uid,
-                                          'name' => 'gUserName',
-                                          'module' => 'IWagendas',
-                                          'sv' => $sv));
+                        array('uid' => $uid,
+                            'name' => 'gUserName',
+                            'module' => 'IWagendas',
+                            'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $gRefreshTime = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                       array('uid' => $uid,
-                                             'name' => 'gRefreshTime',
-                                             'module' => 'IWagendas',
-                                             'sv' => $sv));
+                        array('uid' => $uid,
+                            'name' => 'gRefreshTime',
+                            'module' => 'IWagendas',
+                            'sv' => $sv));
 
         $view->assign('cronNotWorks', $cronNotWorks);
         $view->assign('zendFuncAvailable', $zendFuncAvailable);
@@ -113,6 +135,11 @@ class IWmain_Controller_User extends Zikula_Controller
         $view->assign('subscribeNews', $subscribeNews);
         $view->assign('userMail', $userMail);
         $view->assign('canChangeAvatar', $canChangeAvatar);
+        $view->assign('usersCanManageName', $usersCanManageName);
+        $view->assign('userName', $userName);
+        $view->assign('userSurname1', $userSurname1);
+        $view->assign('userSurname2', $userSurname2);
+
         //Return the output that has been generated by this function
         return $view->fetch('IWmain_user_main.htm');
     }
@@ -121,9 +148,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * Update the user parameters
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
      * @return: Return user to form
-    */
-    public function updateconfig($args)
-    {
+     */
+    public function updateconfig($args) {
         $details = FormUtil::getPassedValue('details', isset($args['details']) ? $args['details'] : null, 'POST');
         $cron = FormUtil::getPassedValue('cron', isset($args['cron']) ? $args['cron'] : null, 'POST');
         $cronWorks = FormUtil::getPassedValue('cronWorks', isset($args['cronWorks']) ? $args['cronWorks'] : null, 'POST');
@@ -132,117 +158,122 @@ class IWmain_Controller_User extends Zikula_Controller
         $gUserName = FormUtil::getPassedValue('gUserName', isset($args['gUserName']) ? $args['gUserName'] : null, 'POST');
         $gUserPass = FormUtil::getPassedValue('gUserPass', isset($args['gUserPass']) ? $args['gUserPass'] : null, 'POST');
         $gRefreshTime = FormUtil::getPassedValue('gRefreshTime', isset($args['gRefreshTime']) ? $args['gRefreshTime'] : null, 'POST');
+        $userName = FormUtil::getPassedValue('userName', isset($args['userName']) ? $args['userName'] : null, 'POST');
+        $userSurname1 = FormUtil::getPassedValue('userSurname1', isset($args['userSurname1']) ? $args['userSurname1'] : null, 'POST');
+        $userSurname2 = FormUtil::getPassedValue('userSurname2', isset($args['userSurname2']) ? $args['userSurname2'] : null, 'POST');
+
+
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
         // Confirm authorisation code
         if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError (ModUtil::url('IWmain', 'user', 'main'));
+            return LogUtil::registerAuthidError(ModUtil::url('IWmain', 'user', 'main'));
         }
         $uid = UserUtil::getVar('uid');
         if ($details != null) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                     array('uid' => $uid,
-                                           'name' => 'blockFlaggedDetails',
-                                           'module' => 'IWmain_block_news',
-                                           'sv' => $sv,
-                                           'value' => '1'));
+                            array('uid' => $uid,
+                                'name' => 'blockFlaggedDetails',
+                                'module' => 'IWmain_block_news',
+                                'sv' => $sv,
+                                'value' => '1'));
         } else {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                     array('uid' => $uid,
-                                           'name' => 'blockFlaggedDetails',
-                                           'module' => 'IWmain_block_news',
-                                           'sv' => $sv));
+                            array('uid' => $uid,
+                                'name' => 'blockFlaggedDetails',
+                                'module' => 'IWmain_block_news',
+                                'sv' => $sv));
         }
         if ($gCalendarUse != null) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gCalendarUse',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv,
-                                           'value' => '1'));
+                            array('uid' => $uid,
+                                'name' => 'gCalendarUse',
+                                'module' => 'IWagendas',
+                                'sv' => $sv,
+                                'value' => '1'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gUserName',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv,
-                                           'value' => $gUserName));
+                            array('uid' => $uid,
+                                'name' => 'gUserName',
+                                'module' => 'IWagendas',
+                                'sv' => $sv,
+                                'value' => $gUserName));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gRefreshTime',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv,
-                                           'value' => $gRefreshTime));
+                            array('uid' => $uid,
+                                'name' => 'gRefreshTime',
+                                'module' => 'IWagendas',
+                                'sv' => $sv,
+                                'value' => $gRefreshTime));
             if ($gUserPass != '') {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                         array('uid' => $uid,
-                                               'name' => 'gUserPass',
-                                               'module' => 'IWagendas',
-                                               'sv' => $sv,
-                                               'value' => base64_encode($gUserPass)));
+                                array('uid' => $uid,
+                                    'name' => 'gUserPass',
+                                    'module' => 'IWagendas',
+                                    'sv' => $sv,
+                                    'value' => base64_encode($gUserPass)));
             }
         } else {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gCalendarUse',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv));
+                            array('uid' => $uid,
+                                'name' => 'gCalendarUse',
+                                'module' => 'IWagendas',
+                                'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gUserName',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv));
+                            array('uid' => $uid,
+                                'name' => 'gUserName',
+                                'module' => 'IWagendas',
+                                'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gUserPass',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv));
+                            array('uid' => $uid,
+                                'name' => 'gUserPass',
+                                'module' => 'IWagendas',
+                                'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                     array('uid' => $uid,
-                                           'name' => 'gRefreshTime',
-                                           'module' => 'IWagendas',
-                                           'sv' => $sv));
+                            array('uid' => $uid,
+                                'name' => 'gRefreshTime',
+                                'module' => 'IWagendas',
+                                'sv' => $sv));
         }
         if ($cronWorks != null) {
             if ($cron != null) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                         array('uid' => $uid,
-                                               'name' => 'subscribeNews',
-                                               'module' => 'IWmain_cron',
-                                               'sv' => $sv,
-                                               'value' => '1'));
+                                array('uid' => $uid,
+                                    'name' => 'subscribeNews',
+                                    'module' => 'IWmain_cron',
+                                    'sv' => $sv,
+                                    'value' => '1'));
             } else {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                         array('uid' => $uid,
-                                               'name' => 'subscribeNews',
-                                               'module' => 'IWmain_cron',
-                                               'sv' => $sv));
+                                array('uid' => $uid,
+                                    'name' => 'subscribeNews',
+                                    'module' => 'IWmain_cron',
+                                    'sv' => $sv));
             }
         }
         if ($deleteAvatar != 1) {
             //gets the attached file array
             $fileName = $_FILES['avatar']['name'];
-            $file_extension = strtolower(substr(strrchr($fileName,"."),1));
+            $file_extension = strtolower(substr(strrchr($fileName, "."), 1));
             if ($file_extension != 'png' && $file_extension != 'gif' && $file_extension != 'jpg' && $fileName != '') {
                 $errorMsg = $this->__('The information has been modified, but the uplaod of the avatar has failed because the file extension is not allowed. The allowed extensions are: png, jpg and gif');
                 $fileName = '';
             }
             // update the attached file to the server
             if ($fileName != '') {
-                for ($i=0; $i<2; $i++) {
+                for ($i = 0; $i < 2; $i++) {
                     $fileAvatarName = (ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded') == 1) ? '_' . UserUtil::getVar('uname') : UserUtil::getVar('uname');
                     $userFileName = ($i == 0) ? $fileAvatarName . '.' . $file_extension : $fileAvatarName . '_s.' . $file_extension;
                     $new_width = ($i == 0) ? 90 : 30;
@@ -251,37 +282,46 @@ class IWmain_Controller_User extends Zikula_Controller
                     $imgDest = ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $userFileName;
                     //if success $errorMsg = ''
                     $errorMsg = ModUtil::func('IWmain', 'user', 'thumb',
-                                               array('imgSource' => $imgSource,
-                                                     'imgDest' => $imgDest,
-                                                     'new_width' => $new_width,
-                                                     'imageName' => $fileName));
+                                    array('imgSource' => $imgSource,
+                                        'imgDest' => $imgDest,
+                                        'new_width' => $new_width,
+                                        'imageName' => $fileName));
                 }
             }
         } else {
             ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                       array('avatarName' => UserUtil::getVar('uname'),
-                             'extensions' => array('jpg',
-                                                   'png',
-                                                   'gif')));
+                            array('avatarName' => UserUtil::getVar('uname'),
+                                'extensions' => array('jpg',
+                                    'png',
+                                    'gif')));
             ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                       array('avatarName' => UserUtil::getVar('uname') . '_s',
-                             'extensions' => array('jpg',
-                                                   'png',
-                                                   'gif')));
+                            array('avatarName' => UserUtil::getVar('uname') . '_s',
+                                'extensions' => array('jpg',
+                                    'png',
+                                    'gif')));
         }
+
+        if (ModUtil::getVar('IWusers', 'usersCanManageName') == 1) {
+            if(!ModUtil::apiFunc('IWusers', 'user', 'changeRealName',
+                    array('userName' => $userName,
+                          'userSurname1' => $userSurname1,
+                          'userSurname2' => $userSurname2,
+                        ))) $errorMsg = 'Changing the real name has fauiled.';
+        }
+
         if ($errorMsg != '') {
             LogUtil::registerError($errorMsg);
         } else {
             //Successfull
-            LogUtil::registerStatus ($this->__('The values have changed correctly'));
+            LogUtil::registerStatus($this->__('The values have changed correctly'));
         }
         //delete flagged block content
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                 array('uid' => UserUtil::getVar('uid'),
-                                       'name' => 'flagged',
-                                       'module' => 'IWmain_block_flagged',
-                                       'sv' => $sv));
+                        array('uid' => UserUtil::getVar('uid'),
+                            'name' => 'flagged',
+                            'module' => 'IWmain_block_flagged',
+                            'sv' => $sv));
         return System::redirect(ModUtil::url('IWmain', 'user', 'main'));
     }
 
@@ -292,8 +332,7 @@ class IWmain_Controller_User extends Zikula_Controller
      * @param	the extensions image files that must be deleted
      * @return	The module information
      */
-    public function deleteAvatar($args)
-    {
+    public function deleteAvatar($args) {
         $avatarName = FormUtil::getPassedValue('avatarName', isset($args['avatarName']) ? $args['avatarName'] : null, 'POST');
         $extensions = FormUtil::getPassedValue('extensions', isset($args['extensions']) ? $args['extensions'] : null, 'POST');
         // Security check
@@ -308,11 +347,13 @@ class IWmain_Controller_User extends Zikula_Controller
                 if (!unlink($file)) {
                     $result = false;
                 } else {
-                    $count ++;
+                    $count++;
                 }
             }
         }
-        if ($count == 0) {$result = false;}
+        if ($count == 0) {
+            $result = false;
+        }
         return $result;
     }
 
@@ -324,8 +365,7 @@ class IWmain_Controller_User extends Zikula_Controller
      * @param	the width for the new image
      * @return	The module information
      */
-    public function thumb($args)
-    {
+    public function thumb($args) {
         $imgSource = FormUtil::getPassedValue('imgSource', isset($args['imgSource']) ? $args['imgSource'] : null, 'POST');
         $imgDest = FormUtil::getPassedValue('imgDest', isset($args['imgDest']) ? $args['imgDest'] : null, 'POST');
         $new_width = FormUtil::getPassedValue('new_width', isset($args['new_width']) ? $args['new_width'] : null, 'POST');
@@ -337,23 +377,24 @@ class IWmain_Controller_User extends Zikula_Controller
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $msg = ModUtil::func('IWmain', 'user', 'thumbnail',
-                              array('sv' => $sv,
-                                    'imgSource' => $imgSource,
-                                    'imgDest' => $imgDest,
-                                    'widthImg' => $new_width,
-                                    'heightImg' => 0,
-                                    'imageName' => $imageName));
-        if ($msg != '') return $msg;
-        $avatarName = strtolower(substr(strrchr($imgDest,"/"),1));
-        $avatarName = substr($avatarName,0,-4);
+                        array('sv' => $sv,
+                            'imgSource' => $imgSource,
+                            'imgDest' => $imgDest,
+                            'widthImg' => $new_width,
+                            'heightImg' => 0,
+                            'imageName' => $imageName));
+        if ($msg != '')
+            return $msg;
+        $avatarName = strtolower(substr(strrchr($imgDest, "/"), 1));
+        $avatarName = substr($avatarName, 0, -4);
         //Success. In this case delete possible pictures in others diferents formats
         if (ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded') != 1 || $deleteOthers == 1) {
             ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                           array('avatarName' => $avatarName,
-                                 'extensions' => $formats));
+                            array('avatarName' => $avatarName,
+                                'extensions' => $formats));
             ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                           array('avatarName' => $avatarName . '_s',
-                                 'extensions' => $formats));
+                            array('avatarName' => $avatarName . '_s',
+                                'extensions' => $formats));
         }
         return '';
     }
@@ -363,11 +404,11 @@ class IWmain_Controller_User extends Zikula_Controller
      *
      * @author	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param	$where:
-     *			res->All
-     *			fo->Forums
-     *			fu->Forms
-     *			me->Messages
-     *			ta->Noteboard
+     * 			res->All
+     * 			fo->Forums
+     * 			fu->Forms
+     * 			me->Messages
+     * 			ta->Noteboard
      * 			ag->Agendas
      * @return	The news prepared for HTML seen
      */
@@ -376,7 +417,7 @@ class IWmain_Controller_User extends Zikula_Controller
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : null, 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         if (ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                       array('sv' => $sv))) {
+                        array('sv' => $sv))) {
             $requestByCron = true;
         }
         if ($uid == null) {
@@ -388,17 +429,17 @@ class IWmain_Controller_User extends Zikula_Controller
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $news = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                   array('uid' => $uid,
-                                         'module' => 'IWmain_block_news',
-                                         'name' => 'news',
-                                         'sv' => $sv,
-                                         'nult' => true));
+                            array('uid' => $uid,
+                                'module' => 'IWmain_block_news',
+                                'name' => 'news',
+                                'sv' => $sv,
+                                'nult' => true));
             $init = '<!---' . $where . '--->';
             $end = '<!---/' . $where . '--->';
-            $pos_init = strpos($news,$init);
+            $pos_init = strpos($news, $init);
             $pos_end = ModUtil::func('IWmain', 'user', 'stringrpos',
-                                      array('sHaystack' => $news,
-                                            'sNeedle' => $end));
+                            array('sHaystack' => $news,
+                                'sNeedle' => $end));
             $calc = strlen($news) - $pos_end;
             $before = substr($news, 0, $pos_init);
             $after = substr($news, - $calc);
@@ -416,9 +457,9 @@ class IWmain_Controller_User extends Zikula_Controller
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('IWnoteboard','user','noves',
-                                           array('uid' => $uid,
-                                                 'sv' => $sv));
+                $noves = ModUtil::apiFunc('IWnoteboard', 'user', 'noves',
+                                array('uid' => $uid,
+                                    'sv' => $sv));
                 if ($noves['nombre'] > 0) {
                     $out .= '<!---ta--->';
                     $out .= '<tr>';
@@ -443,16 +484,16 @@ class IWmain_Controller_User extends Zikula_Controller
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('IWagendas','user','new',
-                                           array('uid' => $uid,
-                                                 'sv' => $sv));
+                $noves = ModUtil::apiFunc('IWagendas', 'user', 'new',
+                                array('uid' => $uid,
+                                    'sv' => $sv));
                 //Get user news in agendas
                 if ($noves > 0) {
                     $out .= '<!---ag--->';
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
                     $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWagendas">' . $this->__('Personal agenda') . '</a>';
-                    $out .= ('</td>');
+                    $out .= ( '</td>');
                     $out .= '<td align="right" valign="top">';
                     $out .= $noves;
                     $out .= '</td>';
@@ -471,9 +512,9 @@ class IWmain_Controller_User extends Zikula_Controller
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
                 $noves = ModUtil::apiFunc('IWmessages', 'user', 'countitems',
-                                           array('uid' => $uid,
-                                                 'unread' => true,
-                                                 'sv' =>$sv));
+                                array('uid' => $uid,
+                                    'unread' => true,
+                                    'sv' => $sv));
                 if ($noves > 0) {
                     $out .= '<!---me--->';
                     $out .= '<tr>';
@@ -497,24 +538,24 @@ class IWmain_Controller_User extends Zikula_Controller
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
                 $registres = ModUtil::apiFunc('IWforums', 'user', 'getall',
-                                               array('uid' => $uid,
-                                                     'sv' => $sv));
+                                array('uid' => $uid,
+                                    'sv' => $sv));
                 $out .= '<!---fo--->';
                 foreach ($registres as $registre) {
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
                     if ($registre['actiu'] == 1 && ModUtil::func('IWforums', 'user', 'access',
-                                                              array('fid' => $registre['fid'],
-                                                                    'uid' => $uid,    'sv' => $sv)) > 0) {
+                                    array('fid' => $registre['fid'],
+                                        'uid' => $uid, 'sv' => $sv)) > 0) {
                         if ($uid != $realUid) {
                             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                         }
                         $noves = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
-                                                   array('fid' => $registre['fid'],
-                                                         'tots' => true,
-                                                         'uid' => $uid,
-                                                         'sv' => $sv));
+                                        array('fid' => $registre['fid'],
+                                            'tots' => true,
+                                            'uid' => $uid,
+                                            'sv' => $sv));
                         if ($noves['nollegits'] > 0) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top">';
@@ -540,13 +581,13 @@ class IWmain_Controller_User extends Zikula_Controller
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
                 $forms = ModUtil::apiFunc('IWforms', 'user', 'getAllForms',
-                                           array('user' => 1,
-                                                 'sv' => $sv));
+                                array('user' => 1,
+                                    'sv' => $sv));
                 //get all the groups of the user
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $userGroups = ModUtil::func('IWmain', 'user', 'getAllUserGroups',
-                                             array('uid' => $uid,
-                                                   'sv' => $sv));
+                                array('uid' => $uid,
+                                    'sv' => $sv));
                 foreach ($userGroups as $group) {
                     $userGroupsArray[] = $group['id'];
                 }
@@ -556,10 +597,10 @@ class IWmain_Controller_User extends Zikula_Controller
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
                 $access = ModUtil::func('IWforms', 'user', 'access',
-                                         array('fid' => $form['fid'],
-                                               'userGroups' => $userGroupsArray,
-                                               'uid' => $uid,
-                                               'sv' => $sv));
+                                array('fid' => $form['fid'],
+                                    'userGroups' => $userGroupsArray,
+                                    'uid' => $uid,
+                                    'sv' => $sv));
                 $out .= '<!---fu--->';
                 if ($access['level'] > 1) {
                     // get not view user news
@@ -567,9 +608,9 @@ class IWmain_Controller_User extends Zikula_Controller
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
                     $nNotes = ModUtil::apiFunc('IWforms', 'user', 'getNewNotes',
-                                                array('fid' => $form['fid'],
-                                                      'uid' => $uid,
-                                                      'sv' => $sv));
+                                    array('fid' => $form['fid'],
+                                        'uid' => $uid,
+                                        'sv' => $sv));
                     if (count($nNotes) > 0) {
                         // user can read the notes
                         $out .= '<tr>';
@@ -593,7 +634,7 @@ class IWmain_Controller_User extends Zikula_Controller
         }
 
         //Change avatar requests
-        if (SecurityUtil::checkPermission( 'IWmain::', '::', ACCESS_ADMIN) && ($where == 'ch' || $where == '')) {
+        if (SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN) && ($where == 'ch' || $where == '')) {
             $files = ModUtil::func('IWmain', 'admin', 'getChangeAvatarRequest');
             if (count($files) > 0) {
                 $out .= '<!---ch--->';
@@ -611,27 +652,30 @@ class IWmain_Controller_User extends Zikula_Controller
         $out = $before . $out . $after;
         $out = str_replace('\'', '&acute;', $out);
         //if not there are news is it writed in the block
-        if (strpos($out,'<tr>') == '0') $out = $this->__('Nothing to show');
+        if (strpos($out, '<tr>') == '0')
+            $out = $this->__('Nothing to show');
         $out .= '</table>';
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         ModUtil::func('IWmain', 'user', 'userSetVar',
-                       array('uid' => $uid,
-                             'name' => 'news',
-                             'module' => 'IWmain_block_news',
-                             'sv' => $sv,
-                             'value' => $out,
-                             'lifetime' => '700'));
+                        array('uid' => $uid,
+                            'name' => 'news',
+                            'module' => 'IWmain_block_news',
+                            'sv' => $sv,
+                            'value' => $out,
+                            'lifetime' => '700'));
         return true;
     }
 
     public function stringrpos($args) {
         $sNeedle = FormUtil::getPassedValue('sNeedle', isset($args['sNeedle']) ? $args['sNeedle'] : null, 'POST');
         $sHaystack = FormUtil::getPassedValue('sHaystack', isset($args['sHaystack']) ? $args['sHaystack'] : null, 'POST');
-        $i = strlen( $sHaystack );
+        $i = strlen($sHaystack);
         while (substr($sHaystack, $i, strlen($sNeedle)) != $sNeedle) {
             $i--;
-            if ($i < 0) {return false;}
+            if ($i < 0) {
+                return false;
+            }
         }
         return $i;
     }
@@ -641,11 +685,11 @@ class IWmain_Controller_User extends Zikula_Controller
      *
      * @author	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param	$where:
-     *			res->All
-     *			fo->Forums
-     *			fu->Forms
-     *			me->Messages
-     *			ta->Noteboard
+     * 			res->All
+     * 			fo->Forums
+     * 			fu->Forms
+     * 			me->Messages
+     * 			ta->Noteboard
      * @return	The news prepared for HTML seen
      */
     public function flagged($args) {
@@ -657,28 +701,28 @@ class IWmain_Controller_User extends Zikula_Controller
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $flags = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                    array('uid' => UserUtil::getVar('uid'),
-                                          'module' => 'IWmain_block_flagged',
-                                          'name' => 'flagged',
-                                          'sv' => $sv,
-                                          'nult' => true));
+                            array('uid' => UserUtil::getVar('uid'),
+                                'module' => 'IWmain_block_flagged',
+                                'name' => 'flagged',
+                                'sv' => $sv,
+                                'nult' => true));
             $init = '<!---' . $where . '--->';
             $end = '<!---/' . $where . '--->';
-            $pos_init = strpos($flags,$init);
+            $pos_init = strpos($flags, $init);
             $pos_end = ModUtil::func('IWmain', 'user', 'stringrposFlagged',
-                                      array('flags' => $flags,
-                                            'end' => $end));
+                            array('flags' => $flags,
+                                'end' => $end));
             $calc = strlen($flags) - $pos_end;
-            $before = substr($flags,0,$pos_init);
+            $before = substr($flags, 0, $pos_init);
             $after = substr($flags, - $calc);
         }
         $uid = UserUtil::getVar('uid');
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                                                 array('name' => 'blockFlaggedDetails',
-                                                       'module' => 'IWmain_block_news',
-                                                       'uid' => $uid,
-                                                       'sv' => $sv));
+                        array('name' => 'blockFlaggedDetails',
+                            'module' => 'IWmain_block_news',
+                            'uid' => $uid,
+                            'sv' => $sv));
         $out = '<table width="100%">';
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have flagged posts in the module
         //IWnoteboard
@@ -689,23 +733,23 @@ class IWmain_Controller_User extends Zikula_Controller
             //Check that user can access the module
             if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
                 //Get the notes that user has flagged
-                $flagged = ModUtil::apiFunc('IWnoteboard','user','getFlagged');
+                $flagged = ModUtil::apiFunc('IWnoteboard', 'user', 'getFlagged');
                 // Get the user permissions in noteboard
                 $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                                                 array('uid' => $uid));
+                                array('uid' => $uid));
                 //Check if user can access the notes
                 foreach ($flagged as $registre) {
                     // insert the list of groups that have access to the note into an array
-                    $grups_acces = explode('$',$registre['destinataris']);
+                    $grups_acces = explode('$', $registre['destinataris']);
                     $esta_en_grups_acces = array_intersect($grups_acces, $permissions['grups']);
-                    $pos = strpos($registre['no_mostrar'],'$' . $uid . '$');
+                    $pos = strpos($registre['no_mostrar'], '$' . $uid . '$');
                     if ((($registre['verifica'] == 1 &&
-                        (count($esta_en_grups_acces) >= 1 ||
-                        $uid == $registre['informa'])) ||
-                        $permissions['potverificar']) &&
-                        $pos == 0) {
+                            (count($esta_en_grups_acces) >= 1 ||
+                            $uid == $registre['informa'])) ||
+                            $permissions['potverificar']) &&
+                            $pos == 0) {
                         $flaggedArray[] = array('noticia' => trim(cutTextFlagged(strip_tags($registre['noticia']), $chars)),
-                                                'nid' => $registre['nid']);
+                            'nid' => $registre['nid']);
                     }
                 }
                 $out .= '<!---ta--->';
@@ -741,7 +785,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 $flaggedArray = array();
                 foreach ($flagged as $flag) {
                     $flaggedArray[] = array('subject' => $flag['subject'],
-                                            'msgid' => $flag['msg_id']);
+                        'msgid' => $flag['msg_id']);
                 }
                 $out .= '<!---me--->';
                 if (count($flaggedArray) > 0) {
@@ -772,32 +816,32 @@ class IWmain_Controller_User extends Zikula_Controller
         if ($modinfo['state'] == 3 && ($where == 'fo' || $where == '')) {
             if (SecurityUtil::checkPermission('IWforums::', "::", ACCESS_READ)) {
                 //get all forums
-                $forums = ModUtil::apiFunc('IWforums','user','getall',
-                                            array('filter' => '1'));
+                $forums = ModUtil::apiFunc('IWforums', 'user', 'getall',
+                                array('filter' => '1'));
                 foreach ($forums as $forum) {
                     $n_msg = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
-                                               array('fid' => $forum['fid'],
-                                                     'tots' => true));
+                                    array('fid' => $forum['fid'],
+                                        'tots' => true));
                     $marcats = $n_msg['marcats'];
                     $forumsArray[] = array('fid' => $forum['fid'],
-                                           'name' => $forum['nom_forum'],
-                                           'marcats' => $marcats);
+                        'name' => $forum['nom_forum'],
+                        'marcats' => $marcats);
                 }
                 $out .= '<!---fo--->';
                 foreach ($forumsArray as $forum) {
                     if ($forum['marcats'] > 0) {
-                        $flagged = ModUtil::apiFunc('IWforums','user','getFlagged',
-                                                     array('fid' => $forum['fid']));
+                        $flagged = ModUtil::apiFunc('IWforums', 'user', 'getFlagged',
+                                        array('fid' => $forum['fid']));
                         $flaggedArray = array();
                         foreach ($flagged as $registre) {
                             if (ModUtil::func('IWforums', 'user', 'access',
-                                               array('fid' => $registre['fid']))) {
+                                            array('fid' => $registre['fid']))) {
                                 $oid = ($registre['idparent'] == 0) ? $registre['fmid'] : $registre['idparent'];
-                                $flaggedArray[] = array('titol' => trim(cutTextFlagged(strip_tags($registre['titol']),$chars)),
-                                                        'fmid' => $registre['fmid'],
-                                                        'ftid' => $registre['ftid'],
-                                                        'oid' => $oid,
-                                                        'fid' => $registre['fid']);
+                                $flaggedArray[] = array('titol' => trim(cutTextFlagged(strip_tags($registre['titol']), $chars)),
+                                    'fmid' => $registre['fmid'],
+                                    'ftid' => $registre['ftid'],
+                                    'oid' => $oid,
+                                    'fid' => $registre['fid']);
                             }
                         }
                         $out .= '<tr>';
@@ -830,51 +874,51 @@ class IWmain_Controller_User extends Zikula_Controller
             if (SecurityUtil::checkPermission('IWforms::', "::", ACCESS_READ)) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                                                array('info' => 'ccn',
-                                                      'sv' => $sv));
+                                array('info' => 'ccn',
+                                    'sv' => $sv));
                 //Get the notes that user has flagged
-                $flagged = ModUtil::apiFunc('IWforms','user','getWhereFlagged');
+                $flagged = ModUtil::apiFunc('IWforms', 'user', 'getWhereFlagged');
                 $flaggedArray = array();
                 $formsArray = array();
                 //Check if user can access the forms as validator
                 foreach ($flagged as $flag) {
-                        //get form information
-                        $access = ModUtil::func('IWforms', 'user', 'access',
-                                                 array('fid' => $flag['fid']));
-                        if ($access['level'] == 7) {
-                                $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition',
-                                                           array('fid' => $flag['fid']));
-                                $formsArray[] = array('name' => trim(cutTextFlagged(strip_tags($formx['formName']), $chars)),
-                                                      'fid' => $formx['fid']);
-                        }
+                    //get form information
+                    $access = ModUtil::func('IWforms', 'user', 'access',
+                                    array('fid' => $flag['fid']));
+                    if ($access['level'] == 7) {
+                        $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition',
+                                        array('fid' => $flag['fid']));
+                        $formsArray[] = array('name' => trim(cutTextFlagged(strip_tags($formx['formName']), $chars)),
+                            'fid' => $formx['fid']);
+                    }
                 }
                 $out .= '<!---fr--->';
                 foreach ($formsArray as $form) {
-                        $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged',
-                                                      array('fid' => $form['fid']));
-                        $out .= '<tr>';
-                        $out .= '<td align="left" valign="top">';
-                        $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
-                        $out .= '</td>';
-                        $out .= '<td align="right" valign="top">';
-                        $out .= count($flaggeds);
-                        $out .= '</td>';
-                        $out .= '</tr>';
-                        if ($blockFlaggedDetails) {
-                                foreach ($flaggeds as $flagged) {
-                                        $out .= '<tr>';
-                                        $out .= '<td align="left" valign="top" colspan ="2">';
-                                        $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '&fmid=' . $flagged['fmid'] . '">' . $this->__("sent at ") . ' '. date('d/m/Y',$flagged['time']) . ' ' . $this->__("by ") . ' ' . $usersFullname[$flagged['user']] . '</a>';
-                                        $out .= '</td>';
-                                        $out .= '</tr>';
-                                }
+                    $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged',
+                                    array('fid' => $form['fid']));
+                    $out .= '<tr>';
+                    $out .= '<td align="left" valign="top">';
+                    $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
+                    $out .= '</td>';
+                    $out .= '<td align="right" valign="top">';
+                    $out .= count($flaggeds);
+                    $out .= '</td>';
+                    $out .= '</tr>';
+                    if ($blockFlaggedDetails) {
+                        foreach ($flaggeds as $flagged) {
+                            $out .= '<tr>';
+                            $out .= '<td align="left" valign="top" colspan ="2">';
+                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '&fmid=' . $flagged['fmid'] . '">' . $this->__("sent at ") . ' ' . date('d/m/Y', $flagged['time']) . ' ' . $this->__("by ") . ' ' . $usersFullname[$flagged['user']] . '</a>';
+                            $out .= '</td>';
+                            $out .= '</tr>';
                         }
+                    }
                 }
                 $out .= '<!---/fr--->';
             }
         }
         $out = $before . $out . $after;
-        $out = str_replace('\'','&acute;',$out);
+        $out = str_replace('\'', '&acute;', $out);
         //Si no hi ha novetats no mostrem el bloc
         if (strpos($out, '<tr>') == '0') {
             $out = '';
@@ -884,12 +928,12 @@ class IWmain_Controller_User extends Zikula_Controller
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         ModUtil::func('IWmain', 'user', 'userSetVar',
-                   array('uid' => UserUtil::getVar('uid'),
-                         'name' => 'flagged',
-                         'module' => 'IWmain_block_flagged',
-                         'sv' => $sv,
-                         'value' => $out,
-                         'lifetime' => '600'));
+                        array('uid' => UserUtil::getVar('uid'),
+                            'name' => 'flagged',
+                            'module' => 'IWmain_block_flagged',
+                            'sv' => $sv,
+                            'value' => $out,
+                            'lifetime' => '600'));
         return true;
     }
 
@@ -897,13 +941,15 @@ class IWmain_Controller_User extends Zikula_Controller
         $i = strlen($args['flags']);
         while (substr($args['flags'], $i, strlen($args['end'])) != $args['end']) {
             $i--;
-            if ($i < 0) {return false;}
+            if ($i < 0) {
+                return false;
+            }
         }
         return $i;
     }
 
     function cutTextFlagged($text, $lenght = 25) {
-        $newText = substr($text,0,$lenght);
+        $newText = substr($text, 0, $lenght);
         if ($text > $newText) {
             $newText .= '...';
         }
@@ -915,9 +961,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	name of the file that have to be gotten
      * @return:	The file information
-    */
-    public function getPhoto($args)
-    {
+     */
+    public function getPhoto($args) {
         // File name with the path
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : 0, 'GET');
         // Security check
@@ -926,60 +971,28 @@ class IWmain_Controller_User extends Zikula_Controller
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         return ModUtil::func('IWmain', 'user', 'getFile',
-                              array('fileName' => $fileName,
-                                    'sv' => $sv));
+                array('fileName' => $fileName,
+                    'sv' => $sv));
     }
 
     /**
      * Make sure that the request comes from a real module
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
      * @return: A session var with an encrypted value
-    */
-    public function genSecurityValue()
-    {
+     */
+    public function genSecurityValue() {
         $rand = rand();
         $value = md5($rand);
         $_SESSION['iwSecure'] = $value;
         return $_SESSION['iwSecure'] = md5($rand);
 
 
-        
+
         return $value;
         return 1;
 
         // TODO: Important!
-
-
-
-
-
-
-
-
-
-
-
-
         //die('FALLA A Controller/User.php 980');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //return $_SESSION['iwSecure'] = md5($rand);
     }
 
@@ -988,9 +1001,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the securtity value generated in the module functions
      * @return: 	True if the security value is correct an false in any other case
-    */
-    public function checkSecurityValue($args)
-    {
+     */
+    public function checkSecurityValue($args) {
         $return = true;
         if ($args['sv'] != $_SESSION['iwSecure'] || $_SESSION['iwSecure'] == '') {
             $return = false;
@@ -1004,27 +1016,26 @@ class IWmain_Controller_User extends Zikula_Controller
      * get the information of all users
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the information needed and the security value.
-     *		Possible values returned:
-     *			'n'	-> Name
+     * 		Possible values returned:
+     * 			'n'	-> Name
      * 			'c1' 	-> 1st surname
-     *			'c2'	-> 2nd surname
-     *			'ncc'	-> Full name
-     *			'nc'	-> Name and 1st surname
-     *			'cn'	-> Fullname with the name at the end
-     *			'ccn'	-> Fullname with the name at the end
-     *			'l'	-> Username
+     * 			'c2'	-> 2nd surname
+     * 			'ncc'	-> Full name
+     * 			'nc'	-> Name and 1st surname
+     * 			'cn'	-> Fullname with the name at the end
+     * 			'ccn'	-> Fullname with the name at the end
+     * 			'l'	-> Username
      * @return:	An array with the information of all users where the array key is the
      * 		user identity. If a data is not found returns the username
-    */
-    public function getAllUsersInfo($args)
-    {
+     */
+    public function getAllUsersInfo($args) {
         extract($args);
         $fromArray = (isset($fromArray)) ? $fromArray : array();
         $list = (isset($list)) ? $list : '';
         $users = ModUtil::apiFunc('IWmain', 'user', 'getAllUsers',
-                                   array('sv' => $sv,
-                                         'fromArray' => $fromArray,
-                                         'list' => $list));
+                        array('sv' => $sv,
+                            'fromArray' => $fromArray,
+                            'list' => $list));
         if ($users) {
             foreach ($users as $user) {
                 $usersName[$user['uid']] = $user['uname'];
@@ -1037,9 +1048,9 @@ class IWmain_Controller_User extends Zikula_Controller
             // Get users extra information because it probably exists
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $extraUsers = ModUtil::apiFunc('IWmain', 'user', 'getUsersExtraInfo',
-                                            array('sv' => $sv,
-                                                  'fromArray' => $fromArray,
-                                                  'list' => $list));
+                            array('sv' => $sv,
+                                'fromArray' => $fromArray,
+                                'list' => $list));
         }
         $extraUsersArray = array();
         $usersInfo = array();
@@ -1088,23 +1099,22 @@ class IWmain_Controller_User extends Zikula_Controller
      * get the information of an users
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the information needed and user id and the security value.
-     *		Possible values returned:
-     *			'n'	-> Name
+     * 		Possible values returned:
+     * 			'n'	-> Name
      * 			'c1' 	-> 1st surname
-     *			'c2'	-> 2nd surname
-     *			'ncc'	-> Full name
-     *			'nc'	-> Name and 1st surname
-     *			'cn'	-> Fullname with the name at the end
-     *			'ccn'	-> Fullname with the name at the end
-     *			'l'	-> Username
+     * 			'c2'	-> 2nd surname
+     * 			'ncc'	-> Full name
+     * 			'nc'	-> Name and 1st surname
+     * 			'cn'	-> Fullname with the name at the end
+     * 			'ccn'	-> Fullname with the name at the end
+     * 			'l'	-> Username
      * @return:	An array with the information of an users. If a data is not found
-     *		returns the username
-    */
-    public function getUserInfo($args)
-    {
+     * 		returns the username
+     */
+    public function getUserInfo($args) {
         $user = ModUtil::apiFunc('IWmain', 'user', 'getUser',
-                                  array('uid' => $args['uid'],
-                                        'sv' => $args['sv']));
+                        array('uid' => $args['uid'],
+                            'sv' => $args['sv']));
         // Checks if module IWusers is installed. In this case get the users extra information
         $modid = ModUtil::getIdFromName('IWusers');
         $modinfo = ModUtil::getInfo($modid);
@@ -1112,8 +1122,8 @@ class IWmain_Controller_User extends Zikula_Controller
             // Get users extra information because it probably exists
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $userExtraInfo = ModUtil::apiFunc('IWmain', 'user', 'getUserExtraInfo',
-                                               array('uid' => $args['uid'],
-                                                     'sv' => $sv));
+                            array('uid' => $args['uid'],
+                                'sv' => $sv));
         } else {
             // Force username return
             $args['info'] = 'l';
@@ -1126,9 +1136,9 @@ class IWmain_Controller_User extends Zikula_Controller
                 $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 break;
             case 'ccn':
-                if ($userExtraInfo[0]['cognom2']!='') {
+                if ($userExtraInfo[0]['cognom2'] != '') {
                     $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
-                } elseif ($userExtraInfo[0]['cognom1']!='') {
+                } elseif ($userExtraInfo[0]['cognom1'] != '') {
                     $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 } else {
                     $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
@@ -1159,18 +1169,19 @@ class IWmain_Controller_User extends Zikula_Controller
      * @param:	args   Array with the fields plus (additional group), less (not group)
      * 		and the security value
      * @return:	An array with the groups information
-    */
-    public function getAllGroups($args)
-    {
+     */
+    public function getAllGroups($args) {
         $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroups',
-                                    array('sv' => $args['sv']));
-        if (!empty($args['plus'])) {$items[] = array('id'=>0,
-                                                     'name' => $args['plus']);}
+                        array('sv' => $args['sv']));
+        if (!empty($args['plus'])) {
+            $items[] = array('id' => 0,
+                'name' => $args['plus']);
+        }
         $less = (isset($args['less'])) ? $args['less'] : 0;
         foreach ($groups as $group) {
             if ($group['gid'] != $less) {
                 $items[$group['gid']] = array('id' => $group['gid'],
-                                              'name' => $group['name']);
+                    'name' => $group['name']);
             }
         }
         // return results
@@ -1182,28 +1193,29 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the group identity, the plus user and the security value
      * @return:	An array with the users information
-    */
-    public function getMembersGroup($args)
-    {
+     */
+    public function getMembersGroup($args) {
         extract($args);
         if (!isset($gid) || !is_numeric($gid)) {
             return false;
         }
         $membersArray = array();
-        
+
         $members = ModUtil::apiFunc('IWmain', 'user', 'getMembersGroup',
-                                     array('gid' => $gid,
-                                           'sv' => $sv));
-        if (!empty($plus)) {$membersArray[] = array('id' => 0,
-                                                    'name' => $plus);}
+                        array('gid' => $gid,
+                            'sv' => $sv));
+        if (!empty($plus)) {
+            $membersArray[] = array('id' => 0,
+                'name' => $plus);
+        }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                                        array('info' => 'ccn',
-                                              'sv' => $sv,
-                                              'fromArray' => $members));
+                        array('info' => 'ccn',
+                            'sv' => $sv,
+                            'fromArray' => $members));
         foreach ($members as $member) {
             $membersArray[] = array('name' => $usersFullname[$member['uid']],
-                                    'id' => $member['uid']);
+                'id' => $member['uid']);
         }
         // Return values
         return $membersArray;
@@ -1214,12 +1226,11 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the user and the group identities
      * @return:	True if the user is member of the group and false in any other case
-    */
-    public function isMember($args)
-    {
-        extract ($args);
+     */
+    public function isMember($args) {
+        extract($args);
         if (!isset($uid) || !is_numeric($uid)) {
-            return LogUtil::registerError ($this->__('Error! Could not do what you wanted. Please check your input.'));
+            return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         if (!isset($gid) || !is_numeric($gid)) {
             $gid = 0;
@@ -1228,10 +1239,10 @@ class IWmain_Controller_User extends Zikula_Controller
             $sgid = 0;
         }
         $isMember = ModUtil::apiFunc('IWmain', 'user', 'isMember',
-                                      array('uid' => $uid,
-                                            'gid' => $gid,
-                                            'sgid' => $sgid,
-                                            'sv' => $sv));
+                        array('uid' => $uid,
+                            'gid' => $gid,
+                            'sgid' => $sgid,
+                            'sv' => $sv));
         // Return values
         return $isMember;
     }
@@ -1241,13 +1252,12 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the security value
      * @return:	An array with the information of all the groups
-    */
-    public function getAllGroupsInfo($args)
-    {
+     */
+    public function getAllGroupsInfo($args) {
         extract($args);
         $groupsInfo = array();
         $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroupsInfo',
-                                    array('sv' => $sv));
+                        array('sv' => $sv));
         if ($groups) {
             foreach ($groups as $group) {
                 $groupsInfo[$group['gid']] = $group['name'];
@@ -1261,9 +1271,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the groups id
      * @return:	An array with the information of all the groups where the user is member
-    */
-    public function getAllUserGroups($args)
-    {
+     */
+    public function getAllUserGroups($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         if (!isset($uid) || !is_numeric($uid)) {
@@ -1271,8 +1280,8 @@ class IWmain_Controller_User extends Zikula_Controller
         }
         $items = array();
         $userGroups = ModUtil::apiFunc('IWmain', 'user', 'getAllUserGroups',
-                                        array('sv' => $sv,
-                                              'uid' => $uid));
+                        array('sv' => $sv,
+                            'uid' => $uid));
         foreach ($userGroups as $group) {
             $items[$group['gid']] = array('id' => $group['gid']);
         }
@@ -1284,9 +1293,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the file parameters, the security value and the folder where the file have to be uploaded
      * @return:	True if the file has been uploaded and a error message in any other case
-    */
-    public function updateFile($args)
-    {
+     */
+    public function updateFile($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $folder = FormUtil::getPassedValue('folder', isset($args['folder']) ? $args['folder'] : null, 'POST');
         $file = FormUtil::getPassedValue('file', isset($args['file']) ? $args['file'] : null, 'POST');
@@ -1300,7 +1308,7 @@ class IWmain_Controller_User extends Zikula_Controller
         $widthImg = FormUtil::getPassedValue('width', isset($args['widthImg']) ? $args['widthImg'] : 0, 'POST');
         $heightImg = FormUtil::getPassedValue('heightImg', isset($args['heightImg']) ? $args['heightImg'] : 0, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
+            return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         //Check if folder exists. If not returns error.
         if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . $folder)) {
@@ -1312,21 +1320,21 @@ class IWmain_Controller_User extends Zikula_Controller
             $file['size'] = $fileSize;
         }
         //Check if the extension of the file is allowed
-        $allowedExtensionsText = ($allowOnly != null) ? $allowOnly : ModUtil::getVar('IWmain','extensions') . $allow;
+        $allowedExtensionsText = ($allowOnly != null) ? $allowOnly : ModUtil::getVar('IWmain', 'extensions') . $allow;
         $allowed_extensions = explode('|', $allowedExtensionsText);
-        $file_extension = strtolower(substr(strrchr($file['name'],"."),1));
-        if (!in_array($file_extension,$allowed_extensions)) {
+        $file_extension = strtolower(substr(strrchr($file['name'], "."), 1));
+        if (!in_array($file_extension, $allowed_extensions)) {
             return array('msg' => $this->__('The file extension is not allowed.'), 'fileName' => '');
         }
         //Check if the file size is allowed
-        $maxsize = ModUtil::getVar('IWmain','maxsize');
+        $maxsize = ModUtil::getVar('IWmain', 'maxsize');
         if ($file['size'] > $maxsize) {
             return array('msg' => $this->__('File size not allowed.'), 'fileName' => '');
         }
         if (!isset($fileName) || $fileName == '') {
             // Prepare file name
             // Replace spaces with _
-            $fileName = str_replace(' ','_',$file['name']);
+            $fileName = str_replace(' ', '_', $file['name']);
             // Check if file name exists into the folder. In this case change the name
             if ($overwrite != 1) {
                 $fitxer = $fileName;
@@ -1341,24 +1349,24 @@ class IWmain_Controller_User extends Zikula_Controller
         //Update the file
         if (!move_uploaded_file($file['tmp_name'], $filePath)) {
             return array('msg' => $this->__("The attached file haven't been updated because an error."),
-                         'fileName' => '');
+                'fileName' => '');
         } else {
             // if a thumbnail is required and it can be done, do it
             if (($widthImg != 0 ||
-                $heightImg != 0) &&
-                ($file_extension == 'gif' || $file_extension == 'jpg' || $file_extension == 'png')) {
-                    $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                    ModUtil::func('IWmain', 'user', 'thumbnail',
-                                   array('sv' => $sv,
-                                         'imgSource' => $filePath,
-                                         'imgDest' => $filePath,
-                                         'widthImg' => $widthImg,
-                                         'heightImg' => $heightImg));
+                    $heightImg != 0) &&
+                    ($file_extension == 'gif' || $file_extension == 'jpg' || $file_extension == 'png')) {
+                $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+                ModUtil::func('IWmain', 'user', 'thumbnail',
+                                array('sv' => $sv,
+                                    'imgSource' => $filePath,
+                                    'imgDest' => $filePath,
+                                    'widthImg' => $widthImg,
+                                    'heightImg' => $heightImg));
             }
         }
         // The file has been updated
         return array('msg' => '',
-                     'fileName' => $fileName);
+            'fileName' => $fileName);
     }
 
     /**
@@ -1369,9 +1377,8 @@ class IWmain_Controller_User extends Zikula_Controller
      * @param: widthImg => Maximum width of the image
      * @param: heightImg => Maximum height of the image
      * @return:	True if success and false otherwise
-    */
-    public function thumbnail($args)
-    {
+     */
+    public function thumbnail($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $imgSource = FormUtil::getPassedValue('imgSource', isset($args['imgSource']) ? $args['imgSource'] : null, 'POST');
         $imgDest = FormUtil::getPassedValue('imgDest', isset($args['imgDest']) ? $args['imgDest'] : null, 'POST');
@@ -1379,22 +1386,22 @@ class IWmain_Controller_User extends Zikula_Controller
         $heightImg = FormUtil::getPassedValue('heightImg', isset($args['heightImg']) ? $args['heightImg'] : 0, 'POST');
         $imageName = FormUtil::getPassedValue('imageName', isset($args['imageName']) ? $args['imageName'] : null, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to use this functionality.'));
+            return LogUtil::registerError($this->__('You are not allowed to access to use this functionality.'));
         }
         $errorMsg = '';
         if (($widthImg == 0 && $heightImg == 0) ||
-            $imgSource == null ||
-            $imgDest == null ||
-            !file_exists($imgSource)) {
-                return $this->__('Error! The parameters receiver are not correct.');
+                $imgSource == null ||
+                $imgDest == null ||
+                !file_exists($imgSource)) {
+            return $this->__('Error! The parameters receiver are not correct.');
         }
         // seems that all the parameters required are available and the thumbnail is created
         $fileExtension = ($imageName != numm && $imageName != '') ? FileUtil::getExtension($imageName) : FileUtil::getExtension($imgSource);
         $thumbnailExtensions = array('gif',
-                                     'jpg',
-                                     'jpeg',
-                                     'png');
-        if (!in_array($fileExtension,$thumbnailExtensions)) {
+            'jpg',
+            'jpeg',
+            'png');
+        if (!in_array($fileExtension, $thumbnailExtensions)) {
             return $this->__('Error! Thumbnailing the image file.');
         }
         $format = '';
@@ -1433,27 +1440,27 @@ class IWmain_Controller_User extends Zikula_Controller
         imagesavealpha($destimg, true);
         imagealphablending($destimg, true);
         // create the image
-        switch($format) {
+        switch ($format) {
             case 'image/gif':
-                if (!$srcimg = imagecreatefromgif ($imgSource)) {
+                if (!$srcimg = imagecreatefromgif($imgSource)) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
                 // preserve the transparency
                 $transIndex = imagecolortransparent($srcimg);
                 if ($transIndex >= 0) {
                     // get transparent colors from the received image
-                    $transColor    = imagecolorsforindex($srcimg, $transIndex);
+                    $transColor = imagecolorsforindex($srcimg, $transIndex);
                     // allocate the color to the destiny image
-                    $transIndex    = imagecolorallocate($destimg, $transColor['red'], $transColor['green'], $transColor['blue']);
+                    $transIndex = imagecolorallocate($destimg, $transColor['red'], $transColor['green'], $transColor['blue']);
                     // fills the background of destiny image with the allocated color.
                     imagefill($destimg, 0, 0, $transIndex);
                     // set the background color for destiny image to transparent
                     imagecolortransparent($destimg, $transIndex);
                 }
-                if (!imagecopyresampled($destimg,$srcimg, 0, 0, 0, 0, $newWidth, $newHeight, imagesx($srcimg), imagesy($srcimg))) {
+                if (!imagecopyresampled($destimg, $srcimg, 0, 0, 0, 0, $newWidth, $newHeight, imagesx($srcimg), imagesy($srcimg))) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
-                if (!imagegif ($destimg,$imgDest)) {
+                if (!imagegif($destimg, $imgDest)) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
                 break;
@@ -1461,10 +1468,10 @@ class IWmain_Controller_User extends Zikula_Controller
                 if (!$srcimg = imagecreatefromjpeg($imgSource)) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
-                if (!imagecopyresampled($destimg,$srcimg, 0, 0, 0, 0, $newWidth, $newHeight, ImageSX($srcimg), ImageSY($srcimg))) {
+                if (!imagecopyresampled($destimg, $srcimg, 0, 0, 0, 0, $newWidth, $newHeight, ImageSX($srcimg), ImageSY($srcimg))) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
-                if (!imagejpeg($destimg,$imgDest)) {
+                if (!imagejpeg($destimg, $imgDest)) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
                 break;
@@ -1484,7 +1491,7 @@ class IWmain_Controller_User extends Zikula_Controller
                 if (!imagecopyresampled($destimg, $srcimg, 0, 0, 0, 0, $newWidth, $newHeight, ImageSX($srcimg), ImageSY($srcimg))) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
-                if (!imagepng($destimg,$imgDest)) {
+                if (!imagepng($destimg, $imgDest)) {
                     return $this->__('Error! Thumbnailing the image file.');
                 }
                 break;
@@ -1499,17 +1506,16 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the file name, the security value and the folder where the file have to be deleted
      * @return:	True if the file has been deleted
-    */
-    public function deleteFile($args)
-    {
+     */
+    public function deleteFile($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $folder = FormUtil::getPassedValue('folder', isset($args['folder']) ? $args['folder'] : null, 'POST');
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : null, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
+            return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         if (!unlink(ModUtil::getVar('IWmain', 'documentRoot') . '/' . $folder . '/' . $fileName)) {
-            return LogUtil::registerError ($this->__('Failed to deleted'));
+            return LogUtil::registerError($this->__('Failed to deleted'));
         }
         return true;
     }
@@ -1519,33 +1525,32 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the file name, the security value and the folder where the file have to be deleted
      * @return:	True if the file has been deleted
-    */
-    public function downloadFile($args)
-    {
+     */
+    public function downloadFile($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : null, 'POST');
         $fileNameInServer = FormUtil::getPassedValue('fileNameInServer', isset($args['fileNameInServer']) ? $args['fileNameInServer'] : null, 'POST');
         if (!isset($fileNameInServer)) {
             $fileNameInServer = $fileName;
         }
-        $folder =  ModUtil::getVar('IWmain','documentRoot');
+        $folder = ModUtil::getVar('IWmain', 'documentRoot');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                            array('sv' => $sv))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
+                        array('sv' => $sv))) {
+            return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         //Check if file exists. If not returns error.
         if (!file_exists($folder . '/' . $fileNameInServer)) {
             // Create output object
-            $view = Zikula_View::getInstance('IWmain',false);
+            $view = Zikula_View::getInstance('IWmain', false);
             $view->assign('file', $folder . '/' . $fileName);
             return $view->fetch('IWmain_user_file_not_found.htm');
         }
         // get file size
         $fileSize = filesize($folder . '/' . $fileNameInServer);
         // Get file extension
-        $fileExtension = strtolower(substr(strrchr($fileName,"."),1));
+        $fileExtension = strtolower(substr(strrchr($fileName, "."), 1));
         $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype',
-                                     array('extension' => $fileExtension));
+                        array('extension' => $fileExtension));
         $ctype = $ctypeArray['type'];
         //Begin writing headers
         header("Pragma: public");
@@ -1556,10 +1561,10 @@ class IWmain_Controller_User extends Zikula_Controller
         //Use the switch-generated Content-Type
         header("Content-Type: $ctype");
         //Force the download
-        $header = "Content-Disposition: attachment; filename=".$fileName.";";
+        $header = "Content-Disposition: attachment; filename=" . $fileName . ";";
         header($header);
         header("Content-Transfer-Encoding: binary");
-        header("Content-Length: ".$fileSize);
+        header("Content-Length: " . $fileSize);
         @readfile($folder . '/' . $fileNameInServer);
         return true;
     }
@@ -1569,37 +1574,37 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	name of the file that have to be gotten
      * @return:	The file
-    */
+     */
     public function getFile($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : null, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $args['sv']))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
+            return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
-        $fileName = ModUtil::getVar('IWmain','documentRoot') . '/' . $fileName;
+        $fileName = ModUtil::getVar('IWmain', 'documentRoot') . '/' . $fileName;
         //Check if file exists. If not returns error.
         if (!file_exists($fileName)) {
             // Create output object
-            $view = Zikula_View::getInstance('IWmain',false);
+            $view = Zikula_View::getInstance('IWmain', false);
             $view->assign('file', $fileName);
             return $view->fetch('IWmain_user_file_not_found.htm');
         }
         // Get file extension
-        $fileExtension = strtolower(substr(strrchr($fileName, "."),1));
+        $fileExtension = strtolower(substr(strrchr($fileName, "."), 1));
         $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype',
-                                     array('extension' => $fileExtension));
+                        array('extension' => $fileExtension));
         $ctype = $ctypeArray['type'];
         //Use the switch-generated Content-Type
         header("Content-Type: $ctype");
-        $chunksize = 1*(1024*1024);
+        $chunksize = 1 * (1024 * 1024);
         $buffer = '';
-        $cnt =0;
+        $cnt = 0;
         $handle = fopen($fileName, 'rb');
         if ($handle === false) {
             return false;
         }
         while (!feof($handle)) {
-            @set_time_limit(60*60);
+            @set_time_limit(60 * 60);
             $buffer = fread($handle, $chunksize);
             echo $buffer;
             flush();
@@ -1617,154 +1622,156 @@ class IWmain_Controller_User extends Zikula_Controller
      */
     public function getMimetype($args) {
         $extension = FormUtil::getPassedValue('extension', isset($args['extension']) ? $args['extension'] : null, 'POST');
-        $mimeTypes = array('xxx'  => array('type' => 'document/unknown', 'icon' => 'unknown.gif'),
-                           '3gp'  => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
-                           'ai'   => array('type' => 'application/postscript', 'icon' => 'image.gif'),
-                           'aif'  => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
-                           'aiff' => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
-                           'aifc' => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
-                           'applescript'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'asc'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'asm'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'au'   => array('type' => 'audio/au', 'icon' => 'audio.gif'),
-                           'avi'  => array('type' => 'video/x-ms-wm', 'icon' => 'avi.gif'),
-                           'bmp'  => array('type' => 'image/bmp', 'icon' => 'image.gif'),
-                           'c'    => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'cct'  => array('type' => 'shockwave/director', 'icon' => 'flash.gif'),
-                           'cpp'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'cs'   => array('type' => 'application/x-csh', 'icon' => 'text.gif'),
-                           'css'  => array('type' => 'text/css', 'icon' => 'text.gif'),
-                           'dv'   => array('type' => 'video/x-dv', 'icon' => 'video.gif'),
-                           'dmg'  => array('type' => 'application/octet-stream', 'icon' => 'dmg.gif'),
-                           'doc'  => array('type' => 'application/msword', 'icon' => 'word.gif'),
-                           'docx' => array('type' => 'application/msword', 'icon' => 'docx.gif'),
-                           'docm' => array('type' => 'application/msword', 'icon' => 'docm.gif'),
-                           'dotx' => array('type' => 'application/msword', 'icon' => 'dotx.gif'),
-                           'dcr'  => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
-                           'dif'  => array('type' => 'video/x-dv', 'icon' => 'video.gif'),
-                           'dir'  => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
-                           'dxr'  => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
-                           'eps'  => array('type' => 'application/postscript', 'icon' => 'pdf.gif'),
-                           'fdf'  => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
-                           'flv'  => array('type' => 'video/x-flv', 'icon' => 'video.gif'),
-                            'gpx'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'gif'  => array('type' => 'image/gif', 'icon' => 'image.gif'),
-                           'gtar' => array('type' => 'application/x-gtar', 'icon' => 'zip.gif'),
-                           'tgz'  => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
-                           'gz'   => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
-                           'gzip' => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
-                           'h'    => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'hpp'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'hqx'  => array('type' => 'application/mac-binhex40', 'icon' => 'zip.gif'),
-                           'htc'  => array('type' => 'text/x-component', 'icon' => 'text.gif'),
-                           'html' => array('type' => 'text/html', 'icon' => 'html.gif'),
-                           'htm'  => array('type' => 'text/html', 'icon' => 'html.gif'),
-                           'ico'  => array('type' => 'image/vnd.microsoft.icon', 'icon' => 'image.gif'),
-                           'java' => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'jcb'  => array('type' => 'text/xml', 'icon' => 'jcb.gif'),
-                           'jcl'  => array('type' => 'text/xml', 'icon' => 'jcl.gif'),
-                           'jcw'  => array('type' => 'text/xml', 'icon' => 'jcw.gif'),
-                           'jmt'  => array('type' => 'text/xml', 'icon' => 'jmt.gif'),
-                           'jmx'  => array('type' => 'text/xml', 'icon' => 'jmx.gif'),
-                           'jpe'  => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
-                           'jpeg' => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
-                           'jpg'  => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
-                           'jqz'  => array('type' => 'text/xml', 'icon' => 'jqz.gif'),
-                           'js'   => array('type' => 'application/x-javascript', 'icon' => 'text.gif'),
-                           'latex'=> array('type' => 'application/x-latex', 'icon' => 'text.gif'),
-                           'm'    => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'mov'  => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
-                           'movie'=> array('type' => 'video/x-sgi-movie', 'icon' => 'video.gif'),
-                           'm3u'  => array('type' => 'audio/x-mpegurl', 'icon' => 'audio.gif'),
-                           'mp3'  => array('type' => 'audio/mp3', 'icon' => 'audio.gif'),
-                           'mp4'  => array('type' => 'video/mp4', 'icon' => 'video.gif'),
-                           'mpeg' => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
-                           'mpe'  => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
-                           'mpg'  => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
-                           'odt'  => array('type' => 'application/vnd.oasis.opendocument.text', 'icon' => 'odt.gif'),
-                           'ott'  => array('type' => 'application/vnd.oasis.opendocument.text-template', 'icon' => 'odt.gif'),
-                           'oth'  => array('type' => 'application/vnd.oasis.opendocument.text-web', 'icon' => 'odt.gif'),
-                           'odm'  => array('type' => 'application/vnd.oasis.opendocument.text-master', 'icon' => 'odm.gif'),
-                           'odg'  => array('type' => 'application/vnd.oasis.opendocument.graphics', 'icon' => 'odg.gif'),
-                           'otg'  => array('type' => 'application/vnd.oasis.opendocument.graphics-template', 'icon' => 'odg.gif'),
-                           'odp'  => array('type' => 'application/vnd.oasis.opendocument.presentation', 'icon' => 'odp.gif'),
-                           'otp'  => array('type' => 'application/vnd.oasis.opendocument.presentation-template', 'icon' => 'odp.gif'),
-                           'ods'  => array('type' => 'application/vnd.oasis.opendocument.spreadsheet', 'icon' => 'ods.gif'),
-                           'ots'  => array('type' => 'application/vnd.oasis.opendocument.spreadsheet-template', 'icon' => 'ods.gif'),
-                           'odc'  => array('type' => 'application/vnd.oasis.opendocument.chart', 'icon' => 'odc.gif'),
-                           'odf'  => array('type' => 'application/vnd.oasis.opendocument.formula', 'icon' => 'odf.gif'),
-                           'odb'  => array('type' => 'application/vnd.oasis.opendocument.database', 'icon' => 'odb.gif'),
-                           'odi'  => array('type' => 'application/vnd.oasis.opendocument.image', 'icon' => 'odi.gif'),
-                           'pct'  => array('type' => 'image/pict', 'icon' => 'image.gif'),
-                           'pdf'  => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
-                           'php'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'pic'  => array('type' => 'image/pict', 'icon' => 'image.gif'),
-                           'pict' => array('type' => 'image/pict', 'icon' => 'image.gif'),
-                           'png'  => array('type' => 'image/png', 'icon' => 'image.gif'),
-                           'pps'  => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'powerpoint.gif'),
-                           'ppt'  => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'powerpoint.gif'),
-                           'pptx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'pptx.gif'),
-                           'pptm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'pptm.gif'),
-                           'potx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'potx.gif'),
-                           'potm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'potm.gif'),
-                           'ppam' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppam.gif'),
-                           'ppsx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppsx.gif'),
-                           'ppsm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppsm.gif'),
-                           'ps'   => array('type' => 'application/postscript', 'icon' => 'pdf.gif'),
-                           'qt'   => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
-                           'ra'   => array('type' => 'audio/x-realaudio', 'icon' => 'audio.gif'),
-                           'ram'  => array('type' => 'audio/x-pn-realaudio', 'icon' => 'audio.gif'),
-                           'rhb'  => array('type' => 'text/xml', 'icon' => 'xml.gif'),
-                           'rm'   => array('type' => 'audio/x-pn-realaudio', 'icon' => 'audio.gif'),
-                           'rtf'  => array('type' => 'text/rtf', 'icon' => 'text.gif'),
-                           'rtx'  => array('type' => 'text/richtext', 'icon' => 'text.gif'),
-                           'sh'   => array('type' => 'application/x-sh', 'icon' => 'text.gif'),
-                           'sit'  => array('type' => 'application/x-stuffit', 'icon' => 'zip.gif'),
-                           'smi'  => array('type' => 'application/smil', 'icon' => 'text.gif'),
-                           'smil' => array('type' => 'application/smil', 'icon' => 'text.gif'),
-                           'sqt'  => array('type' => 'text/xml', 'icon' => 'xml.gif'),
-                           'svg'  => array('type' => 'image/svg+xml', 'icon' => 'image.gif'),
-                           'svgz' => array('type' => 'image/svg+xml', 'icon' => 'image.gif'),
-                           'swa'  => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
-                           'swf'  => array('type' => 'application/x-shockwave-flash', 'icon' => 'flash.gif'),
-                           'swfl' => array('type' => 'application/x-shockwave-flash', 'icon' => 'flash.gif'),
-                           'sxw'  => array('type' => 'application/vnd.sun.xml.writer', 'icon' => 'odt.gif'),
-                           'stw'  => array('type' => 'application/vnd.sun.xml.writer.template', 'icon' => 'odt.gif'),
-                           'sxc'  => array('type' => 'application/vnd.sun.xml.calc', 'icon' => 'odt.gif'),
-                           'stc'  => array('type' => 'application/vnd.sun.xml.calc.template', 'icon' => 'odt.gif'),
-                           'sxd'  => array('type' => 'application/vnd.sun.xml.draw', 'icon' => 'odt.gif'),
-                           'std'  => array('type' => 'application/vnd.sun.xml.draw.template', 'icon' => 'odt.gif'),
-                           'sxi'  => array('type' => 'application/vnd.sun.xml.impress', 'icon' => 'odt.gif'),
-                           'sti'  => array('type' => 'application/vnd.sun.xml.impress.template', 'icon' => 'odt.gif'),
-                           'sxg'  => array('type' => 'application/vnd.sun.xml.writer.global', 'icon' => 'odt.gif'),
-                           'sxm'  => array('type' => 'application/vnd.sun.xml.math', 'icon' => 'odt.gif'),
-                           'tar'  => array('type' => 'application/x-tar', 'icon' => 'zip.gif'),
-                           'tif'  => array('type' => 'image/tiff', 'icon' => 'image.gif'),
-                           'tiff' => array('type' => 'image/tiff', 'icon' => 'image.gif'),
-                           'tex'  => array('type' => 'application/x-tex', 'icon' => 'text.gif'),
-                           'texi' => array('type' => 'application/x-texinfo', 'icon' => 'text.gif'),
-                           'texinfo'  => array('type' => 'application/x-texinfo', 'icon' => 'text.gif'),
-                           'tsv'  => array('type' => 'text/tab-separated-values', 'icon' => 'text.gif'),
-                           'txt'  => array('type' => 'text/plain', 'icon' => 'text.gif'),
-                           'wav'  => array('type' => 'audio/wav', 'icon' => 'audio.gif'),
-                           'wmv'  => array('type' => 'video/x-ms-wmv', 'icon' => 'avi.gif'),
-                           'asf'  => array('type' => 'video/x-ms-asf', 'icon' => 'avi.gif'),
-                           'xdp'  => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
-                           'xfd'  => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
-                           'xfdf' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
-                           'xls'  => array('type' => 'application/vnd.ms-excel', 'icon' => 'excel.gif'),
-                           'xlsx' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsx.gif'),
-                           'xlsm' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsm.gif'),
-                           'xltx' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xltx.gif'),
-                           'xltm' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xltm.gif'),
-                           'xlsb' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsb.gif'),
-                           'xlam' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlam.gif'),
-                           'xml'  => array('type' => 'application/xml', 'icon' => 'xml.gif'),
-                           'xsl'  => array('type' => 'text/xml', 'icon' => 'xml.gif'),
-                           'zip'  => array('type' => 'application/zip', 'icon' => 'zip.gif'));
+        $mimeTypes = array('xxx' => array('type' => 'document/unknown', 'icon' => 'unknown.gif'),
+            '3gp' => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
+            'ai' => array('type' => 'application/postscript', 'icon' => 'image.gif'),
+            'aif' => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
+            'aiff' => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
+            'aifc' => array('type' => 'audio/x-aiff', 'icon' => 'audio.gif'),
+            'applescript' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'asc' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'asm' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'au' => array('type' => 'audio/au', 'icon' => 'audio.gif'),
+            'avi' => array('type' => 'video/x-ms-wm', 'icon' => 'avi.gif'),
+            'bmp' => array('type' => 'image/bmp', 'icon' => 'image.gif'),
+            'c' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'cct' => array('type' => 'shockwave/director', 'icon' => 'flash.gif'),
+            'cpp' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'cs' => array('type' => 'application/x-csh', 'icon' => 'text.gif'),
+            'css' => array('type' => 'text/css', 'icon' => 'text.gif'),
+            'dv' => array('type' => 'video/x-dv', 'icon' => 'video.gif'),
+            'dmg' => array('type' => 'application/octet-stream', 'icon' => 'dmg.gif'),
+            'doc' => array('type' => 'application/msword', 'icon' => 'word.gif'),
+            'docx' => array('type' => 'application/msword', 'icon' => 'docx.gif'),
+            'docm' => array('type' => 'application/msword', 'icon' => 'docm.gif'),
+            'dotx' => array('type' => 'application/msword', 'icon' => 'dotx.gif'),
+            'dcr' => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
+            'dif' => array('type' => 'video/x-dv', 'icon' => 'video.gif'),
+            'dir' => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
+            'dxr' => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
+            'eps' => array('type' => 'application/postscript', 'icon' => 'pdf.gif'),
+            'fdf' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
+            'flv' => array('type' => 'video/x-flv', 'icon' => 'video.gif'),
+            'gpx' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'gif' => array('type' => 'image/gif', 'icon' => 'image.gif'),
+            'gtar' => array('type' => 'application/x-gtar', 'icon' => 'zip.gif'),
+            'tgz' => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
+            'gz' => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
+            'gzip' => array('type' => 'application/g-zip', 'icon' => 'zip.gif'),
+            'h' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'hpp' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'hqx' => array('type' => 'application/mac-binhex40', 'icon' => 'zip.gif'),
+            'htc' => array('type' => 'text/x-component', 'icon' => 'text.gif'),
+            'html' => array('type' => 'text/html', 'icon' => 'html.gif'),
+            'htm' => array('type' => 'text/html', 'icon' => 'html.gif'),
+            'ico' => array('type' => 'image/vnd.microsoft.icon', 'icon' => 'image.gif'),
+            'java' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'jcb' => array('type' => 'text/xml', 'icon' => 'jcb.gif'),
+            'jcl' => array('type' => 'text/xml', 'icon' => 'jcl.gif'),
+            'jcw' => array('type' => 'text/xml', 'icon' => 'jcw.gif'),
+            'jmt' => array('type' => 'text/xml', 'icon' => 'jmt.gif'),
+            'jmx' => array('type' => 'text/xml', 'icon' => 'jmx.gif'),
+            'jpe' => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
+            'jpeg' => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
+            'jpg' => array('type' => 'image/jpeg', 'icon' => 'image.gif'),
+            'jqz' => array('type' => 'text/xml', 'icon' => 'jqz.gif'),
+            'js' => array('type' => 'application/x-javascript', 'icon' => 'text.gif'),
+            'latex' => array('type' => 'application/x-latex', 'icon' => 'text.gif'),
+            'm' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'mov' => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
+            'movie' => array('type' => 'video/x-sgi-movie', 'icon' => 'video.gif'),
+            'm3u' => array('type' => 'audio/x-mpegurl', 'icon' => 'audio.gif'),
+            'mp3' => array('type' => 'audio/mp3', 'icon' => 'audio.gif'),
+            'mp4' => array('type' => 'video/mp4', 'icon' => 'video.gif'),
+            'mpeg' => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
+            'mpe' => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
+            'mpg' => array('type' => 'video/mpeg', 'icon' => 'video.gif'),
+            'odt' => array('type' => 'application/vnd.oasis.opendocument.text', 'icon' => 'odt.gif'),
+            'ott' => array('type' => 'application/vnd.oasis.opendocument.text-template', 'icon' => 'odt.gif'),
+            'oth' => array('type' => 'application/vnd.oasis.opendocument.text-web', 'icon' => 'odt.gif'),
+            'odm' => array('type' => 'application/vnd.oasis.opendocument.text-master', 'icon' => 'odm.gif'),
+            'odg' => array('type' => 'application/vnd.oasis.opendocument.graphics', 'icon' => 'odg.gif'),
+            'otg' => array('type' => 'application/vnd.oasis.opendocument.graphics-template', 'icon' => 'odg.gif'),
+            'odp' => array('type' => 'application/vnd.oasis.opendocument.presentation', 'icon' => 'odp.gif'),
+            'otp' => array('type' => 'application/vnd.oasis.opendocument.presentation-template', 'icon' => 'odp.gif'),
+            'ods' => array('type' => 'application/vnd.oasis.opendocument.spreadsheet', 'icon' => 'ods.gif'),
+            'ots' => array('type' => 'application/vnd.oasis.opendocument.spreadsheet-template', 'icon' => 'ods.gif'),
+            'odc' => array('type' => 'application/vnd.oasis.opendocument.chart', 'icon' => 'odc.gif'),
+            'odf' => array('type' => 'application/vnd.oasis.opendocument.formula', 'icon' => 'odf.gif'),
+            'odb' => array('type' => 'application/vnd.oasis.opendocument.database', 'icon' => 'odb.gif'),
+            'odi' => array('type' => 'application/vnd.oasis.opendocument.image', 'icon' => 'odi.gif'),
+            'pct' => array('type' => 'image/pict', 'icon' => 'image.gif'),
+            'pdf' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
+            'php' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'pic' => array('type' => 'image/pict', 'icon' => 'image.gif'),
+            'pict' => array('type' => 'image/pict', 'icon' => 'image.gif'),
+            'png' => array('type' => 'image/png', 'icon' => 'image.gif'),
+            'pps' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'powerpoint.gif'),
+            'ppt' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'powerpoint.gif'),
+            'pptx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'pptx.gif'),
+            'pptm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'pptm.gif'),
+            'potx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'potx.gif'),
+            'potm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'potm.gif'),
+            'ppam' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppam.gif'),
+            'ppsx' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppsx.gif'),
+            'ppsm' => array('type' => 'application/vnd.ms-powerpoint', 'icon' => 'ppsm.gif'),
+            'ps' => array('type' => 'application/postscript', 'icon' => 'pdf.gif'),
+            'qt' => array('type' => 'video/quicktime', 'icon' => 'video.gif'),
+            'ra' => array('type' => 'audio/x-realaudio', 'icon' => 'audio.gif'),
+            'ram' => array('type' => 'audio/x-pn-realaudio', 'icon' => 'audio.gif'),
+            'rhb' => array('type' => 'text/xml', 'icon' => 'xml.gif'),
+            'rm' => array('type' => 'audio/x-pn-realaudio', 'icon' => 'audio.gif'),
+            'rtf' => array('type' => 'text/rtf', 'icon' => 'text.gif'),
+            'rtx' => array('type' => 'text/richtext', 'icon' => 'text.gif'),
+            'sh' => array('type' => 'application/x-sh', 'icon' => 'text.gif'),
+            'sit' => array('type' => 'application/x-stuffit', 'icon' => 'zip.gif'),
+            'smi' => array('type' => 'application/smil', 'icon' => 'text.gif'),
+            'smil' => array('type' => 'application/smil', 'icon' => 'text.gif'),
+            'sqt' => array('type' => 'text/xml', 'icon' => 'xml.gif'),
+            'svg' => array('type' => 'image/svg+xml', 'icon' => 'image.gif'),
+            'svgz' => array('type' => 'image/svg+xml', 'icon' => 'image.gif'),
+            'swa' => array('type' => 'application/x-director', 'icon' => 'flash.gif'),
+            'swf' => array('type' => 'application/x-shockwave-flash', 'icon' => 'flash.gif'),
+            'swfl' => array('type' => 'application/x-shockwave-flash', 'icon' => 'flash.gif'),
+            'sxw' => array('type' => 'application/vnd.sun.xml.writer', 'icon' => 'odt.gif'),
+            'stw' => array('type' => 'application/vnd.sun.xml.writer.template', 'icon' => 'odt.gif'),
+            'sxc' => array('type' => 'application/vnd.sun.xml.calc', 'icon' => 'odt.gif'),
+            'stc' => array('type' => 'application/vnd.sun.xml.calc.template', 'icon' => 'odt.gif'),
+            'sxd' => array('type' => 'application/vnd.sun.xml.draw', 'icon' => 'odt.gif'),
+            'std' => array('type' => 'application/vnd.sun.xml.draw.template', 'icon' => 'odt.gif'),
+            'sxi' => array('type' => 'application/vnd.sun.xml.impress', 'icon' => 'odt.gif'),
+            'sti' => array('type' => 'application/vnd.sun.xml.impress.template', 'icon' => 'odt.gif'),
+            'sxg' => array('type' => 'application/vnd.sun.xml.writer.global', 'icon' => 'odt.gif'),
+            'sxm' => array('type' => 'application/vnd.sun.xml.math', 'icon' => 'odt.gif'),
+            'tar' => array('type' => 'application/x-tar', 'icon' => 'zip.gif'),
+            'tif' => array('type' => 'image/tiff', 'icon' => 'image.gif'),
+            'tiff' => array('type' => 'image/tiff', 'icon' => 'image.gif'),
+            'tex' => array('type' => 'application/x-tex', 'icon' => 'text.gif'),
+            'texi' => array('type' => 'application/x-texinfo', 'icon' => 'text.gif'),
+            'texinfo' => array('type' => 'application/x-texinfo', 'icon' => 'text.gif'),
+            'tsv' => array('type' => 'text/tab-separated-values', 'icon' => 'text.gif'),
+            'txt' => array('type' => 'text/plain', 'icon' => 'text.gif'),
+            'wav' => array('type' => 'audio/wav', 'icon' => 'audio.gif'),
+            'wmv' => array('type' => 'video/x-ms-wmv', 'icon' => 'avi.gif'),
+            'asf' => array('type' => 'video/x-ms-asf', 'icon' => 'avi.gif'),
+            'xdp' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
+            'xfd' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
+            'xfdf' => array('type' => 'application/pdf', 'icon' => 'pdf.gif'),
+            'xls' => array('type' => 'application/vnd.ms-excel', 'icon' => 'excel.gif'),
+            'xlsx' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsx.gif'),
+            'xlsm' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsm.gif'),
+            'xltx' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xltx.gif'),
+            'xltm' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xltm.gif'),
+            'xlsb' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlsb.gif'),
+            'xlam' => array('type' => 'application/vnd.ms-excel', 'icon' => 'xlam.gif'),
+            'xml' => array('type' => 'application/xml', 'icon' => 'xml.gif'),
+            'xsl' => array('type' => 'text/xml', 'icon' => 'xml.gif'),
+            'zip' => array('type' => 'application/zip', 'icon' => 'zip.gif'));
         $return = ($extension != null) ? $mimeTypes[$extension] : false;
 
-        if ($return['type'] == '') {$return = $mimeTypes['xxx'];}
+        if ($return['type'] == '') {
+            $return = $mimeTypes['xxx'];
+        }
         return $return;
     }
 
@@ -1773,24 +1780,23 @@ class IWmain_Controller_User extends Zikula_Controller
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the uname of the user
      * @return:	The picture url
-    */
-    public function getUserPicture($args)
-    {
+     */
+    public function getUserPicture($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $uname = FormUtil::getPassedValue('uname', isset($args['uname']) ? $args['uname'] : null, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                            array('sv' => $sv))) {
-            return LogUtil::registerError ($this->__('You are not allowed to access to some information.'));
+                        array('sv' => $sv))) {
+            return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         $photo = '';
-        if (file_exists(ModUtil::getVar('IWmain','documentRoot') . '/' . ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.gif')) {
-            $photo = ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.gif';
+        if (file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.gif')) {
+            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.gif';
         }
-        if ($photo == '' && file_exists(ModUtil::getVar('IWmain','documentRoot') . '/' . ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.png')) {
-            $photo = ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.png';
+        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.png')) {
+            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.png';
         }
-        if ($photo == '' && file_exists(ModUtil::getVar('IWmain','documentRoot') . '/' . ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.jpg')) {
-            $photo = ModUtil::getVar('IWmain','usersPictureFolder') . '/' . $uname . '.jpg';
+        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.jpg')) {
+            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.jpg';
         }
         return $photo;
     }
@@ -1806,16 +1812,15 @@ class IWmain_Controller_User extends Zikula_Controller
      * Get an user variable associate with a module
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - module: module where the varible is used
-                    - name: name of the variable
-                    - default: default value of the variable if it doesn't exists
-                    - uid: user id
-                    - nult: boolean for update de lifetime every time that a user get the vaule. Default false
-                    - sv: security value
+      - module: module where the varible is used
+      - name: name of the variable
+      - default: default value of the variable if it doesn't exists
+      - uid: user id
+      - nult: boolean for update de lifetime every time that a user get the vaule. Default false
+      - sv: security value
      * @return:	The value of the variable if find it or default if not
-    */
-    public function userGetVar ($args)
-    {
+     */
+    public function userGetVar($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $module = FormUtil::getPassedValue('module', isset($args['module']) ? $args['module'] : null, 'POST');
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : null, 'POST');
@@ -1824,38 +1829,38 @@ class IWmain_Controller_User extends Zikula_Controller
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //get the variable value
         $value = ModUtil::apiFunc('IWmain', 'user', 'userGetVar',
-                                   array('module' => $module,
-                                         'name' => $name,
-                                         'uid' => $uid,
-                                         'sv' => $sv));
+                        array('module' => $module,
+                            'name' => $name,
+                            'uid' => $uid,
+                            'sv' => $sv));
         // If a value is returned it's saved the time when it has been readed
         if (count($value) > 0) {
             if (!$nult) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 ModUtil::apiFunc('IWmain', 'user', 'userUpdateGetVarTime',
-                                  array('sv' => $sv,
-                                        'uid' => $uid,
-                                        'module' => $module,
-                                        'name' => $name));
+                                array('sv' => $sv,
+                                    'uid' => $uid,
+                                    'module' => $module,
+                                    'name' => $name));
             } else {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 ModUtil::apiFunc('IWmain', 'user', 'userUpdateNultVar',
-                                  array('sv' => $sv,
-                                        'uid' => $uid,
-                                        'module' => $module,
-                                        'name' => $name));
+                                array('sv' => $sv,
+                                    'uid' => $uid,
+                                    'module' => $module,
+                                    'name' => $name));
             }
             $value = $value[0]['value'];
         } else {
             //If the value is not returned from the database the default value will be returned
             $value = $default;
         }
-        
+
         //Delele all the values that not have been readed the time specified in the config values
         //and the variables that have reached the lifetime value. Zero means that the old values never are deleted
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         ModUtil::apiFunc('IWmain', 'user', 'userDeleteOldVars',
-                          array('sv' => $sv));
+                        array('sv' => $sv));
         //return the value required
         return $value;
     }
@@ -1864,50 +1869,52 @@ class IWmain_Controller_User extends Zikula_Controller
      * Set an user variable associate with a module
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - module: module where the varible is used
-                    - name: name of the variable
-                    - lifetime: date of caducity of the variable
-                    - uid: user id
-                    - value: value for the variable
-                    - sv: security value
+      - module: module where the varible is used
+      - name: name of the variable
+      - lifetime: date of caducity of the variable
+      - uid: user id
+      - value: value for the variable
+      - sv: security value
      * @return:	The value of the variable if find it or default if not
-    */
-    public function userSetVar ($args) {
+     */
+    public function userSetVar($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $module = FormUtil::getPassedValue('module', isset($args['module']) ? $args['module'] : null, 'POST');
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : null, 'POST');
         $value = FormUtil::getPassedValue('value', isset($args['value']) ? $args['value'] : '', 'POST');
-        $lifetime = FormUtil::getPassedValue('lifetime', isset($args['lifetime']) ?  $args['lifetime'] : 0, 'POST');
+        $lifetime = FormUtil::getPassedValue('lifetime', isset($args['lifetime']) ? $args['lifetime'] : 0, 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
-        $lifetime = ($lifetime == 0) ? time() + 24*60*60*ModUtil::getVar('IWmain', 'usersvarslife'): $lifetime = time() + $lifetime;
+        $lifetime = ($lifetime == 0) ? time() + 24 * 60 * 60 * ModUtil::getVar('IWmain', 'usersvarslife') : $lifetime = time() + $lifetime;
         // Avoid that register of variables for unregistered users
-        if ($uid == null) {return false;}
+        if ($uid == null) {
+            return false;
+        }
         //Checks if the value is registered
         $valueExists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                                         array('sv' => $sv,
-                                               'uid' => $uid,
-                                               'module' => $module,
-                                               'name' => $name));
+                        array('sv' => $sv,
+                            'uid' => $uid,
+                            'module' => $module,
+                            'name' => $name));
         // If the value is registered update it in other case create it
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         if ($valueExists) {
             // The value is updated
             $result = ModUtil::apiFunc('IWmain', 'user', 'updateUserVar',
-                                        array('sv' => $sv,
-                                              'uid' => $uid,
-                                              'module' => $module,
-                                              'name' => $name,
-                                              'value' => $value,
-                                              'lifetime' => $lifetime));
+                            array('sv' => $sv,
+                                'uid' => $uid,
+                                'module' => $module,
+                                'name' => $name,
+                                'value' => $value,
+                                'lifetime' => $lifetime));
         } else {
             // The value is updated
             $result = ModUtil::apiFunc('IWmain', 'user', 'createUserVar',
-                                        array('sv' => $sv,
-                                              'uid' => $uid,
-                                              'module' => $module,
-                                              'name' => $name,
-                                              'value' => $value,
-                                              'lifetime' => $lifetime));
+                            array('sv' => $sv,
+                                'uid' => $uid,
+                                'module' => $module,
+                                'name' => $name,
+                                'value' => $value,
+                                'lifetime' => $lifetime));
         }
         return $result;
     }
@@ -1916,35 +1923,37 @@ class IWmain_Controller_User extends Zikula_Controller
      * Init an user variable associate with a module. If variable exists get the value. If not exists create it with the default value
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - module: module where the varible is used
-                    - name: name of the variable
-                    - lifetime: date of caducity of the variable
-                    - uid: user id
-                    - sv: security value
+      - module: module where the varible is used
+      - name: name of the variable
+      - lifetime: date of caducity of the variable
+      - uid: user id
+      - sv: security value
      * @return:	The value of the variable if find it or default if not
-    */
-    public function userInitVar ($args) {
+     */
+    public function userInitVar($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $module = FormUtil::getPassedValue('module', isset($args['module']) ? $args['module'] : null, 'POST');
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : null, 'POST');
         $default = FormUtil::getPassedValue('default', isset($args['default']) ? $args['default'] : '', 'POST');
-        $lifetime = FormUtil::getPassedValue('lifetime', isset($args['lifetime']) ?  $args['lifetime'] : ModUtil::getVar('IWmain', 'usersvarslife'), 'POST');
+        $lifetime = FormUtil::getPassedValue('lifetime', isset($args['lifetime']) ? $args['lifetime'] : ModUtil::getVar('IWmain', 'usersvarslife'), 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
-        if ($lifetime != 0) {$lifetime = time() + 24*60*60*ModUtil::getVar('IWmain', 'usersvarslife');}
+        if ($lifetime != 0) {
+            $lifetime = time() + 24 * 60 * 60 * ModUtil::getVar('IWmain', 'usersvarslife');
+        }
         $value = ModUtil::func('IWmain', 'user', 'userGetVar',
-                                array('sv' => $sv,
-                                      'module' => $module,
-                                      'name' => $name,
-                                      'uid' => $uid));
+                        array('sv' => $sv,
+                            'module' => $module,
+                            'name' => $name,
+                            'uid' => $uid));
         if (count($value) == 0 || $value == '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::func('IWmain', 'user',  'userSetVar',
-                           array('module' => $module,
-                                 'name' => $name,
-                                 'value' => $default,
-                                 'uid' => $uid,
-                                 'timelife' => $timelife,
-                                 'sv' => $sv));
+            ModUtil::func('IWmain', 'user', 'userSetVar',
+                            array('module' => $module,
+                                'name' => $name,
+                                'value' => $default,
+                                'uid' => $uid,
+                                'timelife' => $timelife,
+                                'sv' => $sv));
             $value = $default;
         }
         return $value;
@@ -1954,20 +1963,20 @@ class IWmain_Controller_User extends Zikula_Controller
      * Delete the variables indicated for all users in a module
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - module: module where the varible have to be deleted
-                    - name: name of the variable that have to be deleted (if name is .* (default) all the users module variables are deleted)
-                    - sv: security value
+      - module: module where the varible have to be deleted
+      - name: name of the variable that have to be deleted (if name is .* (default) all the users module variables are deleted)
+      - sv: security value
      * @return:	True if success and false if not
-    */
-    public function usersVarsDelModule ($args) {
+     */
+    public function usersVarsDelModule($args) {
         $module = FormUtil::getPassedValue('module', isset($args['module']) ? $args['module'] : null, 'POST');
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : '.*', 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //The variable is deleted
         $result = ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                                    array('sv' => $sv,
-                                          'module' => $module,
-                                          'name' => $name));
+                        array('sv' => $sv,
+                            'module' => $module,
+                            'name' => $name));
         return $result;
     }
 
@@ -1975,23 +1984,23 @@ class IWmain_Controller_User extends Zikula_Controller
      * Delete the variable indicated for the user in a module
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - module: module where the varible have to be deleted
-                    - name: name of the variable that have to be deleted (if name is .* (default) all varibles of the user in the module are deleted)
-                    - uid: user id
-                    - sv: security value
+      - module: module where the varible have to be deleted
+      - name: name of the variable that have to be deleted (if name is .* (default) all varibles of the user in the module are deleted)
+      - uid: user id
+      - sv: security value
      * @return:	True if success and false if not
-    */
-    public function userDelVar ($args) {
+     */
+    public function userDelVar($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $module = FormUtil::getPassedValue('module', isset($args['module']) ? $args['module'] : null, 'POST');
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : '.*', 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //The variable is deleted
         $result = ModUtil::apiFunc('IWmain', 'user', 'userDelVar',
-                                    array('sv' => $sv,
-                                          'module' => $module,
-                                          'uid' => $uid,
-                                          'name' => $name));
+                        array('sv' => $sv,
+                            'module' => $module,
+                            'uid' => $uid,
+                            'name' => $name));
         return $result;
     }
 
@@ -1999,19 +2008,20 @@ class IWmain_Controller_User extends Zikula_Controller
      * Delete all the variables for a user that are temporally. The variables that have got the parameter nult in the value 1
      * @author:	Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the elements:
-                    - uid: user id
-                    - sv: security value
+      - uid: user id
+      - sv: security value
      * @return:	True if success and false if not
-    */
-    public function regenBlockNews ($args) {
+     */
+    public function regenBlockNews($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         //The variable is deleted
         $result = ModUtil::apiFunc('IWmain', 'user', 'regenDinamicVars',
-                                    array('sv' => $sv,
-                                          'uid' => $uid));
+                        array('sv' => $sv,
+                            'uid' => $uid));
         return System::redirect($_SERVER['HTTP_REFERER']);
     }
+
     //***************************************************************************************
     //
     // END - Function used for the managment of user var variables
