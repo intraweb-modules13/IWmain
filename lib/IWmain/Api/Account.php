@@ -13,7 +13,7 @@
  *
  * @return   array   
  */
-class IWmain_Api_Account extends Zikula_Api
+class IWmain_Api_Account extends Zikula_AbstractApi
 {
     public function getAll($args) {
         // Create an array of links to return

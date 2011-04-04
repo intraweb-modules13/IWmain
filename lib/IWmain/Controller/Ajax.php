@@ -1,5 +1,5 @@
 <?php
-class IWmain_Controller_Ajax extends Zikula_Controller
+class IWmain_Controller_Ajax extends Zikula_Controller_AbstractAjax
 {
     /**
      * Delete all the information about an activity
@@ -73,8 +73,6 @@ class IWmain_Controller_Ajax extends Zikula_Controller
     }
 
     public function reloadNewsBlock() {
-
-
         // Security check
         if (!SecurityUtil::checkPermission('IWmain:newsBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! No authorization to access this module.')));
@@ -130,7 +128,6 @@ class IWmain_Controller_Ajax extends Zikula_Controller
     }
 
     public function reloadFlaggedBlock() {
-
         // Security check
         if (!SecurityUtil::checkPermission('IWmain:flaggedBlock:', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! No authorization to access this module.')));
@@ -144,27 +141,22 @@ class IWmain_Controller_Ajax extends Zikula_Controller
                                           'module' => 'IWmain_block_flagged',
                                           'uid' => UserUtil::getVar('uid'),
                                           'sv' => $sv));
-
         $chars = 15;
-
         if (!$exists) {
             ModUtil::func('IWmain', 'user', 'flagged',
                            array('where' => '',
                                  'chars' => $chars));
         }
-
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $have_flags = ModUtil::func('IWmain', 'user', 'userGetVar',
                                      array('uid' => UserUtil::getVar('uid'),
                                            'name' => 'have_flags',
                                            'module' => 'IWmain_block_flagged',
                                            'sv' => $sv));
-
         if ($have_flags != '0') {
             ModUtil::func('IWmain', 'user', 'flagged',
                            array('where' => $have_flags,
                                  'chars' => $chars));
-
             //Posa la variable d'usuari have_news en blanc per no haver-la de tornar a llegir a la propera reiteraci�
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::func('IWmain', 'user', 'userSetVar',

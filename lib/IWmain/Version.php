@@ -1,5 +1,5 @@
 <?php
-class IWmain_Version extends Zikula_Version
+class IWmain_Version extends Zikula_AbstractVersion
 {
     public function getMetaData ()
     {

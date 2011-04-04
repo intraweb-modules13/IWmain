@@ -1,5 +1,5 @@
 <?php
-class IWmain_Api_User extends Zikula_Api
+class IWmain_Api_User extends Zikula_AbstractApi
 {
     /**
      * Get all the users

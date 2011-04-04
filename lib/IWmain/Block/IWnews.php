@@ -1,6 +1,9 @@
 <?php
-class IWmain_Block_IWnews extends Zikula_Controller_Block {
-
+class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
+    protected function postInitialize() {
+        // Set caching to false by default.
+        $this->view->setCaching(false);
+    }
     /**
      * initialise block
      *
@@ -126,12 +129,10 @@ class IWmain_Block_IWnews extends Zikula_Controller_Block {
                             'sv' => $sv,
                             'nult' => true));
 
-        $view = Zikula_View::getInstance('IWmain', false);
+        $this->view->assign('news', $news)
+                ->assign('flags', $flags);
 
-        $view->assign('news', $news);
-        $view->assign('flags', $flags);
-
-        $s = $view->fetch('IWmain_block_IWnews.htm');
+        $s = $this->view->fetch('IWmain_block_IWnews.htm');
 
         $row['content'] = $s;
         return BlockUtil::themesideblock($row);

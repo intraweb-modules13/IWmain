@@ -10,7 +10,7 @@
  * @package PostNuke_Value_Addons
  * @subpackage Webbox
  */
-class IWmain_Installer extends Zikula_Installer
+class IWmain_Installer extends Zikula_AbstractInstaller
 {
     /**
      * Initialise the IWmain module creating module tables and module vars

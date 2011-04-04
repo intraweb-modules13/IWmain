@@ -1,5 +1,5 @@
 <?php
-class IWmain_Api_Admin extends Zikula_Api
+class IWmain_Api_Admin extends Zikula_AbstractApi
 {
     /**
      * Get available admin panel links.
