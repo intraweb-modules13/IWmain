@@ -10,12 +10,15 @@
             <input type="checkbox" {if $blockFlaggedDetails}checked{/if} name="details" />
         </div>
         {if isset($cronNotWorks)}
-            <div style="background-color: #FFE1DA; padding: 10px;">
-                {img modname='core' src='error.png' set='icons/small'} {gt text="It has not worked"}
+            {checkpermission component='IWusers::' instance='::' level='ACCESS_ADMIN' assign='authadmin'}
+            {if $authadmin}
+            <div class="z-errormsg">
+                {gt text="It has not worked (only visible for administrators)."}
             </div>
+            {/if}
         {elseif $userMail == ''}
-            <div style="background-color: #FDD994; padding: 10px;">
-                {img modname='core' src='error.png' set='icons/small'} {gt text="If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"}
+            <div class="z-errormsg">
+                {gt text="If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"}
                 <a href="{modurl modname=profile func=modify}">{gt text="this link."}</a>
             </div>
         {else}

@@ -1134,28 +1134,28 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         switch ($args['info']) {
             case 'ncc':
-                $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] . ' ' . $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] : $user[0]['uname'];
+                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] . ' ' . $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] : $user[0]['uname'];
                 break;
             case 'n':
-                $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 break;
             case 'ccn':
                 if ($userExtraInfo[0]['cognom2'] != '') {
-                    $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 } elseif ($userExtraInfo[0]['cognom1'] != '') {
-                    $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 } else {
-                    $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 }
                 break;
             case 'cn':
-                $userInfo = ($userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
                 break;
             case 'c1':
-                $userInfo = $userExtraInfo[0]['cognom1'];
+                $userInfo = (isset($userExtraInfo[0]['cognom1'])) ? $userExtraInfo[0]['cognom1'] : '';
                 break;
             case 'c2':
-                $userInfo = $userExtraInfo[0]['cognom2'];
+                $userInfo = (isset($userExtraInfo[0]['cognom2'])) ? $userExtraInfo[0]['cognom2'] : '';
                 break;
             case 'e':
                 $userInfo = $user[0]['email'];
