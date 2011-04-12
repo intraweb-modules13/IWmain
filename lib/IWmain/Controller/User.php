@@ -18,8 +18,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             throw new Zikula_Exception_Forbidden();
         }
         $uid = UserUtil::getVar('uid');
-        // Create output object
-        $view = Zikula_View::getInstance('IWmain', false);
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
@@ -68,7 +66,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         //Check if gd library is available
         if (extension_loaded('gd') && ModUtil::getVar('IWmain', 'allowUserChangeAvatar') == 1) {
             $canChangeAvatar = true;
-            $view->assign('avatarChangeValidationNeeded', ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded'));
         }
         //Check if the users picture folder exists
         if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder')) || ModUtil::getVar('IWmain', 'usersPictureFolder') == '') {
@@ -132,6 +129,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'sv' => $sv));
 
         return $this->view->assign('cronNotWorks', $cronNotWorks)
+                ->assign('avatarChangeValidationNeeded', ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded'))
                 ->assign('zendFuncAvailable', $zendFuncAvailable)
                 ->assign('blockFlaggedDetails', $blockFlaggedDetails)
                 ->assign('gCalendarUse', $gCalendarUse)
