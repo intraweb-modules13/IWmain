@@ -19,7 +19,7 @@
         {elseif $userMail == ''}
             <div class="z-errormsg">
                 {gt text="If you want the system would be able to send you emails with a dayly resume of things to see, but it is not possible because your email has not been found. You can define your email address form"}
-                <a href="{modurl modname=profile func=modify}">{gt text="this link."}</a>
+                <a href="{modurl type="user" modname=profile func=modify}">{gt text="this link."}</a>
             </div>
         {else}
             <div>

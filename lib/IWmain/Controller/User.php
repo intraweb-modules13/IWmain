@@ -848,7 +848,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             if (ModUtil::func('IWforums', 'user', 'access',
                                             array('fid' => $registre['fid']))) {
                                 $oid = ($registre['idparent'] == 0) ? $registre['fmid'] : $registre['idparent'];
-                                $flaggedArray[] = array('titol' => trim(cutTextFlagged(strip_tags($registre['titol']), $chars)),
+                                $flaggedArray[] = array('titol' => trim($this->cutTextFlagged(strip_tags($registre['titol']), $chars)),
                                     'fmid' => $registre['fmid'],
                                     'ftid' => $registre['ftid'],
                                     'oid' => $oid,
