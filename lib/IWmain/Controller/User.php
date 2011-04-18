@@ -827,7 +827,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if ($modinfo['state'] == 3 && ($where == 'fo' || $where == '')) {
             if (SecurityUtil::checkPermission('IWforums::', "::", ACCESS_READ)) {
                 //get all forums
-                $forumsArray[] = Array();
+                $forumsArray = Array();
                 $forums = ModUtil::apiFunc('IWforums', 'user', 'getall',
                                 array('filter' => '1'));
                 foreach ($forums as $forum) {
