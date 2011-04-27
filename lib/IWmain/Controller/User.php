@@ -1007,7 +1007,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      */
     public function checkSecurityValue($args) {
         $return = true;
-        if ($args['sv'] != $_SESSION['iwSecure'] || $_SESSION['iwSecure'] == '') {
+        if (!isset($_SESSION['iwSecure']) || $args['sv'] != $_SESSION['iwSecure'] || $_SESSION['iwSecure'] == '') {
             $return = false;
         }
         // delete the security value
