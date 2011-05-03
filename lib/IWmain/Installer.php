@@ -35,12 +35,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller
              ->setVar('extensions', 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt')
              ->setVar('maxsize', '1000000')
              ->setVar('usersvarslife', '60')
-             ->setVar('usersPictureFolder', 'photos')
              ->setVar('cronHeaderText', $this->__('Header text of the cron automatic emails with the new things to see'))
              ->setVar('cronFooterText', $this->__('Footer text of the email'))
              ->setVar('showHideFiles', '0')
-             ->setVar('allowUserChangeAvatar', '1')
-             ->setVar('avatarChangeValidationNeeded', '1')
              ->setVar('URLBase', System::getBaseUrl());
 
         return true;
@@ -62,12 +59,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller
              ->delVar('extensions')
              ->delVar('maxsize')
              ->delVar('usersvarslife')
-             ->delVar('usersPictureFolder')
              ->delVar('cronHeaderText')
              ->delVar('cronFooterText')
              ->delVar('showHideFiles')
-             ->delVar('allowUserChangeAvatar')
-             ->delVar('avatarChangeValidationNeeded')
              ->delVar('URLBase');
 
         //Deletion successfull

@@ -55,50 +55,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         array('uid' => $uid,
                             'sv' => $sv,
                             'info' => 'e'));
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $photo = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                        array('uname' => UserUtil::getVar('uname'),
-                            'sv' => $sv));
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $photo_s = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                        array('uname' => '_' . UserUtil::getVar('uname'),
-                            'sv' => $sv));
-        //Check if gd library is available
-        if (extension_loaded('gd') && ModUtil::getVar('IWmain', 'allowUserChangeAvatar') == 1) {
-            $canChangeAvatar = true;
-        }
-        //Check if the users picture folder exists
-        if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder')) || ModUtil::getVar('IWmain', 'usersPictureFolder') == '') {
-            $canChangeAvatar = false;
-        } else {
-            if (!is_writeable(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder'))) {
-                $canChangeAvatar = false;
-            }
-        }
-        // checks if user can change their real names
-        $modid = ModUtil::getIdFromName('IWusers');
-        $modinfo = ModUtil::getInfo($modid);
-        $usersCanManageName = (ModUtil::getVar('IWusers', 'usersCanManageName') == 1 && $modinfo['state'] == 3) ? true : false;
-        $userName = '';
-        $userSurname1 = '';
-        $userSurname2 = '';
-        if ($modinfo['state'] == 3) {
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $userName = ModUtil::func('IWmain', 'user', 'getUserInfo',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'info' => 'n',
-                                'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $userSurname1 = ModUtil::func('IWmain', 'user', 'getUserInfo',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'info' => 'c1',
-                                'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $userSurname2 = ModUtil::func('IWmain', 'user', 'getUserInfo',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'info' => 'c2',
-                                'sv' => $sv));
-        }
         // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
         $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
@@ -129,21 +85,13 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'sv' => $sv));
 
         return $this->view->assign('cronNotWorks', $cronNotWorks)
-                ->assign('avatarChangeValidationNeeded', ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded'))
                 ->assign('zendFuncAvailable', $zendFuncAvailable)
                 ->assign('blockFlaggedDetails', $blockFlaggedDetails)
                 ->assign('gCalendarUse', $gCalendarUse)
                 ->assign('gUserName', $gUserName)
                 ->assign('gRefreshTime', $gRefreshTime)
-                ->assign('photo', $photo)
-                ->assign('photo_s', $photo_s)
                 ->assign('subscribeNews', $subscribeNews)
                 ->assign('userMail', $userMail)
-                ->assign('canChangeAvatar', $canChangeAvatar)
-                ->assign('usersCanManageName', $usersCanManageName)
-                ->assign('userName', $userName)
-                ->assign('userSurname1', $userSurname1)
-                ->assign('userSurname2', $userSurname2)
                 ->fetch('IWmain_user_main.htm');
     }
 
@@ -156,14 +104,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $details = FormUtil::getPassedValue('details', isset($args['details']) ? $args['details'] : null, 'POST');
         $cron = FormUtil::getPassedValue('cron', isset($args['cron']) ? $args['cron'] : null, 'POST');
         $cronWorks = FormUtil::getPassedValue('cronWorks', isset($args['cronWorks']) ? $args['cronWorks'] : null, 'POST');
-        $deleteAvatar = FormUtil::getPassedValue('deleteAvatar', isset($args['deleteAvatar']) ? $args['deleteAvatar'] : 0, 'POST');
         $gCalendarUse = FormUtil::getPassedValue('gCalendarUse', isset($args['gCalendarUse']) ? $args['gCalendarUse'] : null, 'POST');
         $gUserName = FormUtil::getPassedValue('gUserName', isset($args['gUserName']) ? $args['gUserName'] : null, 'POST');
         $gUserPass = FormUtil::getPassedValue('gUserPass', isset($args['gUserPass']) ? $args['gUserPass'] : null, 'POST');
         $gRefreshTime = FormUtil::getPassedValue('gRefreshTime', isset($args['gRefreshTime']) ? $args['gRefreshTime'] : null, 'POST');
-        $userName = FormUtil::getPassedValue('userName', isset($args['userName']) ? $args['userName'] : null, 'POST');
-        $userSurname1 = FormUtil::getPassedValue('userSurname1', isset($args['userSurname1']) ? $args['userSurname1'] : null, 'POST');
-        $userSurname2 = FormUtil::getPassedValue('userSurname2', isset($args['userSurname2']) ? $args['userSurname2'] : null, 'POST');
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             throw new Zikula_Exception_Forbidden();
@@ -263,62 +207,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                                     'sv' => $sv));
             }
         }
-        if ($deleteAvatar != 1) {
-            //gets the attached file array
-            $fileName = $_FILES['avatar']['name'];
-            $file_extension = strtolower(substr(strrchr($fileName, "."), 1));
-            if ($file_extension != 'png' && $file_extension != 'gif' && $file_extension != 'jpg' && $fileName != '') {
-                $errorMsg = $this->__('The information has been modified, but the uplaod of the avatar has failed because the file extension is not allowed. The allowed extensions are: png, jpg and gif');
-                $fileName = '';
-            }
-            // update the attached file to the server
-            if ($fileName != '') {
-                for ($i = 0; $i < 2; $i++) {
-                    $fileAvatarName = (ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded') == 1) ? '_' . UserUtil::getVar('uname') : UserUtil::getVar('uname');
-                    $userFileName = ($i == 0) ? $fileAvatarName . '.' . $file_extension : $fileAvatarName . '_s.' . $file_extension;
-                    $new_width = ($i == 0) ? 90 : 30;
-                    //source and destination
-                    $imgSource = $_FILES['avatar']['tmp_name'];
-                    $imgDest = ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $userFileName;
-                    //if success $errorMsg = ''
-                    $errorMsg = ModUtil::func('IWmain', 'user', 'thumb',
-                                    array('imgSource' => $imgSource,
-                                        'imgDest' => $imgDest,
-                                        'new_width' => $new_width,
-                                        'imageName' => $fileName));
-                }
-            }
-        } else {
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                            array('avatarName' => UserUtil::getVar('uname'),
-                                'extensions' => array('jpg',
-                                    'png',
-                                    'gif')));
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                            array('avatarName' => UserUtil::getVar('uname') . '_s',
-                                'extensions' => array('jpg',
-                                    'png',
-                                    'gif')));
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                            array('avatarName' => '_' . UserUtil::getVar('uname'),
-                                'extensions' => array('jpg',
-                                    'png',
-                                    'gif')));
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
-                            array('avatarName' => '_' . UserUtil::getVar('uname') . '_s',
-                                'extensions' => array('jpg',
-                                    'png',
-                                    'gif')));
-        }
-
-        if (ModUtil::getVar('IWusers', 'usersCanManageName') == 1) {
-            if (!ModUtil::apiFunc('IWusers', 'user', 'changeRealName',
-                            array('userName' => $userName,
-                                'userSurname1' => $userSurname1,
-                                'userSurname2' => $userSurname2,
-                    )))
-                $errorMsg = 'Changing the real name has fauiled.';
-        }
 
         if ($errorMsg != '') {
             LogUtil::registerError($errorMsg);
@@ -334,38 +222,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'module' => 'IWmain_block_flagged',
                             'sv' => $sv));
         return System::redirect(ModUtil::url('IWmain', 'user', 'main'));
-    }
-
-    /**
-     * Delete the users' avatars
-     * @author	Albert Pérez Monfort (aperezm@xtec.cat)
-     * @param	avatar name
-     * @param	the extensions image files that must be deleted
-     * @return	The module information
-     */
-    public function deleteAvatar($args) {
-        $avatarName = FormUtil::getPassedValue('avatarName', isset($args['avatarName']) ? $args['avatarName'] : null, 'POST');
-        $extensions = FormUtil::getPassedValue('extensions', isset($args['extensions']) ? $args['extensions'] : null, 'POST');
-        // Security check
-        if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
-            throw new Zikula_Exception_Forbidden();
-        }
-        $result = true;
-        $count = 0;
-        foreach ($extensions as $extension) {
-            $file = ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $avatarName . '.' . $extension;
-            if (file_exists($file)) {
-                if (!unlink($file)) {
-                    $result = false;
-                } else {
-                    $count++;
-                }
-            }
-        }
-        if ($count == 0) {
-            $result = false;
-        }
-        return $result;
     }
 
     /**
@@ -399,11 +255,11 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $avatarName = strtolower(substr(strrchr($imgDest, "/"), 1));
         $avatarName = substr($avatarName, 0, -4);
         //Success. In this case delete possible pictures in others diferents formats
-        if (ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded') != 1 || $deleteOthers == 1) {
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
+        if (ModUtil::getVar('IWusers', 'avatarChangeValidationNeeded') != 1 || $deleteOthers == 1) {
+            ModUtil::func('IWusers', 'user', 'deleteAvatar',
                             array('avatarName' => $avatarName,
                                 'extensions' => $formats));
-            ModUtil::func('IWmain', 'user', 'deleteAvatar',
+            ModUtil::func('IWusers', 'user', 'deleteAvatar',
                             array('avatarName' => $avatarName . '_s',
                                 'extensions' => $formats));
         }
@@ -645,13 +501,13 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
 
         //Change avatar requests
-        if (SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN) && ($where == 'ch' || $where == '')) {
-            $files = ModUtil::func('IWmain', 'admin', 'getChangeAvatarRequest');
+        if (SecurityUtil::checkPermission('IWusers::', '::', ACCESS_ADMIN) && ($where == 'ch' || $where == '')) {
+            $files = ModUtil::func('IWusers', 'admin', 'getChangeAvatarRequest');
             if (count($files) > 0) {
                 $out .= '<!---ch--->';
                 $out .= '<tr>';
                 $out .= '<td align="left" valign="top">';
-                $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWmain&type=admin&func=changeAvatarView">' . $this->__('Avatar replacement') . '</a>';
+                $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWusers&type=admin&func=changeAvatarView">' . $this->__('Avatar replacement') . '</a>';
                 $out .= '</td>';
                 $out .= '<td align="right" valign="top">';
                 $out .= count($files);
@@ -1792,14 +1648,14 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         $photo = '';
-        if (file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.gif')) {
-            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.gif';
+        if (file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.gif')) {
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.gif';
         }
-        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.png')) {
-            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.png';
+        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.png')) {
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.png';
         }
-        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.jpg')) {
-            $photo = ModUtil::getVar('IWmain', 'usersPictureFolder') . '/' . $uname . '.jpg';
+        if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.jpg')) {
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.jpg';
         }
         return $photo;
     }

@@ -12,7 +12,6 @@ class IWmain_Api_Admin extends Zikula_AbstractApi
         if (SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
             $links[] = array('url' => ModUtil::url('IWmain', 'admin', 'main'), 'text' => $this->__('Programmed sequences information'), 'id' => 'iwmain_crone', 'class' => 'z-icon-es-gears');
             $links[] = array('url' => ModUtil::url('IWmain', 'admin', 'conf'), 'text' => $this->__('Configure parameters'), 'id' => 'iwmain_conf', 'class' => 'z-icon-es-config');
-            $links[] = array('url' => ModUtil::url('IWmain', 'admin', 'changeAvatarView'), 'text' => $this->__('Avatar change request'), 'id' => 'iwmain_changeAvatar', 'class' => 'z-icon-es-regenerate');
             // checks module Files availability
             $modid = ModUtil::getIdFromName('Files');
             $modinfo = ModUtil::getInfo($modid);

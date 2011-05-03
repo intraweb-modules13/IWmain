@@ -13,43 +13,6 @@ function stateCheckAll(chkbox){
 	}	
 }
 
-function change(chid,text,toDo){
-	resposta=confirm(text);
-	if (resposta) {
-		if(toDo == 'ch'){
-			//showinfo(chid, changingAvatar);
-			var pars = "module=IWmain&func=change&chid=" + chid + "&toDo=ch";
-		}else{
-			//showinfo(chid, deletingAvatar);
-			var pars = "module=IWmain&func=change&chid=" + chid + "&toDo=del";
-		}
-		var myAjax = new Ajax.Request("ajax.php", {
-			method: 'get',
-			parameters: pars,
-			onComplete: change_response,
-			onFailure: change_failure
-		});
-	}
-}
-
-function change_response(req){
-	if (req.status != 200 ) { 
-		pnshowajaxerror(req.responseText);
-		return;
-	}
-
-	var json = pndejsonize(req.responseText);
-	if(json.error == ''){
-		$('change_' + json.chid).toggle();
-	}else{
-		alert(json.error);
-	}
-}
-
-function change_failure(req){
-
-}
-
 function reloadNewsBlock(){
 	var pars = "module=IWmain&func=reloadNewsBlock";
 	var myAjax = new Ajax.Request("ajax.php", {

@@ -80,38 +80,18 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
             }
         }
 
-        $noWriteablePictureFolder = false;
-        $noPictureFolder = false;
-        //Check if the users picture folder exists
-        if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder')) || ModUtil::getVar('IWmain', 'usersPictureFolder') == '') {
-            $noPictureFolder = true;
-        } else {
-            if (!is_writeable(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder'))) {
-                $noWriteablePictureFolder = true;
-            }
-        }
-
         $multizk = (isset($GLOBALS['PNConfig']['Multisites']['multi']) && $GLOBALS['PNConfig']['Multisites']['multi'] == 1) ? 1 : 0;
-        if (extension_loaded('gd'))
-            $gdAvailable = true;
 
         // Create output object
-        return $this->view->assign('gdAvailable', $gdAvailable)
-                ->assign('noWriteabledocumentRoot', $noWriteabledocumentRoot)
+        return $this->view->assign('noWriteabledocumentRoot', $noWriteabledocumentRoot)
                 ->assign('noFolder', $noFolder)
-                ->assign('noPictureFolder', $noPictureFolder)
-                ->assign('noWriteablePictureFolder', $noWriteablePictureFolder)
                 ->assign('multizk', $multizk)
-                ->assign('extensions', ModUtil::getVar('IWmain', 'extensions'))
                 ->assign('extensions', ModUtil::getVar('IWmain', 'extensions'))
                 ->assign('maxsize', ModUtil::getVar('IWmain', 'maxsize'))
                 ->assign('usersvarslife', ModUtil::getVar('IWmain', 'usersvarslife'))
                 ->assign('documentRoot', ModUtil::getVar('IWmain', 'documentRoot'))
-                ->assign('usersPictureFolder', ModUtil::getVar('IWmain', 'usersPictureFolder'))
                 ->assign('cronHeaderText', ModUtil::getVar('IWmain', 'cronHeaderText'))
                 ->assign('cronFooterText', ModUtil::getVar('IWmain', 'cronFooterText'))
-                ->assign('allowUserChangeAvatar', ModUtil::getVar('IWmain', 'allowUserChangeAvatar'))
-                ->assign('avatarChangeValidationNeeded', ModUtil::getVar('IWmain', 'avatarChangeValidationNeeded'))
                 ->fetch('IWmain_admin_conf.htm');
     }
 
@@ -140,11 +120,9 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         $extensions = FormUtil::getPassedValue('extensions', isset($args['extensions']) ? $args['extensions'] : null, 'POST');
         $maxsize = FormUtil::getPassedValue('maxsize', isset($args['maxsize']) ? $args['maxsize'] : null, 'POST');
         $usersvarslife = FormUtil::getPassedValue('usersvarslife', isset($args['usersvarslife']) ? $args['usersvarslife'] : null, 'POST');
-        $usersPictureFolder = FormUtil::getPassedValue('usersPictureFolder', isset($args['usersPictureFolder']) ? $args['usersPictureFolder'] : null, 'POST');
         $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
         $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
-        $allowUserChangeAvatar = FormUtil::getPassedValue('allowUserChangeAvatar', isset($args['allowUserChangeAvatar']) ? $args['allowUserChangeAvatar'] : 0, 'POST');
-        $avatarChangeValidationNeeded = FormUtil::getPassedValue('avatarChangeValidationNeeded', isset($args['avatarChangeValidationNeeded']) ? $args['avatarChangeValidationNeeded'] : 0, 'POST');
+
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
@@ -168,92 +146,18 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
          */
 
         $this->setVar('extensions', $extensions)
+                ->setVar('documentRoot', $documentRoot)
                 ->setVar('maxsize', $maxsize)
                 ->setVar('usersvarslife', $usersvarslife)
                 ->setVar('usersPictureFolder', $usersPictureFolder)
                 ->setVar('cronHeaderText', $cronHeaderText)
                 ->setVar('cronFooterText', $cronFooterText)
-                ->setVar('allowUserChangeAvatar', $allowUserChangeAvatar)
-                ->setVar('avatarChangeValidationNeeded', $avatarChangeValidationNeeded)
                 ->setVar('URLBase', System::getBaseUrl());
 
         LogUtil::registerStatus($this->__('The configuration have been updated'));
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
         return System::redirect(ModUtil::url('IWmain', 'admin', 'conf'));
-    }
-
-    /**
-     * Get the files in users pictures folder for avatar replacement
-     * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
-     * @return:		An array with the files from a change avatar request
-     */
-    public function getChangeAvatarRequest() {
-        // Security check
-        if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
-            throw new Zikula_Exception_Forbidden();
-        }
-        $folder = ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWmain', 'usersPictureFolder');
-        //Get information files
-        $fileList = ModUtil::func('IWmain', 'admin', 'dir_list',
-                        array('folder' => $folder));
-        $filesArray = array();
-        if ($fileList) {
-            foreach ($fileList['file'] as $file) {
-                if (substr($file['name'], 0, 1) == '_' && substr($file['name'], -6, -4) != '_s') {
-                    $filesArray[] = array($file['name']);
-                }
-            }
-        }
-        return $filesArray;
-    }
-
-    /**
-     * List the users who have asked for a avatar replacement
-     * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
-     * @return:		The list of users
-     */
-    public function changeAvatarView() {
-        // Security check
-        if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
-            throw new Zikula_Exception_Forbidden();
-        }
-        $files = ModUtil::func('IWmain', 'admin', 'getChangeAvatarRequest');
-        // Create output object
-        $view = Zikula_View::getInstance('IWmain', false);
-        $usersList = '$$';
-        $filesArray = array();
-        foreach ($files as $file) {
-            $userName = substr($file[0], 1, -4);
-            $userId = UserUtil::getIdFromName($userName);
-            $usersList .= $userId . '$$';
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $photo = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                            array('uname' => $userName,
-                                'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $photo_new = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                            array('uname' => '_' . $userName,
-                                'sv' => $sv));
-            if ($userId != '') {
-                $filesArray[] = array('uid' => $userId,
-                    'photo' => $photo,
-                    'photo_new' => $photo_new,
-                    'fileName' => $file[0]);
-            }
-        }
-        $users = '';
-        if (count($files) > 0) {
-            //get all users information
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $users = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                            array('sv' => $sv,
-                                'info' => 'ncc',
-                                'list' => $usersList));
-        }
-        return $this->view->assign('users', $users)
-                ->assign('filesArray', $filesArray)
-                ->fetch('IWmain_admin_changeAvatarView.htm');
     }
 
     /**
