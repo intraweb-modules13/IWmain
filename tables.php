@@ -42,7 +42,8 @@ function IWmain_tables() {
         'accio' => 'iw_accio',
         'sex' => 'iw_sex',
         'description' => 'iw_description',
-        'photoExtension' => 'iw_photoExtension',
+        'avatar' => 'iw_avatar',
+        'avatarvalidated' => 'iw_avatarvalidated',
     );
     // Return the table information
     return $table;

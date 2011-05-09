@@ -20,26 +20,23 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $uid = UserUtil::getVar('uid');
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'blockFlaggedDetails',
-                            'module' => 'IWmain_block_news',
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'blockFlaggedDetails',
+                    'module' => 'IWmain_block_news',
+                    'uid' => $uid,
+                    'sv' => $sv));
 
         //get the headlines saved in the user vars. It is renovate every 10 minutes
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $subscribeNews = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'subscribeNews',
-                            'module' => 'IWmain_cron',
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $subscribeNews = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'subscribeNews',
+                    'module' => 'IWmain_cron',
+                    'uid' => $uid,
+                    'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => -100,
-                            'name' => 'lastCronSuccessfull',
-                            'module' => 'IWmain_cron',
-                            'sv' => $sv));
+        $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+                    'name' => 'lastCronSuccessfull',
+                    'module' => 'IWmain_cron',
+                    'sv' => $sv));
         $lastCronSuccessfullTime = ($lastCronSuccessfull <> '') ? date('M, d Y - H.i', $lastCronSuccessfull) : '';
         $time = time();
 
@@ -51,10 +48,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         //get user mail
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $userMail = ModUtil::func('IWmain', 'user', 'getUserInfo',
-                        array('uid' => $uid,
-                            'sv' => $sv,
-                            'info' => 'e'));
+        $userMail = ModUtil::func('IWmain', 'user', 'getUserInfo', array('uid' => $uid,
+                    'sv' => $sv,
+                    'info' => 'e'));
         // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
         $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
@@ -64,25 +60,22 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 ModUtil::func('IWagendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gCalendarUse = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'gCalendarUse',
-                            'module' => 'IWagendas',
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $gCalendarUse = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'gCalendarUse',
+                    'module' => 'IWagendas',
+                    'uid' => $uid,
+                    'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gUserName = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => $uid,
-                            'name' => 'gUserName',
-                            'module' => 'IWagendas',
-                            'sv' => $sv));
+        $gUserName = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
+                    'name' => 'gUserName',
+                    'module' => 'IWagendas',
+                    'sv' => $sv));
         //get the last cron successfull response
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gRefreshTime = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => $uid,
-                            'name' => 'gRefreshTime',
-                            'module' => 'IWagendas',
-                            'sv' => $sv));
+        $gRefreshTime = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
+                    'name' => 'gRefreshTime',
+                    'module' => 'IWagendas',
+                    'sv' => $sv));
 
         return $this->view->assign('cronNotWorks', $cronNotWorks)
                 ->assign('zendFuncAvailable', $zendFuncAvailable)
@@ -118,93 +111,81 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $uid = UserUtil::getVar('uid');
         if ($details != null) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                            array('uid' => $uid,
-                                'name' => 'blockFlaggedDetails',
-                                'module' => 'IWmain_block_news',
-                                'sv' => $sv,
-                                'value' => '1'));
+            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                        'name' => 'blockFlaggedDetails',
+                        'module' => 'IWmain_block_news',
+                        'sv' => $sv,
+                        'value' => '1'));
         } else {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('uid' => $uid,
-                                'name' => 'blockFlaggedDetails',
-                                'module' => 'IWmain_block_news',
-                                'sv' => $sv));
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                        'name' => 'blockFlaggedDetails',
+                        'module' => 'IWmain_block_news',
+                        'sv' => $sv));
         }
         if ($gCalendarUse != null) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                            array('uid' => $uid,
-                                'name' => 'gCalendarUse',
-                                'module' => 'IWagendas',
-                                'sv' => $sv,
-                                'value' => '1'));
+            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                        'name' => 'gCalendarUse',
+                        'module' => 'IWagendas',
+                        'sv' => $sv,
+                        'value' => '1'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                            array('uid' => $uid,
-                                'name' => 'gUserName',
-                                'module' => 'IWagendas',
-                                'sv' => $sv,
-                                'value' => $gUserName));
+            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                        'name' => 'gUserName',
+                        'module' => 'IWagendas',
+                        'sv' => $sv,
+                        'value' => $gUserName));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                            array('uid' => $uid,
-                                'name' => 'gRefreshTime',
-                                'module' => 'IWagendas',
-                                'sv' => $sv,
-                                'value' => $gRefreshTime));
+            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                        'name' => 'gRefreshTime',
+                        'module' => 'IWagendas',
+                        'sv' => $sv,
+                        'value' => $gRefreshTime));
             if ($gUserPass != '') {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('uid' => $uid,
-                                    'name' => 'gUserPass',
-                                    'module' => 'IWagendas',
-                                    'sv' => $sv,
-                                    'value' => base64_encode($gUserPass)));
+                $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                            'name' => 'gUserPass',
+                            'module' => 'IWagendas',
+                            'sv' => $sv,
+                            'value' => base64_encode($gUserPass)));
             }
         } else {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('uid' => $uid,
-                                'name' => 'gCalendarUse',
-                                'module' => 'IWagendas',
-                                'sv' => $sv));
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                        'name' => 'gCalendarUse',
+                        'module' => 'IWagendas',
+                        'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('uid' => $uid,
-                                'name' => 'gUserName',
-                                'module' => 'IWagendas',
-                                'sv' => $sv));
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                        'name' => 'gUserName',
+                        'module' => 'IWagendas',
+                        'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('uid' => $uid,
-                                'name' => 'gUserPass',
-                                'module' => 'IWagendas',
-                                'sv' => $sv));
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                        'name' => 'gUserPass',
+                        'module' => 'IWagendas',
+                        'sv' => $sv));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('uid' => $uid,
-                                'name' => 'gRefreshTime',
-                                'module' => 'IWagendas',
-                                'sv' => $sv));
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                        'name' => 'gRefreshTime',
+                        'module' => 'IWagendas',
+                        'sv' => $sv));
         }
         if ($cronWorks != null) {
             if ($cron != null) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $result = ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('uid' => $uid,
-                                    'name' => 'subscribeNews',
-                                    'module' => 'IWmain_cron',
-                                    'sv' => $sv,
-                                    'value' => '1'));
+                $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                            'name' => 'subscribeNews',
+                            'module' => 'IWmain_cron',
+                            'sv' => $sv,
+                            'value' => '1'));
             } else {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                                array('uid' => $uid,
-                                    'name' => 'subscribeNews',
-                                    'module' => 'IWmain_cron',
-                                    'sv' => $sv));
+                $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                            'name' => 'subscribeNews',
+                            'module' => 'IWmain_cron',
+                            'sv' => $sv));
             }
         }
 
@@ -216,11 +197,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         //delete flagged block content
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $result = ModUtil::func('IWmain', 'user', 'userDelVar',
-                        array('uid' => UserUtil::getVar('uid'),
-                            'name' => 'flagged',
-                            'module' => 'IWmain_block_flagged',
-                            'sv' => $sv));
+        $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => UserUtil::getVar('uid'),
+                    'name' => 'flagged',
+                    'module' => 'IWmain_block_flagged',
+                    'sv' => $sv));
         return System::redirect(ModUtil::url('IWmain', 'user', 'main'));
     }
 
@@ -243,25 +223,22 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             throw new Zikula_Exception_Forbidden();
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $msg = ModUtil::func('IWmain', 'user', 'thumbnail',
-                        array('sv' => $sv,
-                            'imgSource' => $imgSource,
-                            'imgDest' => $imgDest,
-                            'widthImg' => $new_width,
-                            'heightImg' => 0,
-                            'imageName' => $imageName));
+        $msg = ModUtil::func('IWmain', 'user', 'thumbnail', array('sv' => $sv,
+                    'imgSource' => $imgSource,
+                    'imgDest' => $imgDest,
+                    'widthImg' => $new_width,
+                    'heightImg' => 0,
+                    'imageName' => $imageName));
         if ($msg != '')
             return $msg;
         $avatarName = strtolower(substr(strrchr($imgDest, "/"), 1));
         $avatarName = substr($avatarName, 0, -4);
         //Success. In this case delete possible pictures in others diferents formats
         if (ModUtil::getVar('IWusers', 'avatarChangeValidationNeeded') != 1 || $deleteOthers == 1) {
-            ModUtil::func('IWusers', 'user', 'deleteAvatar',
-                            array('avatarName' => $avatarName,
-                                'extensions' => $formats));
-            ModUtil::func('IWusers', 'user', 'deleteAvatar',
-                            array('avatarName' => $avatarName . '_s',
-                                'extensions' => $formats));
+            ModUtil::func('IWusers', 'user', 'deleteAvatar', array('avatarName' => $avatarName,
+                'extensions' => $formats));
+            ModUtil::func('IWusers', 'user', 'deleteAvatar', array('avatarName' => $avatarName . '_s',
+                'extensions' => $formats));
         }
         return '';
     }
@@ -283,8 +260,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $where = FormUtil::getPassedValue('where', isset($args['where']) ? $args['where'] : null, 'POST');
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : null, 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
-        if (ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                        array('sv' => $sv))) {
+        if (ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             $requestByCron = true;
         }
         if ($uid == null) {
@@ -295,18 +271,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $realUid = UserUtil::getVar('uid');
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $news = ModUtil::func('IWmain', 'user', 'userGetVar',
-                            array('uid' => $uid,
-                                'module' => 'IWmain_block_news',
-                                'name' => 'news',
-                                'sv' => $sv,
-                                'nult' => true));
+            $news = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
+                        'module' => 'IWmain_block_news',
+                        'name' => 'news',
+                        'sv' => $sv,
+                        'nult' => true));
             $init = '<!---' . $where . '--->';
             $end = '<!---/' . $where . '--->';
             $pos_init = strpos($news, $init);
-            $pos_end = ModUtil::func('IWmain', 'user', 'stringrpos',
-                            array('sHaystack' => $news,
-                                'sNeedle' => $end));
+            $pos_end = ModUtil::func('IWmain', 'user', 'stringrpos', array('sHaystack' => $news,
+                        'sNeedle' => $end));
             $calc = strlen($news) - $pos_end;
             $before = substr($news, 0, $pos_init);
             $after = substr($news, - $calc);
@@ -324,9 +298,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('IWnoteboard', 'user', 'noves',
-                                array('uid' => $uid,
-                                    'sv' => $sv));
+                $noves = ModUtil::apiFunc('IWnoteboard', 'user', 'noves', array('uid' => $uid,
+                            'sv' => $sv));
                 if ($noves['nombre'] > 0) {
                     $out .= '<!---ta--->';
                     $out .= '<tr>';
@@ -351,9 +324,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('IWagendas', 'user', 'new',
-                                array('uid' => $uid,
-                                    'sv' => $sv));
+                $noves = ModUtil::apiFunc('IWagendas', 'user', 'new', array('uid' => $uid,
+                            'sv' => $sv));
                 //Get user news in agendas
                 if ($noves > 0) {
                     $out .= '<!---ag--->';
@@ -378,10 +350,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $noves = ModUtil::apiFunc('IWmessages', 'user', 'countitems',
-                                array('uid' => $uid,
-                                    'unread' => true,
-                                    'sv' => $sv));
+                $noves = ModUtil::apiFunc('IWmessages', 'user', 'countitems', array('uid' => $uid,
+                            'unread' => true,
+                            'sv' => $sv));
                 if ($noves > 0) {
                     $out .= '<!---me--->';
                     $out .= '<tr>';
@@ -404,25 +375,22 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $registres = ModUtil::apiFunc('IWforums', 'user', 'getall',
-                                array('uid' => $uid,
-                                    'sv' => $sv));
+                $registres = ModUtil::apiFunc('IWforums', 'user', 'getall', array('uid' => $uid,
+                            'sv' => $sv));
                 $out .= '<!---fo--->';
                 foreach ($registres as $registre) {
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
-                    if ($registre['actiu'] == 1 && ModUtil::func('IWforums', 'user', 'access',
-                                    array('fid' => $registre['fid'],
-                                        'uid' => $uid, 'sv' => $sv)) > 0) {
+                    if ($registre['actiu'] == 1 && ModUtil::func('IWforums', 'user', 'access', array('fid' => $registre['fid'],
+                                'uid' => $uid, 'sv' => $sv)) > 0) {
                         if ($uid != $realUid) {
                             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                         }
-                        $noves = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
-                                        array('fid' => $registre['fid'],
-                                            'tots' => true,
-                                            'uid' => $uid,
-                                            'sv' => $sv));
+                        $noves = ModUtil::apiFunc('IWforums', 'user', 'compta_msg', array('fid' => $registre['fid'],
+                                    'tots' => true,
+                                    'uid' => $uid,
+                                    'sv' => $sv));
                         if ($noves['nollegits'] > 0) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top">';
@@ -447,14 +415,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $forms = ModUtil::apiFunc('IWforms', 'user', 'getAllForms',
-                                array('user' => 1,
-                                    'sv' => $sv));
+                $forms = ModUtil::apiFunc('IWforms', 'user', 'getAllForms', array('user' => 1,
+                            'sv' => $sv));
                 //get all the groups of the user
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $userGroups = ModUtil::func('IWmain', 'user', 'getAllUserGroups',
-                                array('uid' => $uid,
-                                    'sv' => $sv));
+                $userGroups = ModUtil::func('IWmain', 'user', 'getAllUserGroups', array('uid' => $uid,
+                            'sv' => $sv));
                 foreach ($userGroups as $group) {
                     $userGroupsArray[] = $group['id'];
                 }
@@ -463,21 +429,19 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 if ($uid != $realUid) {
                     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 }
-                $access = ModUtil::func('IWforms', 'user', 'access',
-                                array('fid' => $form['fid'],
-                                    'userGroups' => $userGroupsArray,
-                                    'uid' => $uid,
-                                    'sv' => $sv));
+                $access = ModUtil::func('IWforms', 'user', 'access', array('fid' => $form['fid'],
+                            'userGroups' => $userGroupsArray,
+                            'uid' => $uid,
+                            'sv' => $sv));
                 $out .= '<!---fu--->';
                 if ($access['level'] > 1) {
                     // get not view user news
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                     }
-                    $nNotes = ModUtil::apiFunc('IWforms', 'user', 'getNewNotes',
-                                    array('fid' => $form['fid'],
-                                        'uid' => $uid,
-                                        'sv' => $sv));
+                    $nNotes = ModUtil::apiFunc('IWforms', 'user', 'getNewNotes', array('fid' => $form['fid'],
+                                'uid' => $uid,
+                                'sv' => $sv));
                     if (count($nNotes) > 0) {
                         // user can read the notes
                         $out .= '<tr>';
@@ -524,13 +488,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $out .= '</table>';
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        ModUtil::func('IWmain', 'user', 'userSetVar',
-                        array('uid' => $uid,
-                            'name' => 'news',
-                            'module' => 'IWmain_block_news',
-                            'sv' => $sv,
-                            'value' => $out,
-                            'lifetime' => '700'));
+        ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+            'name' => 'news',
+            'module' => 'IWmain_block_news',
+            'sv' => $sv,
+            'value' => $out,
+            'lifetime' => '700'));
         return true;
     }
 
@@ -567,29 +530,26 @@ class IWmain_Controller_User extends Zikula_AbstractController {
 
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $flags = ModUtil::func('IWmain', 'user', 'userGetVar',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'module' => 'IWmain_block_flagged',
-                                'name' => 'flagged',
-                                'sv' => $sv,
-                                'nult' => true));
+            $flags = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => UserUtil::getVar('uid'),
+                        'module' => 'IWmain_block_flagged',
+                        'name' => 'flagged',
+                        'sv' => $sv,
+                        'nult' => true));
             $init = '<!---' . $where . '--->';
             $end = '<!---/' . $where . '--->';
             $pos_init = strpos($flags, $init);
-            $pos_end = ModUtil::func('IWmain', 'user', 'stringrposFlagged',
-                            array('flags' => $flags,
-                                'end' => $end));
+            $pos_end = ModUtil::func('IWmain', 'user', 'stringrposFlagged', array('flags' => $flags,
+                        'end' => $end));
             $calc = strlen($flags) - $pos_end;
             $before = substr($flags, 0, $pos_init);
             $after = substr($flags, - $calc);
         }
         $uid = UserUtil::getVar('uid');
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'blockFlaggedDetails',
-                            'module' => 'IWmain_block_news',
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'blockFlaggedDetails',
+                    'module' => 'IWmain_block_news',
+                    'uid' => $uid,
+                    'sv' => $sv));
         $out = '<table width="100%">';
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have flagged posts in the module
         //IWnoteboard
@@ -602,8 +562,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 //Get the notes that user has flagged
                 $flagged = ModUtil::apiFunc('IWnoteboard', 'user', 'getFlagged');
                 // Get the user permissions in noteboard
-                $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                                array('uid' => $uid));
+                $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => $uid));
                 //Check if user can access the notes
                 foreach ($flagged as $registre) {
                     // insert the list of groups that have access to the note into an array
@@ -684,12 +643,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             if (SecurityUtil::checkPermission('IWforums::', "::", ACCESS_READ)) {
                 //get all forums
                 $forumsArray = Array();
-                $forums = ModUtil::apiFunc('IWforums', 'user', 'getall',
-                                array('filter' => '1'));
+                $forums = ModUtil::apiFunc('IWforums', 'user', 'getall', array('filter' => '1'));
                 foreach ($forums as $forum) {
-                    $n_msg = ModUtil::apiFunc('IWforums', 'user', 'compta_msg',
-                                    array('fid' => $forum['fid'],
-                                        'tots' => true));
+                    $n_msg = ModUtil::apiFunc('IWforums', 'user', 'compta_msg', array('fid' => $forum['fid'],
+                                'tots' => true));
                     $marcats = $n_msg['marcats'];
                     $forumsArray[] = array('fid' => $forum['fid'],
                         'name' => $forum['nom_forum'],
@@ -698,12 +655,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 $out .= '<!---fo--->';
                 foreach ($forumsArray as $forum) {
                     if ($forum['marcats'] > 0) {
-                        $flagged = ModUtil::apiFunc('IWforums', 'user', 'getFlagged',
-                                        array('fid' => $forum['fid']));
+                        $flagged = ModUtil::apiFunc('IWforums', 'user', 'getFlagged', array('fid' => $forum['fid']));
                         $flaggedArray = array();
                         foreach ($flagged as $registre) {
-                            if (ModUtil::func('IWforums', 'user', 'access',
-                                            array('fid' => $registre['fid']))) {
+                            if (ModUtil::func('IWforums', 'user', 'access', array('fid' => $registre['fid']))) {
                                 $oid = ($registre['idparent'] == 0) ? $registre['fmid'] : $registre['idparent'];
                                 $flaggedArray[] = array('titol' => trim($this->cutTextFlagged(strip_tags($registre['titol']), $chars)),
                                     'fmid' => $registre['fmid'],
@@ -741,9 +696,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if ($modinfo['state'] == 3 && ($where == 'fr' || $where == '')) {
             if (SecurityUtil::checkPermission('IWforms::', "::", ACCESS_READ)) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                                array('info' => 'ccn',
-                                    'sv' => $sv));
+                $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                            'sv' => $sv));
                 //Get the notes that user has flagged
                 $flagged = ModUtil::apiFunc('IWforms', 'user', 'getWhereFlagged');
                 $flaggedArray = array();
@@ -751,19 +705,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 //Check if user can access the forms as validator
                 foreach ($flagged as $flag) {
                     //get form information
-                    $access = ModUtil::func('IWforms', 'user', 'access',
-                                    array('fid' => $flag['fid']));
+                    $access = ModUtil::func('IWforms', 'user', 'access', array('fid' => $flag['fid']));
                     if ($access['level'] == 7) {
-                        $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition',
-                                        array('fid' => $flag['fid']));
+                        $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition', array('fid' => $flag['fid']));
                         $formsArray[] = array('name' => trim(cutTextFlagged(strip_tags($formx['formName']), $chars)),
                             'fid' => $formx['fid']);
                     }
                 }
                 $out .= '<!---fr--->';
                 foreach ($formsArray as $form) {
-                    $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged',
-                                    array('fid' => $form['fid']));
+                    $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged', array('fid' => $form['fid']));
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
                     $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
@@ -795,13 +746,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        ModUtil::func('IWmain', 'user', 'userSetVar',
-                        array('uid' => UserUtil::getVar('uid'),
-                            'name' => 'flagged',
-                            'module' => 'IWmain_block_flagged',
-                            'sv' => $sv,
-                            'value' => $out,
-                            'lifetime' => '600'));
+        ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => UserUtil::getVar('uid'),
+            'name' => 'flagged',
+            'module' => 'IWmain_block_flagged',
+            'sv' => $sv,
+            'value' => $out,
+            'lifetime' => '600'));
         return true;
     }
 
@@ -838,9 +788,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             throw new Zikula_Exception_Forbidden();
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        return ModUtil::func('IWmain', 'user', 'getFile',
-                array('fileName' => $fileName,
-                    'sv' => $sv));
+        return ModUtil::func('IWmain', 'user', 'getFile', array('fileName' => $fileName,
+            'sv' => $sv));
     }
 
     /**
@@ -891,10 +840,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         extract($args);
         $fromArray = (isset($fromArray)) ? $fromArray : array();
         $list = (isset($list)) ? $list : '';
-        $users = ModUtil::apiFunc('IWmain', 'user', 'getAllUsers',
-                        array('sv' => $sv,
-                            'fromArray' => $fromArray,
-                            'list' => $list));
+        $users = ModUtil::apiFunc('IWmain', 'user', 'getAllUsers', array('sv' => $sv,
+                    'fromArray' => $fromArray,
+                    'list' => $list));
         if ($users) {
             foreach ($users as $user) {
                 $usersName[$user['uid']] = $user['uname'];
@@ -906,50 +854,94 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if ($modinfo['state'] == 3) {
             // Get users extra information because it probably exists
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $extraUsers = ModUtil::apiFunc('IWmain', 'user', 'getUsersExtraInfo',
-                            array('sv' => $sv,
-                                'fromArray' => $fromArray,
-                                'list' => $list));
+            $extraUsers = ModUtil::apiFunc('IWmain', 'user', 'getUsersExtraInfo', array('sv' => $sv,
+                        'fromArray' => $fromArray,
+                        'list' => $list));
         }
         $extraUsersArray = array();
         $usersInfo = array();
-        switch ($args['info']) {
-            case 'ncc':
-                if (isset($extraUsers)) {
-                    foreach ($extraUsers as $extraUser) {
-                        $extraUsersArray[$extraUser['uid']] = $extraUser['nom'] . ' ' . $extraUser['cognom1'] . ' ' . $extraUser['cognom2'];
-                    }
+        if (is_array($args['info'])) {
+            foreach ($args['info'] as $item) {
+                switch ($item) {
+                    case 'ncc':
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                $extraUsersArray[$extraUser['uid']] = $extraUser['nom'] . ' ' . $extraUser['cognom1'] . ' ' . $extraUser['cognom2'];
+                            }
+                        }
+                        if ($users) {
+                            foreach ($users as $user) {
+                                $usersInfo[$user['uid']][$item] = (isset($extraUsersArray[$user['uid']]) && trim($extraUsersArray[$user['uid']]) != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
+                            }
+                        }
+                        break;
+                    case 'ccn':
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                if ($extraUser['cognom2'] != '') {
+                                    $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ' ' . $extraUser['cognom2'] . ', ' . $extraUser['nom'];
+                                } elseif ($extraUser['cognom1'] != '') {
+                                    $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ', ' . $extraUser['nom'];
+                                } else {
+                                    $extraUsersArray[$extraUser['uid']] = $extraUser['nom'];
+                                }
+                            }
+                        }
+                        foreach ($users as $user) {
+                            $usersInfo[$user['uid']][$item] = (isset($extraUsersArray[$user['uid']]) && $extraUsersArray[$user['uid']] != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
+                        }
+                        break;
+                    case 'e':
+                        foreach ($users as $user) {
+                            $usersInfo[$user['uid']][$item] = $user['email'];
+                        }
+                        break;
+                    case 'l':
+                    default:
+                        foreach ($users as $user) {
+                            $usersInfo[$user['uid']][$item] = $usersName[$user['uid']];
+                        }
                 }
-                if ($users) {
-                    foreach ($users as $user) {
-                        $usersInfo[$user['uid']] = (isset($extraUsersArray[$user['uid']]) && trim($extraUsersArray[$user['uid']]) != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
-                    }
-                }
-                break;
-            case 'ccn':
-                if (isset($extraUsers)) {
-                    foreach ($extraUsers as $extraUser) {
-                        if ($extraUser['cognom2'] != '') {
-                            $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ' ' . $extraUser['cognom2'] . ', ' . $extraUser['nom'];
-                        } elseif ($extraUser['cognom1'] != '') {
-                            $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ', ' . $extraUser['nom'];
-                        } else {
-                            $extraUsersArray[$extraUser['uid']] = $extraUser['nom'];
+            }
+        } else {
+            switch ($args['info']) {
+                case 'ncc':
+                    if (isset($extraUsers)) {
+                        foreach ($extraUsers as $extraUser) {
+                            $extraUsersArray[$extraUser['uid']] = $extraUser['nom'] . ' ' . $extraUser['cognom1'] . ' ' . $extraUser['cognom2'];
                         }
                     }
-                }
-                foreach ($users as $user) {
-                    $usersInfo[$user['uid']] = (isset($extraUsersArray[$user['uid']]) && $extraUsersArray[$user['uid']] != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
-                }
-                break;
-            case 'e':
-                foreach ($users as $user) {
-                    $usersInfo[$user['uid']] = $user['email'];
-                }
-                break;
-            case 'l':
-            default:
-                $usersInfo = $usersName;
+                    if ($users) {
+                        foreach ($users as $user) {
+                            $usersInfo[$user['uid']] = (isset($extraUsersArray[$user['uid']]) && trim($extraUsersArray[$user['uid']]) != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
+                        }
+                    }
+                    break;
+                case 'ccn':
+                    if (isset($extraUsers)) {
+                        foreach ($extraUsers as $extraUser) {
+                            if ($extraUser['cognom2'] != '') {
+                                $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ' ' . $extraUser['cognom2'] . ', ' . $extraUser['nom'];
+                            } elseif ($extraUser['cognom1'] != '') {
+                                $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ', ' . $extraUser['nom'];
+                            } else {
+                                $extraUsersArray[$extraUser['uid']] = $extraUser['nom'];
+                            }
+                        }
+                    }
+                    foreach ($users as $user) {
+                        $usersInfo[$user['uid']] = (isset($extraUsersArray[$user['uid']]) && $extraUsersArray[$user['uid']] != '') ? $extraUsersArray[$user['uid']] : $usersName[$user['uid']];
+                    }
+                    break;
+                case 'e':
+                    foreach ($users as $user) {
+                        $usersInfo[$user['uid']] = $user['email'];
+                    }
+                    break;
+                case 'l':
+                default:
+                    $usersInfo = $usersName;
+            }
         }
         return $usersInfo;
     }
@@ -971,53 +963,95 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      * 		returns the username
      */
     public function getUserInfo($args) {
-        $user = ModUtil::apiFunc('IWmain', 'user', 'getUser',
-                        array('uid' => $args['uid'],
-                            'sv' => $args['sv']));
+        $user = ModUtil::apiFunc('IWmain', 'user', 'getUser', array('uid' => $args['uid'],
+                    'sv' => $args['sv']));
         // Checks if module IWusers is installed. In this case get the users extra information
         $modid = ModUtil::getIdFromName('IWusers');
         $modinfo = ModUtil::getInfo($modid);
         if ($modinfo['state'] == 3) {
             // Get users extra information because it probably exists
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $userExtraInfo = ModUtil::apiFunc('IWmain', 'user', 'getUserExtraInfo',
-                            array('uid' => $args['uid'],
-                                'sv' => $sv));
+            $userExtraInfo = ModUtil::apiFunc('IWmain', 'user', 'getUserExtraInfo', array('uid' => $args['uid'],
+                        'sv' => $sv));
         } else {
             // Force username return
             $args['info'] = 'l';
         }
-        switch ($args['info']) {
-            case 'ncc':
-                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] . ' ' . $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] : $user[0]['uname'];
-                break;
-            case 'n':
-                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
-                break;
-            case 'ccn':
-                if ($userExtraInfo[0]['cognom2'] != '') {
-                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
-                } elseif ($userExtraInfo[0]['cognom1'] != '') {
-                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
-                } else {
-                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+
+        if (is_array($args['info'])) {
+            foreach ($args['info'] as $item) {
+                switch ($item) {
+                    case 'ncc':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] . ' ' . $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] : $user[0]['uname'];
+                        break;
+                    case 'n':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                        break;
+                    case 'ccn':
+                        if ($userExtraInfo[0]['cognom2'] != '') {
+                            $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                        } elseif ($userExtraInfo[0]['cognom1'] != '') {
+                            $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                        } else {
+                            $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                        }
+                        break;
+                    case 'cn':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                        break;
+                    case 'c1':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['cognom1'])) ? $userExtraInfo[0]['cognom1'] : '';
+                        break;
+                    case 'c2':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['cognom2'])) ? $userExtraInfo[0]['cognom2'] : '';
+                        break;
+                    case 'e':
+                        $userInfo[$item] = $user[0]['email'];
+                        break;
+                    case 'a':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
+                        break;
+                    case 'l':
+                    default:
+                        $userInfo[$item] = $user[0]['uname'];
                 }
-                break;
-            case 'cn':
-                $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
-                break;
-            case 'c1':
-                $userInfo = (isset($userExtraInfo[0]['cognom1'])) ? $userExtraInfo[0]['cognom1'] : '';
-                break;
-            case 'c2':
-                $userInfo = (isset($userExtraInfo[0]['cognom2'])) ? $userExtraInfo[0]['cognom2'] : '';
-                break;
-            case 'e':
-                $userInfo = $user[0]['email'];
-                break;
-            case 'l':
-            default:
-                $userInfo = $user[0]['uname'];
+            }
+        } else {
+            switch ($args['info']) {
+                case 'ncc':
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] . ' ' . $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] : $user[0]['uname'];
+                    break;
+                case 'n':
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    break;
+                case 'ccn':
+                    if ($userExtraInfo[0]['cognom2'] != '') {
+                        $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ' ' . $userExtraInfo[0]['cognom2'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    } elseif ($userExtraInfo[0]['cognom1'] != '') {
+                        $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    } else {
+                        $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    }
+                    break;
+                case 'cn':
+                    $userInfo = (isset($userExtraInfo[0]['nom']) && $userExtraInfo[0]['nom'] != '') ? $userExtraInfo[0]['cognom1'] . ', ' . $userExtraInfo[0]['nom'] : $user[0]['uname'];
+                    break;
+                case 'c1':
+                    $userInfo = (isset($userExtraInfo[0]['cognom1'])) ? $userExtraInfo[0]['cognom1'] : '';
+                    break;
+                case 'c2':
+                    $userInfo = (isset($userExtraInfo[0]['cognom2'])) ? $userExtraInfo[0]['cognom2'] : '';
+                    break;
+                case 'e':
+                    $userInfo = $user[0]['email'];
+                    break;
+                case 'a':
+                    $userInfo = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
+                    break;
+                case 'l':
+                default:
+                    $userInfo = $user[0]['uname'];
+            }
         }
         return $userInfo;
     }
@@ -1030,8 +1064,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      * @return:	An array with the groups information
      */
     public function getAllGroups($args) {
-        $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroups',
-                        array('sv' => $args['sv']));
+        $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroups', array('sv' => $args['sv']));
         if (!empty($args['plus'])) {
             $items[] = array('id' => 0,
                 'name' => $args['plus']);
@@ -1060,18 +1093,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         $membersArray = array();
 
-        $members = ModUtil::apiFunc('IWmain', 'user', 'getMembersGroup',
-                        array('gid' => $gid,
-                            'sv' => $sv));
+        $members = ModUtil::apiFunc('IWmain', 'user', 'getMembersGroup', array('gid' => $gid,
+                    'sv' => $sv));
         if (!empty($plus)) {
             $membersArray[] = array('id' => 0,
                 'name' => $plus);
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                        array('info' => 'ccn',
-                            'sv' => $sv,
-                            'fromArray' => $members));
+        $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                    'sv' => $sv,
+                    'fromArray' => $members));
         foreach ($members as $member) {
             $membersArray[] = array('name' => $usersFullname[$member['uid']],
                 'id' => $member['uid']);
@@ -1097,11 +1128,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if (!isset($sgid) || !is_numeric($sgid)) {
             $sgid = 0;
         }
-        $isMember = ModUtil::apiFunc('IWmain', 'user', 'isMember',
-                        array('uid' => $uid,
-                            'gid' => $gid,
-                            'sgid' => $sgid,
-                            'sv' => $sv));
+        $isMember = ModUtil::apiFunc('IWmain', 'user', 'isMember', array('uid' => $uid,
+                    'gid' => $gid,
+                    'sgid' => $sgid,
+                    'sv' => $sv));
         // Return values
         return $isMember;
     }
@@ -1115,8 +1145,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
     public function getAllGroupsInfo($args) {
         extract($args);
         $groupsInfo = array();
-        $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroupsInfo',
-                        array('sv' => $sv));
+        $groups = ModUtil::apiFunc('IWmain', 'user', 'getAllGroupsInfo', array('sv' => $sv));
         if ($groups) {
             foreach ($groups as $group) {
                 $groupsInfo[$group['gid']] = $group['name'];
@@ -1138,9 +1167,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             return false;
         }
         $items = array();
-        $userGroups = ModUtil::apiFunc('IWmain', 'user', 'getAllUserGroups',
-                        array('sv' => $sv,
-                            'uid' => $uid));
+        $userGroups = ModUtil::apiFunc('IWmain', 'user', 'getAllUserGroups', array('sv' => $sv,
+                    'uid' => $uid));
         foreach ($userGroups as $group) {
             $items[$group['gid']] = array('id' => $group['gid']);
         }
@@ -1215,12 +1243,11 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     $heightImg != 0) &&
                     ($file_extension == 'gif' || $file_extension == 'jpg' || $file_extension == 'png')) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                ModUtil::func('IWmain', 'user', 'thumbnail',
-                                array('sv' => $sv,
-                                    'imgSource' => $filePath,
-                                    'imgDest' => $filePath,
-                                    'widthImg' => $widthImg,
-                                    'heightImg' => $heightImg));
+                ModUtil::func('IWmain', 'user', 'thumbnail', array('sv' => $sv,
+                    'imgSource' => $filePath,
+                    'imgDest' => $filePath,
+                    'widthImg' => $widthImg,
+                    'heightImg' => $heightImg));
             }
         }
         // The file has been updated
@@ -1393,8 +1420,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             $fileNameInServer = $fileName;
         }
         $folder = ModUtil::getVar('IWmain', 'documentRoot');
-        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                        array('sv' => $sv))) {
+        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         //Check if file exists. If not returns error.
@@ -1408,8 +1434,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $fileSize = filesize($folder . '/' . $fileNameInServer);
         // Get file extension
         $fileExtension = strtolower(substr(strrchr($fileName, "."), 1));
-        $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype',
-                        array('extension' => $fileExtension));
+        $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype', array('extension' => $fileExtension));
         $ctype = $ctypeArray['type'];
         //Begin writing headers
         header("Pragma: public");
@@ -1450,8 +1475,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         // Get file extension
         $fileExtension = strtolower(substr(strrchr($fileName, "."), 1));
-        $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype',
-                        array('extension' => $fileExtension));
+        $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype', array('extension' => $fileExtension));
         $ctype = $ctypeArray['type'];
         //Use the switch-generated Content-Type
         header("Content-Type: $ctype");
@@ -1643,8 +1667,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
     public function getUserPicture($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $uname = FormUtil::getPassedValue('uname', isset($args['uname']) ? $args['uname'] : null, 'POST');
-        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue',
-                        array('sv' => $sv))) {
+        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         $photo = '';
@@ -1687,27 +1710,24 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $nult = FormUtil::getPassedValue('nult', isset($args['nult']) ? $args['nult'] : null, 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //get the variable value
-        $value = ModUtil::apiFunc('IWmain', 'user', 'userGetVar',
-                        array('module' => $module,
-                            'name' => $name,
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $value = ModUtil::apiFunc('IWmain', 'user', 'userGetVar', array('module' => $module,
+                    'name' => $name,
+                    'uid' => $uid,
+                    'sv' => $sv));
         // If a value is returned it's saved the time when it has been readed
         if (count($value) > 0) {
             if (!$nult) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                ModUtil::apiFunc('IWmain', 'user', 'userUpdateGetVarTime',
-                                array('sv' => $sv,
-                                    'uid' => $uid,
-                                    'module' => $module,
-                                    'name' => $name));
+                ModUtil::apiFunc('IWmain', 'user', 'userUpdateGetVarTime', array('sv' => $sv,
+                    'uid' => $uid,
+                    'module' => $module,
+                    'name' => $name));
             } else {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                ModUtil::apiFunc('IWmain', 'user', 'userUpdateNultVar',
-                                array('sv' => $sv,
-                                    'uid' => $uid,
-                                    'module' => $module,
-                                    'name' => $name));
+                ModUtil::apiFunc('IWmain', 'user', 'userUpdateNultVar', array('sv' => $sv,
+                    'uid' => $uid,
+                    'module' => $module,
+                    'name' => $name));
             }
             $value = $value[0]['value'];
         } else {
@@ -1718,8 +1738,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         //Delele all the values that not have been readed the time specified in the config values
         //and the variables that have reached the lifetime value. Zero means that the old values never are deleted
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        ModUtil::apiFunc('IWmain', 'user', 'userDeleteOldVars',
-                        array('sv' => $sv));
+        ModUtil::apiFunc('IWmain', 'user', 'userDeleteOldVars', array('sv' => $sv));
         //return the value required
         return $value;
     }
@@ -1749,31 +1768,28 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             return false;
         }
         //Checks if the value is registered
-        $valueExists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('sv' => $sv,
-                            'uid' => $uid,
-                            'module' => $module,
-                            'name' => $name));
+        $valueExists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('sv' => $sv,
+                    'uid' => $uid,
+                    'module' => $module,
+                    'name' => $name));
         // If the value is registered update it in other case create it
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         if ($valueExists) {
             // The value is updated
-            $result = ModUtil::apiFunc('IWmain', 'user', 'updateUserVar',
-                            array('sv' => $sv,
-                                'uid' => $uid,
-                                'module' => $module,
-                                'name' => $name,
-                                'value' => $value,
-                                'lifetime' => $lifetime));
+            $result = ModUtil::apiFunc('IWmain', 'user', 'updateUserVar', array('sv' => $sv,
+                        'uid' => $uid,
+                        'module' => $module,
+                        'name' => $name,
+                        'value' => $value,
+                        'lifetime' => $lifetime));
         } else {
             // The value is updated
-            $result = ModUtil::apiFunc('IWmain', 'user', 'createUserVar',
-                            array('sv' => $sv,
-                                'uid' => $uid,
-                                'module' => $module,
-                                'name' => $name,
-                                'value' => $value,
-                                'lifetime' => $lifetime));
+            $result = ModUtil::apiFunc('IWmain', 'user', 'createUserVar', array('sv' => $sv,
+                        'uid' => $uid,
+                        'module' => $module,
+                        'name' => $name,
+                        'value' => $value,
+                        'lifetime' => $lifetime));
         }
         return $result;
     }
@@ -1799,20 +1815,18 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if ($lifetime != 0) {
             $lifetime = time() + 24 * 60 * 60 * ModUtil::getVar('IWmain', 'usersvarslife');
         }
-        $value = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('sv' => $sv,
-                            'module' => $module,
-                            'name' => $name,
-                            'uid' => $uid));
+        $value = ModUtil::func('IWmain', 'user', 'userGetVar', array('sv' => $sv,
+                    'module' => $module,
+                    'name' => $name,
+                    'uid' => $uid));
         if (count($value) == 0 || $value == '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::func('IWmain', 'user', 'userSetVar',
-                            array('module' => $module,
-                                'name' => $name,
-                                'value' => $default,
-                                'uid' => $uid,
-                                'timelife' => $timelife,
-                                'sv' => $sv));
+            ModUtil::func('IWmain', 'user', 'userSetVar', array('module' => $module,
+                'name' => $name,
+                'value' => $default,
+                'uid' => $uid,
+                'timelife' => $timelife,
+                'sv' => $sv));
             $value = $default;
         }
         return $value;
@@ -1832,10 +1846,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : '.*', 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //The variable is deleted
-        $result = ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                        array('sv' => $sv,
-                            'module' => $module,
-                            'name' => $name));
+        $result = ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('sv' => $sv,
+                    'module' => $module,
+                    'name' => $name));
         return $result;
     }
 
@@ -1855,11 +1868,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $name = FormUtil::getPassedValue('name', isset($args['name']) ? $args['name'] : '.*', 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         //The variable is deleted
-        $result = ModUtil::apiFunc('IWmain', 'user', 'userDelVar',
-                        array('sv' => $sv,
-                            'module' => $module,
-                            'uid' => $uid,
-                            'name' => $name));
+        $result = ModUtil::apiFunc('IWmain', 'user', 'userDelVar', array('sv' => $sv,
+                    'module' => $module,
+                    'uid' => $uid,
+                    'name' => $name));
         return $result;
     }
 
@@ -1875,9 +1887,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         //The variable is deleted
-        $result = ModUtil::apiFunc('IWmain', 'user', 'regenDinamicVars',
-                        array('sv' => $sv,
-                            'uid' => $uid));
+        $result = ModUtil::apiFunc('IWmain', 'user', 'regenDinamicVars', array('sv' => $sv,
+                    'uid' => $uid));
         return System::redirect($_SERVER['HTTP_REFERER']);
     }
 
