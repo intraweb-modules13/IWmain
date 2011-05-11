@@ -43,7 +43,7 @@ function IWmain_tables() {
         'sex' => 'iw_sex',
         'description' => 'iw_description',
         'avatar' => 'iw_avatar',
-        'avatarvalidated' => 'iw_avatarvalidated',
+        'newavatar' => 'iw_newavatar',
     );
     // Return the table information
     return $table;

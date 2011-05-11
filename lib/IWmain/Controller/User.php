@@ -896,6 +896,11 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             $usersInfo[$user['uid']][$item] = $user['email'];
                         }
                         break;
+                    case 'a':
+                        foreach ($extraUsers as $extraUser) {
+                            $usersInfo[$extraUser['uid']][$item] = $extraUser['avatar'];
+                        }
+                        break;
                     case 'l':
                     default:
                         foreach ($users as $user) {
@@ -936,6 +941,11 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 case 'e':
                     foreach ($users as $user) {
                         $usersInfo[$user['uid']] = $user['email'];
+                    }
+                    break;
+                case 'a':
+                    foreach ($users as $user) {
+                        $usersInfo[$user['uid']] = $user['avatar'];
                     }
                     break;
                 case 'l':
@@ -1011,6 +1021,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     case 'a':
                         $userInfo[$item] = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
                         break;
+                    case 'na':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
+                        break;
                     case 'l':
                     default:
                         $userInfo[$item] = $user[0]['uname'];
@@ -1047,6 +1060,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     break;
                 case 'a':
                     $userInfo = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
+                    break;
+                case 'na':
+                    $userInfo = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                     break;
                 case 'l':
                 default:
