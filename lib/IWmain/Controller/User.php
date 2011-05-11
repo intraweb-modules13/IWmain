@@ -268,6 +268,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         $before = '';
         $after = '';
+        $newsArray = array();
         $realUid = UserUtil::getVar('uid');
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -285,8 +286,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             $before = substr($news, 0, $pos_init);
             $after = substr($news, - $calc);
         }
-        $out = '<table width="100%">';
-        //For each intraweb module check if it is active and if user can access to it. In this case check if user have news in the module
+
         //IWnoteboard
         $modid = ModUtil::getIdFromName('IWnoteboard');
         $modinfo = ModUtil::getInfo($modid);
@@ -301,19 +301,17 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 $noves = ModUtil::apiFunc('IWnoteboard', 'user', 'noves', array('uid' => $uid,
                             'sv' => $sv));
                 if ($noves['nombre'] > 0) {
-                    $out .= '<!---ta--->';
-                    $out .= '<tr>';
-                    $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWnoteboard&func=main">' . $this->__('Noteboard notes') . '</a>';
-                    $out .= '</td>';
-                    $out .= '<td align="right" valign="top">';
-                    $out .= $noves['nombre'];
-                    $out .= '</td>';
-                    $out .= '</tr>';
-                    $out .= '<!---/ta--->';
+                    $newsArray[] = array('code' => '<!---ta--->');
+                    $newsArray[] = array('code' => '',
+                        'nNotes' => $noves['nombre'],
+                        'url' => ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWnoteboard&func=main',
+                        'element' => $this->__('Noteboard notes'),
+                        'title' => '');
+                    $newsArray[] = array('code' => '<!---/ta--->');
                 }
             }
         }
+
         //IWagendas
         $modid = ModUtil::getIdFromName('IWagendas');
         $modinfo = ModUtil::getInfo($modid);
@@ -328,19 +326,17 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'sv' => $sv));
                 //Get user news in agendas
                 if ($noves > 0) {
-                    $out .= '<!---ag--->';
-                    $out .= '<tr>';
-                    $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWagendas">' . $this->__('Personal agenda') . '</a>';
-                    $out .= ( '</td>');
-                    $out .= '<td align="right" valign="top">';
-                    $out .= $noves;
-                    $out .= '</td>';
-                    $out .= '</tr>';
-                    $out .= '<!---/ag--->';
+                    $newsArray[] = array('code' => '<!---ag--->');
+                    $newsArray[] = array('code' => '',
+                        'nNotes' => $noves,
+                        'url' => ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWagendas',
+                        'element' => $this->__('Personal agenda'),
+                        'title' => '');
+                    $newsArray[] = array('code' => '<!---/ag--->');
                 }
             }
         }
+
         //Private messages
         $modid = ModUtil::getIdFromName('IWmessages');
         $modinfo = ModUtil::getInfo($modid);
@@ -354,19 +350,17 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'unread' => true,
                             'sv' => $sv));
                 if ($noves > 0) {
-                    $out .= '<!---me--->';
-                    $out .= '<tr>';
-                    $out .= '<td align="left" valign="top">';
-                    $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWmessages&func=main">' . $this->__('Private messages') . '</a>';
-                    $out .= '</td>';
-                    $out .= '<td align="right" valign="top">';
-                    $out .= $noves;
-                    $out .= '</td>';
-                    $out .= '</tr>';
-                    $out .= '<!---/me--->';
+                    $newsArray[] = array('code' => '<!---me--->');
+                    $newsArray[] = array('code' => '',
+                        'nNotes' => $noves,
+                        'url' => ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWmessages&func=main',
+                        'element' => $this->__('Private messages'),
+                        'title' => '');
+                    $newsArray[] = array('code' => '<!---/me--->');
                 }
             }
         }
+
         //IWforums
         $modid = ModUtil::getIdFromName('IWforums');
         $modinfo = ModUtil::getInfo($modid);
@@ -377,7 +371,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 }
                 $registres = ModUtil::apiFunc('IWforums', 'user', 'getall', array('uid' => $uid,
                             'sv' => $sv));
-                $out .= '<!---fo--->';
+                $newsArray[] = array('code' => '<!---fo--->');
                 foreach ($registres as $registre) {
                     if ($uid != $realUid) {
                         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -392,20 +386,18 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                                     'uid' => $uid,
                                     'sv' => $sv));
                         if ($noves['nollegits'] > 0) {
-                            $out .= '<tr>';
-                            $out .= '<td align="left" valign="top">';
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforums&func=forum&fid=' . $registre['fid'] . '">' . $this->__('Forum') . ' - ' . $registre['nom_forum'] . '</a>';
-                            $out .= '</td>';
-                            $out .= '<td align="right" valign="top">';
-                            $out .= $noves['nollegits'];
-                            $out .= '</td>';
-                            $out .= '</tr>';
+                            $newsArray[] = array('code' => '',
+                                'nNotes' => $noves['nollegits'],
+                                'url' => ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforums&func=forum&fid=' . $registre['fid'],
+                                'element' => $this->__('Forum'),
+                                'title' => $registre['nom_forum']);
                         }
                     }
                 }
-                $out .= '<!---/fo--->';
+                $newsArray[] = array('code' => '<!---/fo--->');
             }
         }
+
         //IWforms
         $modid = ModUtil::getIdFromName('IWforms');
         $modinfo = ModUtil::getInfo($modid);
@@ -433,7 +425,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'userGroups' => $userGroupsArray,
                             'uid' => $uid,
                             'sv' => $sv));
-                $out .= '<!---fu--->';
+                $newsArray[] = array('code' => '<!---fu--->');
                 if ($access['level'] > 1) {
                     // get not view user news
                     if ($uid != $realUid) {
@@ -444,56 +436,46 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                                 'sv' => $sv));
                     if (count($nNotes) > 0) {
                         // user can read the notes
-                        $out .= '<tr>';
-                        $out .= '<td align="left" valign="top">';
-                        if ($access['level'] == 7) {
-                            // user is validator and it is sended to manage page
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
-                        } else {
-                            // user is not validator an it is sended to read page
-                            $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=read&fid=' . $form['fid'] . '">' . $this->__('Form') . ' - ' . $form['formName'] . '</a>';
-                        }
-                        $out .= '</td>';
-                        $out .= '<td align="right" valign="top">';
-                        $out .= count($nNotes);
-                        $out .= '</td>';
-                        $out .= '</tr>';
+                        $url = ($access['level'] == 7) ? ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=manage&fid=' . $form['fid'] : ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWforms&func=read&fid=' . $form['fid'];
+                        $newsArray[] = array('code' => '',
+                            'nNotes' => count($nNotes),
+                            'url' => $url,
+                            'element' => $this->__('Form'),
+                            'title' => $form['formName']);
                     }
                 }
-                $out .= '<!---/fu--->';
+                $newsArray[] = array('code' => '<!---/fu--->');
             }
         }
 
         //Change avatar requests
         if (SecurityUtil::checkPermission('IWusers::', '::', ACCESS_ADMIN) && ($where == 'ch' || $where == '')) {
-            $files = ModUtil::func('IWusers', 'admin', 'getChangeAvatarRequest');
-            if (count($files) > 0) {
-                $out .= '<!---ch--->';
-                $out .= '<tr>';
-                $out .= '<td align="left" valign="top">';
-                $out .= '<a href="' . ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWusers&type=admin&func=changeAvatarView">' . $this->__('Avatar replacement') . '</a>';
-                $out .= '</td>';
-                $out .= '<td align="right" valign="top">';
-                $out .= count($files);
-                $out .= '</td>';
-                $out .= '</tr>';
-                $out .= '<!---/ch--->';
+            $avatars = ModUtil::apifunc('IWusers', 'admin', 'getNotValidatedAvatars');
+            if (count($avatars) > 0) {
+                $newsArray[] = array('code' => '<!---ch--->');
+                $newsArray[] = array('code' => '',
+                    'nNotes' => count($avatars),
+                    'url' => ModUtil::getVar('IWmain', 'URLBase') . 'index.php?module=IWusers&type=admin&func=changeAvatarView',
+                    'element' => $this->__('Avatar replacement'),
+                    'title' => '');
+                $newsArray[] = array('code' => '<!---/ch--->');
             }
         }
-        $out = $before . $out . $after;
-        $out = str_replace('\'', '&acute;', $out);
-        //if not there are news is it writed in the block
-        if (strpos($out, '<tr>') == '0')
-            $out = $this->__('Nothing to show');
-        $out .= '</table>';
-        //Emmagatzemem la variable d'usuari
+
+        $news = $this->view->assign('newsArray', $newsArray)
+                ->fetch('IWmain_block_news.htm');
+
+        $news = $before . $news . $after;
+        $news = str_replace('\'', '&acute;', $news);
+
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
             'name' => 'news',
             'module' => 'IWmain_block_news',
             'sv' => $sv,
-            'value' => $out,
+            'value' => $news,
             'lifetime' => '700'));
+
         return true;
     }
 
