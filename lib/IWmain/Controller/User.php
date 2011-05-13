@@ -883,6 +883,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             $usersInfo[$extraUser['uid']][$item] = $extraUser['avatar'];
                         }
                         break;
+                    case 'd':
+                        foreach ($extraUsers as $extraUser) {
+                            $usersInfo[$extraUser['uid']][$item] = $extraUser['description'];
+                        }
+                        break;
+                    case 's':
+                        foreach ($extraUsers as $extraUser) {
+                            $usersInfo[$extraUser['uid']][$item] = $extraUser['sex'];
+                        }
+                        break;
                     case 'l':
                     default:
                         foreach ($users as $user) {
@@ -928,6 +938,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 case 'a':
                     foreach ($users as $user) {
                         $usersInfo[$user['uid']] = $user['avatar'];
+                    }
+                    break;
+                case 'd':
+                    foreach ($extraUsers as $extraUser) {
+                        $usersInfo[$user['uid']] = $user['description'];
+                    }
+                    break;
+                case 's':
+                    foreach ($extraUsers as $extraUser) {
+                        $usersInfo[$user['uid']] = $user['sex'];
                     }
                     break;
                 case 'l':
@@ -1006,6 +1026,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     case 'na':
                         $userInfo[$item] = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                         break;
+                    case 'd':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['description'])) ? $userExtraInfo[0]['description'] : '';
+                        break;
+                    case 's':
+                        $userInfo[$item] = (isset($userExtraInfo[0]['sex'])) ? $userExtraInfo[0]['sex'] : '';
+                        break;
                     case 'l':
                     default:
                         $userInfo[$item] = $user[0]['uname'];
@@ -1045,6 +1071,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     break;
                 case 'na':
                     $userInfo = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
+                    break;
+                case 'd':
+                    $userInfo = (isset($userExtraInfo[0]['description'])) ? $userExtraInfo[0]['description'] : '';
+                    break;
+                case 's':
+                    $userInfo = (isset($userExtraInfo[0]['sex'])) ? $userExtraInfo[0]['sex'] : '';
                     break;
                 case 'l':
                 default:
