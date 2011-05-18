@@ -2,7 +2,7 @@
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='configure.png' set='icons/large' __alt="Configure module"}</div>
     <h2>{gt text="Modify the configuration"}</h2>
-    <form  class="z-form" enctype="application/x-www-form-urlencoded" method="post" id="conf" action="{modurl modname="IWmain" type="admin" func="updateconfig"}">
+    <form  class="z-form" enctype="application/x-www-form-urlencoded" method="post" id="conf" action="{modurl modname='IWmain' type='admin' func='updateconfig'}">
         <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
         {if not $multizk}
         <div class="z-formrow">

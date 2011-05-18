@@ -509,6 +509,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $chars = FormUtil::getPassedValue('chars', isset($args['chars']) ? $args['chars'] : null, 'POST');
         $before = '';
         $after = '';
+        $flaggedArray = array();
 
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -556,7 +557,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             $uid == $registre['informa'])) ||
                             $permissions['potverificar']) &&
                             $pos == 0) {
-                        $flaggedArray[] = array('noticia' => trim(cutTextFlagged(strip_tags($registre['noticia']), $chars)),
+                        $flaggedArray[] = array('noticia' => trim($this->cutTextFlagged(strip_tags($registre['noticia']), $chars)),
                             'nid' => $registre['nid']);
                     }
                 }
@@ -609,7 +610,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         foreach ($flaggedArray as $flagged) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top" colspan ="2">';
-                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWmessages&func=display&msgid=' . $flagged['msgid'] . '&qui=d">' . cutTextFlagged($flagged['subject'], $chars) . '</a>';
+                            $out .= str_repeat("&nbsp;", 5) . '-&nbsp;<a href="index.php?module=IWmessages&func=display&msgid=' . $flagged['msgid'] . '&qui=d">' . $this->cutTextFlagged($flagged['subject'], $chars) . '</a>';
                             $out .= '</td>';
                             $out .= '</tr>';
                         }
@@ -690,7 +691,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     $access = ModUtil::func('IWforms', 'user', 'access', array('fid' => $flag['fid']));
                     if ($access['level'] == 7) {
                         $formx = ModUtil::apiFunc('IWforms', 'user', 'getFormDefinition', array('fid' => $flag['fid']));
-                        $formsArray[] = array('name' => trim(cutTextFlagged(strip_tags($formx['formName']), $chars)),
+                        $formsArray[] = array('name' => trim($this->cutTextFlagged(strip_tags($formx['formName']), $chars)),
                             'fid' => $formx['fid']);
                     }
                 }
