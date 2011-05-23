@@ -1229,7 +1229,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         //Check if folder exists. If not returns error.
-        if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . $folder)) {
+        if (!file_exists($this->getVar('documentRoot') . '/' . $folder)) {
             return array('msg' => $this->__("The folder for attached files haven't been found."), 'fileName' => '');
         }
         if (!isset($file)) {
@@ -1238,14 +1238,14 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             $file['size'] = $fileSize;
         }
         //Check if the extension of the file is allowed
-        $allowedExtensionsText = ($allowOnly != null) ? $allowOnly : ModUtil::getVar('IWmain', 'extensions') . $allow;
+        $allowedExtensionsText = ($allowOnly != null) ? $allowOnly : $this->getVar('extensions') . $allow;
         $allowed_extensions = explode('|', $allowedExtensionsText);
         $file_extension = strtolower(substr(strrchr($file['name'], "."), 1));
         if (!in_array($file_extension, $allowed_extensions)) {
             return array('msg' => $this->__('The file extension is not allowed.'), 'fileName' => '');
         }
         //Check if the file size is allowed
-        $maxsize = ModUtil::getVar('IWmain', 'maxsize');
+        $maxsize = $this->getVar('maxsize');
         if ($file['size'] > $maxsize) {
             return array('msg' => $this->__('File size not allowed.'), 'fileName' => '');
         }
@@ -1257,13 +1257,13 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             if ($overwrite != 1) {
                 $fitxer = $fileName;
                 $i = 1;
-                while (file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . $folder . '/' . $fileName)) {
+                while (file_exists($this->getVar('documentRoot') . '/' . $folder . '/' . $fileName)) {
                     $fileName = substr($fitxer, 0, strlen($fitxer) - strlen($file_extension) - (1)) . $i . '.' . $file_extension;
                     $i++;
                 }
             }
         }
-        $filePath = ModUtil::getVar('IWmain', 'documentRoot') . '/' . $folder . '/' . $fileName;
+        $filePath = $this->getVar('documentRoot') . '/' . $folder . '/' . $fileName;
         //Update the file
         if (!move_uploaded_file($file['tmp_name'], $filePath)) {
             return array('msg' => $this->__("The attached file haven't been updated because an error."),
