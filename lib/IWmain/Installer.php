@@ -65,7 +65,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
     /**
      * Update the IWmain module
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
-     * 
+     * @author Jaume Fernàndez Valiente (jfern343@xtec.cat)
      * @return bool true if successful, false otherwise
      */
     public function upgrade($oldversion) {
