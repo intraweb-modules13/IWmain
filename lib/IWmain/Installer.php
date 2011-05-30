@@ -76,7 +76,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         if (!DBUtil::renameTable('iw_main', 'IWmain'))
             return false;
 
-        //Rename iw_module column content
+        //Rename iw_module column values
         $c = "SELECT DISTINCT `iw_module` FROM `{$prefix}_IWmain` WHERE 1";
         $res = DBUtil::executeSQL($c);
 
@@ -85,17 +85,18 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         foreach ($oldNames as $oldName) {
             $newName = substr($oldName, 3);
             $c = "UPDATE {$prefix}_IWmain SET iw_module = 'IW{$newName}' WHERE iw_module = '{$oldName}'";
-            if (!DBUtil::executeSQL($c))
+            if (!DBUtil::executeSQL($c)) {
                 return false;
+            }
         }
 
-        //Update module_var table
+        //Update module_vars table
         
         // Array de d'arrays de parells [name] [value]
-        $oldVars = DBUtil::selectObjectArray("module_vars", "`pn_modname` = 'iw_main'", '', -1, -1, '', null, null, array('name', 'value'));
+        $oldVars = DBUtil::selectObjectArray("module_vars", "`z_modname` = 'iw_main'", '', -1, -1, '', null, null, array('name', 'value'));
 
         //Array de noms
-        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`pn_modname` = 'iw_main'", '', false, '');
+        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'iw_main'", '', false, '');
 
         $newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
             'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
@@ -115,7 +116,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         //Delete unneeded vars and update the rest
         foreach ($oldVarsNames as $old) {
             // echo ($old . '<br>');
-            $this->delVar($del);
+            ModUtil::delVar('iw_main', $old);
             if ($newVars[$old]) {
                 //     echo ($old . ' ' . $newVars[$old]);
                 $this->addVar($old, $oldVars[$old]);
