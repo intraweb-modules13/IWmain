@@ -92,9 +92,12 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 
         //Update module_vars table
         
-        // Array de d'arrays de parells [name] [value]
-        $oldVars = DBUtil::selectObjectArray("module_vars", "`z_modname` = 'iw_main'", '', -1, -1, '', null, null, array('name', 'value'));
-
+        //Update the name (keeps old var value)
+        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWmain' WHERE z_bkey = 'iw_main'";
+        if (!DBUtil::executeSQL($c)) {
+            return false;
+        }
+        
         //Array de noms
         $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'iw_main'", '', false, '');
 
@@ -113,20 +116,15 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
             'URLBase' => System::getBaseUrl());
 
 
-        //Delete unneeded vars and update the rest
-        foreach ($oldVarsNames as $old) {
-            // echo ($old . '<br>');
-            ModUtil::delVar('iw_main', $old);
-            if ($newVars[$old]) {
-                //     echo ($old . ' ' . $newVars[$old]);
-                $this->addVar($old, $oldVars[$old]);
-            }
+        // Delete unneeded vars
+        $del = array_diff($oldVarsNames, $newVarsNames);
+        foreach ($del as $i) {
+            $this->delVar($i);
         }
 
-        //Add new vars
+        // Add new vars
         $add = array_diff($newVarsNames, $oldVarsNames);
         foreach ($add as $i) {
-            //  echo($i . ': ' . 'afegida '/*$newVars[$i]*/);
             $this->setVar($i, $newVars[$i]);
         }
 
