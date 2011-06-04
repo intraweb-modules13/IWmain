@@ -1698,18 +1698,20 @@ class IWmain_Controller_User extends Zikula_AbstractController {
     public function getUserPicture($args) {
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
         $uname = FormUtil::getPassedValue('uname', isset($args['uname']) ? $args['uname'] : null, 'POST');
+        $small = FormUtil::getPassedValue('small', isset($args['small']) ? $args['small'] : 0, 'POST');
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
+        $smallUnderline = ($small == 1) ? '_s' : '';
         $photo = '';
         if (file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.gif')) {
-            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.gif';
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . $smallUnderline . '.gif';
         }
         if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.png')) {
-            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.png';
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . $smallUnderline . '.png';
         }
         if ($photo == '' && file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.jpg')) {
-            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . '.jpg';
+            $photo = ModUtil::getVar('IWusers', 'usersPictureFolder') . '/' . $uname . $smallUnderline . '.jpg';
         }
         return $photo;
     }
