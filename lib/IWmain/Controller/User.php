@@ -849,7 +849,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     case 'ncc':
                         if (isset($extraUsers)) {
                             foreach ($extraUsers as $extraUser) {
-                                $extraUsersArray[$extraUser['uid']] = $extraUser['nom'] . ' ' . $extraUser['cognom1'] . ' ' . $extraUser['cognom2'];
+                                $extraUsersArray[$extraUser['uid']] = trim($extraUser['nom'] . ' ' . $extraUser['cognom1'] . ' ' . $extraUser['cognom2']);
                             }
                         }
                         if ($users) {
@@ -862,9 +862,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         if (isset($extraUsers)) {
                             foreach ($extraUsers as $extraUser) {
                                 if ($extraUser['cognom2'] != '') {
-                                    $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ' ' . $extraUser['cognom2'] . ', ' . $extraUser['nom'];
+                                    $extraUsersArray[$extraUser['uid']] = trim($extraUser['cognom1'] . ' ' . $extraUser['cognom2'] . ', ' . $extraUser['nom']);
                                 } elseif ($extraUser['cognom1'] != '') {
-                                    $extraUsersArray[$extraUser['uid']] = $extraUser['cognom1'] . ', ' . $extraUser['nom'];
+                                    $extraUsersArray[$extraUser['uid']] = trim($extraUser['cognom1'] . ', ' . $extraUser['nom']);
                                 } else {
                                     $extraUsersArray[$extraUser['uid']] = $extraUser['nom'];
                                 }
