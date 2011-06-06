@@ -51,7 +51,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller_AbstractAjax
 
         $view->assign('news', $news);
         $view->assign('ajax', 1);
-        $content = $view->fetch('IWmain_block_iwnews.htm');
+        $content = $view->fetch('IWmain_block_IWnews.htm');
 
         AjaxUtil::output(array('content' => $content));
     }
