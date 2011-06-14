@@ -1318,7 +1318,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             'jpg',
             'jpeg',
             'png');
-        if (!in_array($fileExtension, $thumbnailExtensions)) {
+        if (!in_array(strtolower($fileExtension), $thumbnailExtensions)) {
             return $this->__('Error! Thumbnailing the image file.');
         }
         $format = '';
