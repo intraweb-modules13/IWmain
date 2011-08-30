@@ -1,9 +1,12 @@
 <?php
+
 class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
+
     protected function postInitialize() {
         // Set caching to false by default.
         $this->view->setCaching(false);
     }
+
     /**
      * initialise block
      *
@@ -51,51 +54,44 @@ class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
 
         //get the headlines saved in the user vars. It is renovate every 10 minutes
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'news',
-                            'module' => 'IWmain_block_news',
-                            'uid' => $uid,
-                            'sv' => $sv));
+        $exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'news',
+                    'module' => 'IWmain_block_news',
+                    'uid' => $uid,
+                    'sv' => $sv));
 
         if ($exists) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $have_news = ModUtil::func('IWmain', 'user', 'userGetVar',
-                            array('uid' => $uid,
-                                'name' => 'have_news',
-                                'module' => 'IWmain_block_news',
-                                'sv' => $sv));
+            $have_news = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
+                        'name' => 'have_news',
+                        'module' => 'IWmain_block_news',
+                        'sv' => $sv));
             if ($have_news != '0') {
-                ModUtil::func('IWmain', 'user', 'news',
-                                array('where' => $have_news));
+                ModUtil::func('IWmain', 'user', 'news', array('where' => $have_news));
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('uid' => $uid,
-                                    'name' => 'have_news',
-                                    'module' => 'IWmain_block_news',
-                                    'sv' => $sv,
-                                    'value' => '0'));
+                ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
+                    'name' => 'have_news',
+                    'module' => 'IWmain_block_news',
+                    'sv' => $sv,
+                    'value' => '0'));
             }
 
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $have_flags = ModUtil::func('IWmain', 'user', 'userGetVar',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'name' => 'have_flags',
-                                'module' => 'IWmain_block_flagged',
-                                'sv' => $sv));
+            $have_flags = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => UserUtil::getVar('uid'),
+                        'name' => 'have_flags',
+                        'module' => 'IWmain_block_flagged',
+                        'sv' => $sv));
 
             if ($have_flags != '0') {
-                ModUtil::func('IWmain', 'user', 'flagged',
-                                array('where' => $have_flags,
-                                    'chars' => 15));
+                ModUtil::func('IWmain', 'user', 'flagged', array('where' => $have_flags,
+                    'chars' => 15));
 
 
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('uid' => UserUtil::getVar('uid'),
-                                    'name' => 'have_flags',
-                                    'module' => 'IWmain_block_flagged',
-                                    'sv' => $sv,
-                                    'value' => '0'));
+                ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => UserUtil::getVar('uid'),
+                    'name' => 'have_flags',
+                    'module' => 'IWmain_block_flagged',
+                    'sv' => $sv,
+                    'value' => '0'));
             }
         } else {
             ModUtil::func('IWmain', 'user', 'news');
@@ -103,31 +99,27 @@ class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
 
         //get the flagged items
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        if (!$exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists',
-                        array('name' => 'news',
-                            'module' => 'IWmain_block_flagged',
-                            'uid' => $uid,
-                            'sv' => $sv))) {
-            ModUtil::func('IWmain', 'user', 'flagged',
-                            array('where' => '',
-                                'chars' => 15));
+        if (!$exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'news',
+                    'module' => 'IWmain_block_flagged',
+                    'uid' => $uid,
+                    'sv' => $sv))) {
+            ModUtil::func('IWmain', 'user', 'flagged', array('where' => '',
+                'chars' => 15));
         }
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $news = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => $uid,
-                            'name' => 'news',
-                            'module' => 'IWmain_block_news',
-                            'sv' => $sv,
-                            'nult' => true));
+        $news = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
+                    'name' => 'news',
+                    'module' => 'IWmain_block_news',
+                    'sv' => $sv,
+                    'nult' => true));
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $flags = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => UserUtil::getVar('uid'),
-                            'name' => 'flagged',
-                            'module' => 'IWmain_block_flagged',
-                            'sv' => $sv,
-                            'nult' => true));
+        $flags = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => UserUtil::getVar('uid'),
+                    'name' => 'flagged',
+                    'module' => 'IWmain_block_flagged',
+                    'sv' => $sv,
+                    'nult' => true));
 
         $this->view->assign('news', $news)
                 ->assign('flags', $flags);

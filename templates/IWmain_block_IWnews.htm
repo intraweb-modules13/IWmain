@@ -6,24 +6,20 @@
     {gt text="Flagged items" domain="module_IWmain"}
     {img modname='core' src='flag.png' set='icons/extrasmall'}
 </div>
-{if $flags neq ''}
 <div id="IWmain_block_flagged">
+    {if $flags neq ''}
     {$flags}
+    {/if}
 </div>
-{else}
-<div id="IWmain_block_flagged"></div>
-{/if}
 <br />
 <div style="float: left">
-    <a href="{modurl modname="IWmain" type="user" func="regenBlockNews"}">
-    {gt text="Regenerate" domain="module_IWmain"} {img modname='core' src='quick_restart.png' set='icons/extrasmall' __alt="Regenerate" __title="Regenerate"}
-</a>
+    <a href="{modurl modname='IWmain' type='user' func='regenBlockNews'}">
+        {gt text="Regenerate" domain="module_IWmain"} {img modname='core' src='quick_restart.png' set='icons/extrasmall' __alt="Regenerate" __title="Regenerate"}
+    </a>
 </div>
 <div style="float: right;">
-    <a href="{modurl modname="IWmain" type="user" func="main"}">
-    {gt text="Configure" domain="module_IWmain"} {img modname='core' src='configure.png' set='icons/extrasmall' __alt="Configure" __title="Configure"}
-</a>
+    <a href="{modurl modname='IWmain' type='user' func='main'}">
+        {gt text="Configure" domain="module_IWmain"} {img modname='core' src='configure.png' set='icons/extrasmall' __alt="Configure" __title="Configure"}
+    </a>
 </div>
-<div style="clear: both;">
-    &nbsp;
-</div>
+<div style="clear: both;"></div>

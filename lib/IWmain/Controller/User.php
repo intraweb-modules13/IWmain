@@ -78,14 +78,14 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     'sv' => $sv));
 
         return $this->view->assign('cronNotWorks', $cronNotWorks)
-                ->assign('zendFuncAvailable', $zendFuncAvailable)
-                ->assign('blockFlaggedDetails', $blockFlaggedDetails)
-                ->assign('gCalendarUse', $gCalendarUse)
-                ->assign('gUserName', $gUserName)
-                ->assign('gRefreshTime', $gRefreshTime)
-                ->assign('subscribeNews', $subscribeNews)
-                ->assign('userMail', $userMail)
-                ->fetch('IWmain_user_main.htm');
+                        ->assign('zendFuncAvailable', $zendFuncAvailable)
+                        ->assign('blockFlaggedDetails', $blockFlaggedDetails)
+                        ->assign('gCalendarUse', $gCalendarUse)
+                        ->assign('gUserName', $gUserName)
+                        ->assign('gRefreshTime', $gRefreshTime)
+                        ->assign('subscribeNews', $subscribeNews)
+                        ->assign('userMail', $userMail)
+                        ->fetch('IWmain_user_main.htm');
     }
 
     /**
@@ -772,7 +772,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         return ModUtil::func('IWmain', 'user', 'getFile', array('fileName' => $fileName,
-            'sv' => $sv));
+                    'sv' => $sv));
     }
 
     /**
@@ -880,18 +880,24 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         }
                         break;
                     case 'a':
-                        foreach ($extraUsers as $extraUser) {
-                            $usersInfo[$extraUser['uid']][$item] = $extraUser['avatar'];
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                $usersInfo[$extraUser['uid']][$item] = $extraUser['avatar'];
+                            }
                         }
                         break;
                     case 'd':
-                        foreach ($extraUsers as $extraUser) {
-                            $usersInfo[$extraUser['uid']][$item] = $extraUser['description'];
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                $usersInfo[$extraUser['uid']][$item] = $extraUser['description'];
+                            }
                         }
                         break;
                     case 's':
-                        foreach ($extraUsers as $extraUser) {
-                            $usersInfo[$extraUser['uid']][$item] = $extraUser['sex'];
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                $usersInfo[$extraUser['uid']][$item] = $extraUser['sex'];
+                            }
                         }
                         break;
                     case 'l':
