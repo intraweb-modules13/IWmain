@@ -30,6 +30,33 @@ function IWmain_tables() {
     ObjectUtil::addStandardFieldsToTableDefinition($table['IWmain_column'], 'pn_');
     ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWmain_column_def'], 'iw_');
 
+        // corremonts districts table definition
+    $table['IWmain_logs'] = DBUtil::getLimitedTablename('IWmain_logs');
+    $table['IWmain_logs_column'] = array('logId' => 'iw_logId',
+        'moduleName' => 'iw_moduleName',
+        'actionType' => 'iw_actionType', // 1 - add / 2 - Edit / 3 - Delete
+        'visible' => 'iw_visible', // 1 - all users / 0 - only administrators
+        'actionText' => 'iw_actionText',
+        'logIp' => 'iw_logIp',
+        'indexName' => 'iw_indexName',
+        'indexValue' => 'iw_indexValue',
+        'error' => 'iw_error',
+    );
+
+    $table['IWmain_logs_column_def'] = array('logId' => "I NOTNULL AUTO PRIMARY",
+        'moduleName' => "C(25) NOTNULL DEFAULT ''",
+        'actionType' => "I(1) NOTNULL DEFAULT '0'",
+        'visible' => "I(1) NOTNULL DEFAULT '0'",
+        'actionText' => "C(255) NOTNULL DEFAULT ''",
+        'logIp' => "C(15) NOTNULL DEFAULT ''",
+        'indexName' => "C(15) NOTNULL DEFAULT ''",
+        'indexValue' => "I NOTNULL DEFAULT '0'",
+        'error' => "I(1) NOTNULL DEFAULT '0'",
+    );
+
+    ObjectUtil::addStandardFieldsToTableDefinition($table['IWmain_logs_column'], '');
+    ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWmain_logs_column_def']);
+    
     // IWusers table definition
     $table['IWusers'] = DBUtil::getLimitedTablename('IWusers');
     $table['IWusers_column'] = array('suid' => 'iw_suid',

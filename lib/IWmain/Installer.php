@@ -11,15 +11,22 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         // Create module table
         if (!DBUtil::createTable('IWmain'))
             return false;
+        if (!DBUtil::createTable('IWmain_logs'))
+            return false;
 
         //Create indexes
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         if (!DBUtil::createIndex($c['module'], 'IWmain', 'module'))
             return false;
         if (!DBUtil::createIndex($c['name'], 'IWmain', 'name'))
             return false;
         if (!DBUtil::createIndex($c['uid'], 'IWmain', 'uid'))
+            return false;
+        $c = $table['IWmain_logs_column'];
+        if (!DBUtil::createIndex($c['moduleName'], 'IWmain', 'moduleName'))
+            return false;
+        if (!DBUtil::createIndex($c['visible'], 'IWmain', 'visible'))
             return false;
 
         //Create module vars
@@ -70,6 +77,17 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
      */
     public function upgrade($oldversion) {
 
+        // create new needed tables and index
+        if (!DBUtil::createTable('IWmain_logs'))
+            return false;
+
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_logs_column'];
+        if (!DBUtil::createIndex($c['moduleName'], 'IWmain', 'moduleName'))
+            return false;
+        if (!DBUtil::createIndex($c['visible'], 'IWmain', 'visible'))
+            return false;
+
         $prefix = $GLOBALS['ZConfig']['System']['prefix'];
 
         //Rename table
@@ -91,13 +109,12 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         }
 
         //Update module_vars table
-        
         //Update the name (keeps old var value)
         $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWmain' WHERE z_bkey = 'iw_main'";
         if (!DBUtil::executeSQL($c)) {
             return false;
         }
-        
+
         //Array de noms
         $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'iw_main'", '', false, '');
 
