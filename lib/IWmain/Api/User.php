@@ -14,9 +14,9 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
-        $pntable = DBUtil::getTables();
+        $table = DBUtil::getTables();
         $where = "";
-        $c = $pntable['users_column'];
+        $c = $table['users_column'];
         if ($fromArray != null && count($fromArray) > 0) {
             foreach ($fromArray as $f) {
                 $where .= " $c[uid] = $f[uid] OR";
@@ -53,9 +53,9 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         $fromArray = FormUtil::getPassedValue('fromArray', isset($args['fromArray']) ? $args['fromArray'] : null, 'POST');
         $list = FormUtil::getPassedValue('list', isset($args['list']) ? $args['list'] : null, 'POST');
         $items = array();
-        $pntable = DBUtil::getTables();
+        $table = DBUtil::getTables();
         $where = "";
-        $c = $pntable['IWusers_column'];
+        $c = $table['IWusers_column'];
         //die('tt');
         if ($fromArray != null && count($fromArray) > 0) {
             foreach ($fromArray as $f) {
@@ -97,8 +97,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         $items = array();
-        $pntable = DBUtil::getTables();
-        $c = $pntable['users_column'];
+        $table = DBUtil::getTables();
+        $c = $table['users_column'];
         $where = "$c[uid]=$uid";
         // get the objects from the db
         $items = DBUtil::selectObjectArray('users', $where);
@@ -124,8 +124,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWusers_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWusers_column'];
         $where = "$c[uid]=$uid";
         // get the objects from the db
         $items = DBUtil::selectObjectArray('IWusers', $where);
@@ -148,8 +148,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
-        $pntable = DBUtil::getTables();
-        $c = $pntable['groups_column'];
+        $table = DBUtil::getTables();
+        $c = $table['groups_column'];
         $orderby = "$c[name]";
         $items = array();
         // get the objects from the db
@@ -186,9 +186,9 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             'object_field_name' => array(),
             'compare_field_table' => 'uid',
             'compare_field_join' => 'uid');
-        $pntables = DBUtil::getTables();
-        $ccolumn = $pntables['users_column'];
-        $ocolumn = $pntables['group_membership_column'];
+        $tables = DBUtil::getTables();
+        $ccolumn = $tables['users_column'];
+        $ocolumn = $tables['group_membership_column'];
         $where = "b.$ocolumn[gid] = " . $gid;
         $orderBy = "ORDER BY tbl.$ccolumn[uname]";
         $items = DBUtil::selectExpandedObjectArray('users', $myJoin, $where, $orderBy);
@@ -235,8 +235,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         //Check if the user is member of the group
         if ($gid != 0) {
             $items = array();
-            $pntable = DBUtil::getTables();
-            $c = $pntable['group_membership_column'];
+            $table = DBUtil::getTables();
+            $c = $table['group_membership_column'];
             $where = "$c[uid]=" . $uid . " AND $c[gid]=" . $gid;
             // get the objects from the db
             $items = DBUtil::selectObjectArray('group_membership', $where);
@@ -266,8 +266,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($uid == null || !is_numeric($uid))
             return false;
         $items = array();
-        $pntable = DBUtil::getTables();
-        $c = $pntable['group_membership_column'];
+        $table = DBUtil::getTables();
+        $c = $table['group_membership_column'];
         $where = "$c[uid]=" . $uid;
         // get the objects from the db
         $items = DBUtil::selectObjectArray('group_membership', $where);
@@ -309,8 +309,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($uid == null || $module == null || $name == null) {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         $where = "$c[uid]=" . $uid . " AND $c[module]='" . $module . "' AND $c[name]='" . $name . "'";
         // get the objects from the db
         $items = DBUtil::selectObjectArray('IWmain', $where);
@@ -345,8 +345,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($uid == null || $module == null || $name == null) {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         $where = "$c[uid]=" . $uid . " AND $c[module]='" . $module . "' AND $c[name]='" . $name . "'";
         // get the objects from the db
         $items = DBUtil::selectObjectArray('IWmain', $where);
@@ -422,8 +422,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         }
         $item = array('lifetime' => time() + 24 * 60 * 60 * ModUtil::getVar('IWmain', 'usersvarslife'),
             'nult' => 0);
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         $where = "$c[uid]=" . $uid . " AND $c[module]='" . $module . "' AND $c[name]='" . $name . "'";
         if (!DBUtil::updateObject($item, 'IWmain', $where, 'mid'))
             return LogUtil::registerError($this->__('Error! Update attempt failed.'));
@@ -455,8 +455,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         $item = array('nult' => 1);
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         $where = "$c[uid]=" . $uid . " AND $c[module]='" . $module . "' AND $c[name]='" . $name . "'";
         if (!DBUtil::updateObject($item, 'IWmain', $where, 'mid')) {
             return LogUtil::registerError($this->__('Error! Update attempt failed.'));
@@ -493,8 +493,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         }
         $item = array('value' => $value,
             'lifetime' => $lifetime);
-        $pntable = DBUtil::getTables();
-        $c = $pntable['IWmain_column'];
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_column'];
         $where = "$c[uid]=" . $uid . " AND $c[module]='" . $module . "' AND $c[name]='" . $name . "'";
         if (!DBUtil::updateObject($item, 'IWmain', $where, 'mid')) {
             return LogUtil::registerError($this->__('Error! Update attempt failed.'));
@@ -516,8 +516,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('You are not allowed to access to some information.'));
         }
         $now = time();
-        $pntables = DBUtil::getTables();
-        $c = $pntables['IWmain_column'];
+        $tables = DBUtil::getTables();
+        $c = $tables['IWmain_column'];
         $where = "WHERE $c[lifetime] < '$now'";
         if (!DBUtil::deleteWhere('IWmain', $where)) {
             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
@@ -546,8 +546,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($module == null || $name == null) {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
-        $pntables = DBUtil::getTables();
-        $c = $pntables['IWmain_column'];
+        $tables = DBUtil::getTables();
+        $c = $tables['IWmain_column'];
         $where = ($name == '.*') ? "WHERE $c[module] = '" . $module . "'" : "WHERE $c[module] = '" . $module . "' AND $c[name]='" . $name . "'";
         if (!DBUtil::deleteWhere('IWmain', $where))
             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
@@ -578,8 +578,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($module == null || $uid == null || $name == null) {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
-        $pntables = DBUtil::getTables();
-        $c = $pntables['IWmain_column'];
+        $tables = DBUtil::getTables();
+        $c = $tables['IWmain_column'];
         $where = ($name == '.*') ? "WHERE $c[module] = '" . $module . "' AND $c[uid] = " . $uid : "WHERE $c[module] = '" . $module . "' AND $c[name] = '" . $name . "' AND $c[uid] = " . $uid;
         if (!DBUtil::deleteWhere('IWmain', $where)) {
             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
@@ -606,8 +606,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if ($uid == null) {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
-        $pntables = DBUtil::getTables();
-        $c = $pntables['IWmain_column'];
+        $tables = DBUtil::getTables();
+        $c = $tables['IWmain_column'];
         $where = "WHERE $c[nult] = 1 AND $c[uid] = " . $uid;
         if (!DBUtil::deleteWhere('IWmain', $where))
             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
@@ -648,8 +648,7 @@ class IWmain_Api_User extends Zikula_AbstractApi {
      * @throws Zikula_Exception_Forbidden Thrown if the current user does not have overview access.
      */
     public function saveLog($args) {
-        $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
-        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
+        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $args['sv']))) {
             throw new Zikula_Exception_Forbidden("You are not allowed to access to some information.");
         }
 
@@ -738,11 +737,33 @@ class IWmain_Api_User extends Zikula_AbstractApi {
 
     // get saved logs depending on different options
     public function getLogs($args) {
-        $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
-        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
+        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $args['sv']))) {
             throw new Zikula_Exception_Forbidden("You are not allowed to access to some information.");
         }
+
+        $init = (isset($args['init'])) ? $args['init'] : '-1';
+        $rpp = (isset($args['rpp'])) ? $args['rpp'] : '-1';
+
+        $table = DBUtil::getTables();
+        $where = "";
+        $c = $table['IWmain_logs_column'];
+
+        if (isset($args['moduleName'])) {
+            $where = "$c[moduleName] = '$args[moduleName]'";
+        }
         
+        $order = (isset($args['order'])) ? $args['order'] : '';
+
+        $orderby = "$c[logId] $order";
+        
+        // get the objects from the db
+        $items = DBUtil::selectObjectArray('IWmain_logs', $where, $orderby, $init, $rpp, 'logId');
+        // Check for an error with the database code, and if so set an appropriate
+        // error message and return
+        if ($items === false)
+            return LogUtil::registerError($this->__('Error! Could not load items.'));
+        // Return the items
+        return $items;
     }
 
     //***************************************************************************************

@@ -886,6 +886,15 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             }
                         }
                         break;
+                    case 'as': // avatar small version
+                        if (isset($extraUsers)) {
+                            foreach ($extraUsers as $extraUser) {
+                                $extension = FileUtil::getExtension($extraUser['avatar']);
+                                $smallAvatar = str_replace('.' . $extension, '', $extraUser['avatar']) . '_s.' . $extension;
+                                $usersInfo[$extraUser['uid']][$item] = $smallAvatar;
+                            }
+                        }
+                        break;
                     case 'd':
                         if (isset($extraUsers)) {
                             foreach ($extraUsers as $extraUser) {
@@ -945,6 +954,15 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 case 'a':
                     foreach ($users as $user) {
                         $usersInfo[$user['uid']] = $user['avatar'];
+                    }
+                    break;
+                case 'as': // avatar small version
+                    if (isset($extraUsers)) {
+                        foreach ($users as $user) {
+                            $extension = FileUtil::getExtension($user['avatar']);
+                            $smallAvatar = str_replace('.' . $extension, '', $user['avatar']) . '_s.' . $extension;
+                            $usersInfo[$user['uid']] = $smallAvatar;
+                        }
                     }
                     break;
                 case 'd':
@@ -1030,6 +1048,14 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     case 'a':
                         $userInfo[$item] = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
                         break;
+                    case 'as': // avatar small version
+                        if (isset($userExtraInfo[0]['avatar'])) {
+                            $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
+                            $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                            $userInfo[$item] = $smallAvatar;
+                        } else {
+                            $userInfo[$item] = '';
+                        }
                     case 'na':
                         $userInfo[$item] = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                         break;
@@ -1076,6 +1102,14 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 case 'a':
                     $userInfo = (isset($userExtraInfo[0]['avatar'])) ? $userExtraInfo[0]['avatar'] : '';
                     break;
+                case 'as': // avatar small version
+                    if (isset($userExtraInfo[0]['avatar'])) {
+                        $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
+                        $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                        $userInfo = $smallAvatar;
+                    } else {
+                        $userInfo = '';
+                    }
                 case 'na':
                     $userInfo = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                     break;
