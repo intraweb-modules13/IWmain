@@ -677,6 +677,8 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             'logIp' => $ip,
             'indexName' => $args['indexName'],
             'indexValue' => $args['indexValue'],
+            'indexName1' => $args['indexName1'],
+            'indexValue1' => $args['indexValue1'],
             'error' => $error,
         );
 
@@ -751,11 +753,11 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         if (isset($args['moduleName'])) {
             $where = "$c[moduleName] = '$args[moduleName]'";
         }
-        
+
         $order = (isset($args['order'])) ? $args['order'] : '';
 
         $orderby = "$c[logId] $order";
-        
+
         // get the objects from the db
         $items = DBUtil::selectObjectArray('IWmain_logs', $where, $orderby, $init, $rpp, 'logId');
         // Check for an error with the database code, and if so set an appropriate
