@@ -754,6 +754,16 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             $where = "$c[moduleName] = '$args[moduleName]'";
         }
 
+        if (isset($args['indexName']) && $args['indexName'] != '' && isset($args['indexValue']) && $args['indexValue'] > 0) {
+            $and = ($where != '') ? ' AND ' : '';
+            $where .= $and . "$c[indexName] = '$args[indexName]' AND $c[indexValue] = $args[indexValue]";
+        }
+
+        if (isset($args['indexName1']) && $args['indexName1'] != '' && isset($args['indexValue1']) && $args['indexValue1'] > 0) {
+            $and = ($where != '') ? ' AND ' : '';
+            $where .= $and . "$c[indexName1] = '$args[indexName1]' AND $c[indexValue1] = $args[indexValue1]";
+        }
+
         $order = (isset($args['order'])) ? $args['order'] : '';
 
         $orderby = "$c[logId] $order";
