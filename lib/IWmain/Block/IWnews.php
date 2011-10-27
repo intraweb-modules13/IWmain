@@ -99,7 +99,7 @@ class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
 
         //get the flagged items
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        if (!$exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'news',
+        if (!$exists = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'flagged',
                     'module' => 'IWmain_block_flagged',
                     'uid' => $uid,
                     'sv' => $sv))) {

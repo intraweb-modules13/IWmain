@@ -678,9 +678,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         //Si el mòdul està actiu
         if ($modinfo['state'] == 3 && ($where == 'fr' || $where == '')) {
             if (SecurityUtil::checkPermission('IWforms::', "::", ACCESS_READ)) {
-                $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
-                            'sv' => $sv));
                 //Get the notes that user has flagged
                 $flagged = ModUtil::apiFunc('IWforms', 'user', 'getWhereFlagged');
                 $flaggedArray = array();
@@ -696,8 +693,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     }
                 }
                 $out .= '<!---fr--->';
+                $usersList = '';
                 foreach ($formsArray as $form) {
                     $flaggeds = ModUtil::apiFunc('IWforms', 'user', 'getFlagged', array('fid' => $form['fid']));
+                    foreach ($flaggeds as $flagged) {
+                        $usersList .= $flagged['user'] . '$$';
+                    }
+                    $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+                    $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                                'list' => $usersList,
+                                'sv' => $sv));
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
                     $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
