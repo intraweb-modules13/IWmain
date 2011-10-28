@@ -699,10 +699,6 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     foreach ($flaggeds as $flagged) {
                         $usersList .= $flagged['user'] . '$$';
                     }
-                    $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                    $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
-                                'list' => $usersList,
-                                'sv' => $sv));
                     $out .= '<tr>';
                     $out .= '<td align="left" valign="top">';
                     $out .= '<a href="index.php?module=IWforms&func=manage&fid=' . $form['fid'] . '">' . $this->__("Form") . ' - ' . $form['name'] . '</a>';
@@ -712,6 +708,10 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     $out .= '</td>';
                     $out .= '</tr>';
                     if ($blockFlaggedDetails) {
+                        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+                        $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                                    'list' => $usersList,
+                                    'sv' => $sv));
                         foreach ($flaggeds as $flagged) {
                             $out .= '<tr>';
                             $out .= '<td align="left" valign="top" colspan ="2">';
