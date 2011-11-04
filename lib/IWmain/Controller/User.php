@@ -1061,6 +1061,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         } else {
                             $userInfo[$item] = '';
                         }
+                        break;
                     case 'na':
                         $userInfo[$item] = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                         break;
@@ -1115,6 +1116,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     } else {
                         $userInfo = '';
                     }
+                    break;
                 case 'na':
                     $userInfo = (isset($userExtraInfo[0]['newavatar'])) ? $userExtraInfo[0]['newavatar'] : '';
                     break;
