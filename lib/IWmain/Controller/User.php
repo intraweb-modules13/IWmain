@@ -1063,8 +1063,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         break;
                     case 'as': // avatar small version
                         if (isset($userExtraInfo[0]['avatar'])) {
-                            $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
-                            $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                            if ($userExtraInfo[0]['avatar'] != '') {
+                                $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
+                                $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                            } else {
+                                $smallAvatar = '';
+                            }
                             $userInfo[$item] = $smallAvatar;
                         } else {
                             $userInfo[$item] = '';
@@ -1118,8 +1122,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     break;
                 case 'as': // avatar small version
                     if (isset($userExtraInfo[0]['avatar'])) {
-                        $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
-                        $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                        if ($userExtraInfo[0]['avatar'] != '') {
+                            $extension = FileUtil::getExtension($userExtraInfo[0]['avatar']);
+                            $smallAvatar = str_replace('.' . $extension, '', $userExtraInfo[0]['avatar']) . '_s.' . $extension;
+                        } else {
+                            $smallAvatar = '';
+                        }
                         $userInfo = $smallAvatar;
                     } else {
                         $userInfo = '';
