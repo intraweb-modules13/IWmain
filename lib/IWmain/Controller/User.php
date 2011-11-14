@@ -894,8 +894,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     case 'as': // avatar small version
                         if (isset($extraUsers)) {
                             foreach ($extraUsers as $extraUser) {
-                                $extension = FileUtil::getExtension($extraUser['avatar']);
-                                $smallAvatar = str_replace('.' . $extension, '', $extraUser['avatar']) . '_s.' . $extension;
+                                if ($extraUser['avatar'] != '') {
+                                    $extension = FileUtil::getExtension($extraUser['avatar']);
+                                    $smallAvatar = str_replace('.' . $extension, '', $extraUser['avatar']) . '_s.' . $extension;
+                                } else {
+                                    $smallAvatar = '';
+                                }
                                 $usersInfo[$extraUser['uid']][$item] = $smallAvatar;
                             }
                         }
@@ -964,8 +968,12 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                 case 'as': // avatar small version
                     if (isset($extraUsers)) {
                         foreach ($users as $user) {
-                            $extension = FileUtil::getExtension($user['avatar']);
-                            $smallAvatar = str_replace('.' . $extension, '', $user['avatar']) . '_s.' . $extension;
+                            if ($user['avatar'] != '') {
+                                $extension = FileUtil::getExtension($user['avatar']);
+                                $smallAvatar = str_replace('.' . $extension, '', $user['avatar']) . '_s.' . $extension;
+                            } else {
+                                $smallAvatar = '';
+                            }
                             $usersInfo[$user['uid']] = $smallAvatar;
                         }
                     }
