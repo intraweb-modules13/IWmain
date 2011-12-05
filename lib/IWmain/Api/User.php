@@ -767,9 +767,12 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         $order = (isset($args['order'])) ? $args['order'] : '';
 
         $orderby = "$c[logId] $order";
-
-        // get the objects from the db
-        $items = DBUtil::selectObjectArray('IWmain_logs', $where, $orderby, $init, $rpp, 'logId');
+        if (isset($args['onlyNumber']) && $args['onlyNumber'] == 1) {
+            $items = DBUtil::selectObjectCount('IWmain_logs', $where);
+        } else {
+            // get the objects from the db
+            $items = DBUtil::selectObjectArray('IWmain_logs', $where, $orderby, $init, $rpp, 'logId');
+        }
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
         if ($items === false)
