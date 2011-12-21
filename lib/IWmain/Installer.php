@@ -24,9 +24,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         if (!DBUtil::createIndex($c['uid'], 'IWmain', 'uid'))
             return false;
         $c = $table['IWmain_logs_column'];
-        if (!DBUtil::createIndex($c['moduleName'], 'IWmain', 'moduleName'))
+        if (!DBUtil::createIndex($c['moduleName'], 'IWmain_logs', 'moduleName'))
             return false;
-        if (!DBUtil::createIndex($c['visible'], 'IWmain', 'visible'))
+        if (!DBUtil::createIndex($c['visible'], 'IWmain_logs', 'visible'))
             return false;
 
         //Create module vars
