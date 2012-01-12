@@ -781,6 +781,21 @@ class IWmain_Api_User extends Zikula_AbstractApi {
         return $items;
     }
 
+    function deleteLog($args) {
+        if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $args['sv']))) {
+            throw new Zikula_Exception_Forbidden("You are not allowed to access to some information.");
+        }
+        $table = DBUtil::getTables();
+        $c = $table['IWmain_logs_column'];
+        
+        $where = "$c[moduleName]='$args[moduleName]' AND $c[indexName]='$args[indexName]' AND $c[indexValue]=$args[indexValue]";
+
+        if (!DBUtil::deleteWhere ('IWmain_logs', $where)) {
+             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
+        }
+        return true;
+    }
+
     //***************************************************************************************
     //
     // END - Logs system functions
