@@ -826,6 +826,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      */
     public function getAllUsersInfo($args) {
         extract($args);
+        $usersName = array();
         $fromArray = (isset($fromArray)) ? $fromArray : array();
         $list = (isset($list)) ? $list : '';
         $users = ModUtil::apiFunc('IWmain', 'user', 'getAllUsers', array('sv' => $sv,
