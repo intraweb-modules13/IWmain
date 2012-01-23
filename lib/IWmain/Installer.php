@@ -91,7 +91,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         $prefix = $GLOBALS['ZConfig']['System']['prefix'];
 
         //Rename table
-        if (!DBUtil::renameTable('iw_main', 'IWmain'))
+        if (!DBUtil::renameTable('IWmain', 'IWmain'))
             return false;
 
         //Rename iw_module column values
@@ -110,13 +110,13 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 
         //Update module_vars table
         //Update the name (keeps old var value)
-        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWmain' WHERE z_bkey = 'iw_main'";
+        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWmain' WHERE z_bkey = 'IWmain'";
         if (!DBUtil::executeSQL($c)) {
             return false;
         }
 
         //Array de noms
-        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'iw_main'", '', false, '');
+        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'IWmain'", '', false, '');
 
         $newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
             'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
