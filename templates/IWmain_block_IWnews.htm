@@ -1,6 +1,8 @@
 {ajaxheader modname=IWmain filename=IWmain.js}
 <div id="IWmain_block_news">
-    {$news}
+    <ul>
+        {$news}
+    </ul>
 </div>
 <div style="margin-top: 20px;">
     {gt text="Flagged items"}
@@ -11,7 +13,6 @@
     {$flags}
     {/if}
 </div>
-<br />
 <div style="float: left">
     <a href="{modurl modname='IWmain' type='user' func='regenBlockNews'}">
         {gt text="Regenerate"} {img modname='core' src='quick_restart.png' set='icons/extrasmall' __alt="Regenerate" __title="Regenerate"}
