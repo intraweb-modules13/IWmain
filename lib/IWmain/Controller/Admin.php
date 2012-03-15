@@ -21,7 +21,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         //Check if the cron file exists
         if (!file_exists('iwcron.php')) {
             return $this->view->assign('noCron', true)
-                    ->fetch('IWmain_admin_main.htm');
+                            ->fetch('IWmain_admin_main.htm');
         }
         //Check if module Mailer is active
         $modid = ModUtil::getIdFromName('Mailer');
@@ -33,30 +33,27 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         }
         //-100 really is not a user but represents the system user
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $cronResponse = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => -100,
-                            'name' => 'cronResponse',
-                            'module' => 'IWmain_cron',
-                            'sv' => $sv));
+        $cronResponse = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+                    'name' => 'cronResponse',
+                    'module' => 'IWmain_cron',
+                    'sv' => $sv));
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $lastCron = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => -100,
-                            'name' => 'lastCron',
-                            'module' => 'IWmain_cron',
-                            'sv' => $sv));
+        $lastCron = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+                    'name' => 'lastCron',
+                    'module' => 'IWmain_cron',
+                    'sv' => $sv));
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar',
-                        array('uid' => -100,
-                            'name' => 'lastCronSuccessfull',
-                            'module' => 'IWmain_cron',
-                            'sv' => $sv));
+        $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+                    'name' => 'lastCronSuccessfull',
+                    'module' => 'IWmain_cron',
+                    'sv' => $sv));
         $elapsedTime = 24 * 60 * 60;
         $executeCron = ($lastCron < time() - $elapsedTime) ? 1 : 0;
         $noCronTime = ($lastCronSuccessfull > time() - $elapsedTime) ? true : false;
         return $this->view->assign('executeCron', $executeCron)
-                ->assign('noCronTime', $noCronTime)
-                ->assign('cronResponse', $cronResponse)
-                ->fetch('IWmain_admin_main.htm');
+                        ->assign('noCronTime', $noCronTime)
+                        ->assign('cronResponse', $cronResponse)
+                        ->fetch('IWmain_admin_main.htm');
     }
 
     /**
@@ -84,15 +81,17 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
 
         // Create output object
         return $this->view->assign('noWriteabledocumentRoot', $noWriteabledocumentRoot)
-                ->assign('noFolder', $noFolder)
-                ->assign('multizk', $multizk)
-                ->assign('extensions', ModUtil::getVar('IWmain', 'extensions'))
-                ->assign('maxsize', ModUtil::getVar('IWmain', 'maxsize'))
-                ->assign('usersvarslife', ModUtil::getVar('IWmain', 'usersvarslife'))
-                ->assign('documentRoot', ModUtil::getVar('IWmain', 'documentRoot'))
-                ->assign('cronHeaderText', ModUtil::getVar('IWmain', 'cronHeaderText'))
-                ->assign('cronFooterText', ModUtil::getVar('IWmain', 'cronFooterText'))
-                ->fetch('IWmain_admin_conf.htm');
+                        ->assign('noFolder', $noFolder)
+                        ->assign('multizk', $multizk)
+                        ->assign('extensions', $this->getVar('extensions'))
+                        ->assign('maxsize', $this->getVar('maxsize'))
+                        ->assign('usersvarslife', $this->getVar('usersvarslife'))
+                        ->assign('documentRoot', $this->getVar('documentRoot'))
+                        ->assign('cronHeaderText', $this->getVar('cronHeaderText'))
+                        ->assign('cronFooterText', $this->getVar('cronFooterText'))
+                        ->assign('captchaPrivateCode', $this->getVar('captchaPrivateCode'))
+                        ->assign('captchaPublicCode', $this->getVar('captchaPublicCode'))
+                        ->fetch('IWmain_admin_conf.htm');
     }
 
     /**
@@ -122,7 +121,9 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         $usersvarslife = FormUtil::getPassedValue('usersvarslife', isset($args['usersvarslife']) ? $args['usersvarslife'] : null, 'POST');
         $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
         $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
-
+        $captchaPrivateCode = FormUtil::getPassedValue('captchaPrivateCode', isset($args['captchaPrivateCode']) ? $args['captchaPrivateCode'] : null, 'POST');
+        $captchaPublicCode = FormUtil::getPassedValue('captchaPublicCode', isset($args['captchaPublicCode']) ? $args['captchaPublicCode'] : null, 'POST');
+        
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
@@ -152,6 +153,8 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('usersPictureFolder', $usersPictureFolder)
                 ->setVar('cronHeaderText', $cronHeaderText)
                 ->setVar('cronFooterText', $cronFooterText)
+                ->setVar('captchaPrivateCode', $captchaPrivateCode)
+                ->setVar('captchaPublicCode', $captchaPublicCode)
                 ->setVar('URLBase', System::getBaseUrl());
 
         LogUtil::registerStatus($this->__('The configuration have been updated'));
@@ -216,8 +219,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                 // Get file extension
                 $fileExtension = strtolower(substr(strrchr($filename, "."), 1));
                 // get file icon
-                $ctypeArray = ModUtil::func('IWfiles', 'user', 'getMimetype',
-                                array('extension' => $fileExtension));
+                $ctypeArray = ModUtil::func('IWfiles', 'user', 'getMimetype', array('extension' => $fileExtension));
                 $fileIcon = $ctypeArray['icon'];
                 if (substr($filename, strrpos($filename, '/') + 1, 1) != '.' || ModUtil::getVar('IWfiles', 'showHideFiles') == 1) {
                     $file_object = array('name' => $object,

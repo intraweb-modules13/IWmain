@@ -39,6 +39,8 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->setVar('cronHeaderText', $this->__('Header text of the cron automatic emails with the new things to see'))
                 ->setVar('cronFooterText', $this->__('Footer text of the email'))
                 ->setVar('showHideFiles', '0')
+                ->setVar('captchaPrivateCode', '')
+                ->setVar('captchaPublicCode', '')
                 ->setVar('URLBase', System::getBaseUrl());
 
         return true;
@@ -63,6 +65,8 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->delVar('cronHeaderText')
                 ->delVar('cronFooterText')
                 ->delVar('showHideFiles')
+                ->delVar('captchaPrivateCode')
+                ->delVar('captchaPublicCode')
                 ->delVar('URLBase');
 
         //Deletion successfull
@@ -76,7 +80,6 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
      * @return bool true if successful, false otherwise
      */
     public function upgrade($oldversion) {
-
         // create new needed tables and index
         if (!DBUtil::createTable('IWmain_logs'))
             return false;
@@ -130,8 +133,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
             'cronHeaderText' => $this->__('Header text of the cron automatic emails with the new things to see'),
             'cronFooterText' => $this->__('Footer text of the email'),
             'showHideFiles' => '0',
+            'captchaPrivateCode' => '',
+            'captchaPublicCode' => '',
             'URLBase' => System::getBaseUrl());
-
 
         // Delete unneeded vars
         $del = array_diff($oldVarsNames, $newVarsNames);

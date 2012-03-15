@@ -40,6 +40,26 @@
             <label for="cronFooterText">{gt text="Footer text of the email"}</label>
             <textarea name="cronFooterText" cols="70" rows="5">{$cronFooterText}</textarea>
         </div>
+        <fieldset>
+            <legend>{gt text="Captcha system used in form for unregistered users"}</legend>
+            <div class="z-formrow">
+                <label for="captchaPrivateCode">{gt text="Private captcha code"}</label>
+                <input id="captchaPrivateCode" name="captchaPrivateCode" value="{$captchaPrivateCode}" />
+            </div>
+            <div class="z-formrow">
+                <label for="captchaPublicCode">{gt text="Public captcha code"}</label>
+                <input id="captchaPublicCode" name="captchaPublicCode" value="{$captchaPublicCode}" />
+            </div>
+            <div class="z-formnote z-informationmsg">
+                <div>
+                    {gt text="The captcha system prevents robots can send notes to forms automatically. With this module successfully activated and you get linked to when a user sends an unregistered entry, is obliged to recognize and write a set of characters that can not recognize an automated system."}
+                </div>
+                <div>
+                    {gt text="You can find more information about protection captcha system in"}: <a href="http://www.google.com/recaptcha" target="_blank">http://www.google.com/recaptcha</a>.
+                </div>
+            </div>
+        </fieldset>
+
         <div class="z-center z-buttons">
             <a onclick="javascript: forms['conf'].submit();">{img modname='core' src='button_ok.png' set='icons/small'   __alt="Save changes" __title="Save changes"} {gt text="Save changes"}</a>
         </div>

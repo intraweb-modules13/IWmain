@@ -1994,4 +1994,27 @@ class IWmain_Controller_User extends Zikula_AbstractController {
     // END - Function used for the managment of user var variables
     //
     //***************************************************************************************
+
+    public function getCaptcha() {
+        require_once('modules/IWmain/includes/recaptchalib.php');
+        $publickey = $this->getVar('captchaPublicCode');
+        return recaptcha_get_html($publickey);
+    }
+
+    public function checkCaptcha($args) {
+        $recaptcha_challenge_field = FormUtil::getPassedValue('recaptcha_challenge_field', isset($args['recaptcha_challenge_field']) ? $args['recaptcha_challenge_field'] : null, 'POST');
+        $recaptcha_response_field = FormUtil::getPassedValue('recaptcha_response_field', isset($args['recaptcha_response_field']) ? $args['recaptcha_response_field'] : null, 'POST');
+
+        require_once('modules/IWmain/includes/recaptchalib.php');
+        $privatekey = $this->getVar('captchaPrivateCode');
+
+        $resp = recaptcha_check_answer($privatekey, $_SERVER["REMOTE_ADDR"], $recaptcha_challenge_field, $recaptcha_response_field);
+
+        if (!$resp->is_valid) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
