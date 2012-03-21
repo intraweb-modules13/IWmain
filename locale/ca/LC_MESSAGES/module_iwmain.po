@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: IWmain 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-25 16:08+0100\n"
-"PO-Revision-Date: 2012-03-15 10:35+0100\n"
+"PO-Revision-Date: 2012-03-21 08:40+0100\n"
 "Last-Translator: intraweb <intraweb@xtec.cat>\n"
 "Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
@@ -705,4 +705,7 @@ msgstr "El sistema de captcha evita que robots puguin enviar anotacions als form
 
 msgid "You can find more information about protection captcha system in"
 msgstr "Podeu trobar més informació sobre el sistema de protecció per captcha a"
+
+msgid "It has not worked (only visible for administrators)."
+msgstr "No ha funcionat (només visible per a administradors)."
 
