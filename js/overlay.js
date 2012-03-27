@@ -22,6 +22,7 @@ var xpos=getposOffset(curobj, "left")+((typeof opt_position!="undefined" && opt_
 var ypos=getposOffset(curobj, "top")+((typeof opt_position!="undefined" && opt_position.indexOf("bottom")!=-1)? curobj.offsetHeight : 0)
 subobj.style.left=xpos+"px"
 subobj.style.top=ypos+"px"
+subobj.style.zIndex=1000
 return false
 }
 else
