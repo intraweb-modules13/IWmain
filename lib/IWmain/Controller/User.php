@@ -523,7 +523,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             $pos_init = strpos($flags, $init);
             $pos_end = ModUtil::func('IWmain', 'user', 'stringrposFlagged', array('flags' => $flags,
                         'end' => $end));
-            $calc = strlen($flags) - $pos_end - 12;
+            $calc = strlen($flags) - $pos_end;
             $before = substr($flags, 0, $pos_init);
             $after = substr($flags, - $calc);
         }
