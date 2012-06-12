@@ -509,8 +509,8 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         $chars = FormUtil::getPassedValue('chars', isset($args['chars']) ? $args['chars'] : null, 'POST');
         $before = '';
         $after = '';
+        $out = '';
         $flaggedArray = array();
-
         if ($where != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $flags = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => UserUtil::getVar('uid'),
@@ -523,7 +523,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             $pos_init = strpos($flags, $init);
             $pos_end = ModUtil::func('IWmain', 'user', 'stringrposFlagged', array('flags' => $flags,
                         'end' => $end));
-            $calc = strlen($flags) - $pos_end;
+            $calc = strlen($flags) - $pos_end - 12;
             $before = substr($flags, 0, $pos_init);
             $after = substr($flags, - $calc);
         }
@@ -533,7 +533,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     'module' => 'IWmain_block_news',
                     'uid' => $uid,
                     'sv' => $sv));
-        $out = '<table width="100%">';
+        if ($before == '') {
+            $out = '<table width="100%">';
+        }
         //For each intraweb module check if it is active and if user can access to it. In this case check if user have flagged posts in the module
         //IWnoteboard
         $modid = ModUtil::getIdFromName('IWnoteboard');
@@ -730,7 +732,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         if (strpos($out, '<tr>') == '0') {
             $out = '';
         } else {
-            $out .= '</table>';
+            if ($after == '') {
+                $out .= '</table>';
+            }
         }
         //Emmagatzemem la variable d'usuari
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
