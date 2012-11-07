@@ -30,7 +30,7 @@ function IWmain_tables() {
     ObjectUtil::addStandardFieldsToTableDefinition($table['IWmain_column'], 'pn_');
     ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWmain_column_def'], 'iw_');
 
-    // corremonts districts table definition
+    // logs table definition
     $table['IWmain_logs'] = DBUtil::getLimitedTablename('IWmain_logs');
     $table['IWmain_logs_column'] = array('logId' => 'iw_logId',
         'moduleName' => 'iw_moduleName',
