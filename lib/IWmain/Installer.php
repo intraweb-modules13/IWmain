@@ -86,40 +86,13 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 
         $table = DBUtil::getTables();
         $c = $table['IWmain_logs_column'];
-        if (!DBUtil::createIndex($c['moduleName'], 'IWmain', 'moduleName'))
+        if (!DBUtil::createIndex($c['moduleName'], 'IWmain_logs', 'moduleName'))
             return false;
-        if (!DBUtil::createIndex($c['visible'], 'IWmain', 'visible'))
+        if (!DBUtil::createIndex($c['visible'], 'IWmain_logs', 'visible'))
             return false;
-
-        $prefix = $GLOBALS['ZConfig']['System']['prefix'];
-
-        //Rename table
-        if (!DBUtil::renameTable('IWmain', 'IWmain'))
-            return false;
-
-        //Rename iw_module column values
-        $c = "SELECT DISTINCT `iw_module` FROM `{$prefix}_IWmain` WHERE 1";
-        $res = DBUtil::executeSQL($c);
-
-        $oldNames = DBUtil::marshallFieldArray($res);
-
-        foreach ($oldNames as $oldName) {
-            $newName = substr($oldName, 3);
-            $c = "UPDATE {$prefix}_IWmain SET iw_module = 'IW{$newName}' WHERE iw_module = '{$oldName}'";
-            if (!DBUtil::executeSQL($c)) {
-                return false;
-            }
-        }
-
-        //Update module_vars table
-        //Update the name (keeps old var value)
-        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWmain' WHERE z_bkey = 'IWmain'";
-        if (!DBUtil::executeSQL($c)) {
-            return false;
-        }
 
         //Array de noms
-        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'IWmain'", '', false, '');
+        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`modname` = 'IWmain'", '', false, '');
 
         $newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
             'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
