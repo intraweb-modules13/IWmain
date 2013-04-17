@@ -781,6 +781,11 @@ class IWmain_Api_User extends Zikula_AbstractApi {
             $where .= $and . "$c[indexName1] = '$args[indexName1]' AND $c[indexValue1] = $args[indexValue1]";
         }
 
+        if (isset($args['visible']) && $args['visible'] != '') {
+            $and = ($where != '') ? ' AND ' : '';
+            $where .= $and . "$c[visible] = '$args[visible]'";
+        }
+
         $order = (isset($args['order'])) ? $args['order'] : '';
 
         $orderby = "$c[logId] $order";
