@@ -19,6 +19,8 @@
             </div>
             {/if}
         </div>
+	{else}
+	    <input type="text" name="documentRoot" value="{$documentRoot}" size="50" maxlength="255" />
         {/if}
         <div class="z-formrow">
             <label for="extensions">{gt text="Allowed extensions"}</label>
