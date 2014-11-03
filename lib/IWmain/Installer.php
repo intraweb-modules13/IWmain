@@ -80,48 +80,54 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
      * @return bool true if successful, false otherwise
      */
     public function upgrade($oldversion) {
-        // create new needed tables and index
-        if (!DBUtil::createTable('IWmain_logs'))
-            return false;
+	switch ($oldversion) {
+	    case ($oldversion < '3.0.0'):
+        	// create new needed tables and index
+        	if (!DBUtil::createTable('IWmain_logs'))
+            	    return false;
 
-        $table = DBUtil::getTables();
-        $c = $table['IWmain_logs_column'];
-        if (!DBUtil::createIndex($c['moduleName'], 'IWmain_logs', 'moduleName'))
-            return false;
-        if (!DBUtil::createIndex($c['visible'], 'IWmain_logs', 'visible'))
-            return false;
+        	$table = DBUtil::getTables();
+        	$c = $table['IWmain_logs_column'];
+        	if (!DBUtil::createIndex($c['moduleName'], 'IWmain_logs', 'moduleName'))
+            	    return false;
+        	if (!DBUtil::createIndex($c['visible'], 'IWmain_logs', 'visible'))
+            	    return false;
 
-        //Array de noms
-        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`modname` = 'IWmain'", '', false, '');
+            	//Array de noms
+        	$oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`modname` = 'IWmain'", '', false, '');
 
-        $newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
-            'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
+        	$newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
+            	    'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
 
-        $newVars = Array('url' => 'http://phobos.xtec.net/intraweb',
-            'email' => 'intraweb@xtec.cat',
-            'documentRoot' => 'data',
-            'extensions' => 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt',
-            'maxsize', '1000000',
-            'usersvarslife' => '60',
-            'cronHeaderText' => $this->__('Header text of the cron automatic emails with the new things to see'),
-            'cronFooterText' => $this->__('Footer text of the email'),
-            'showHideFiles' => '0',
-            'captchaPrivateCode' => '',
-            'captchaPublicCode' => '',
-            'URLBase' => System::getBaseUrl());
+        	$newVars = Array('url' => 'http://phobos.xtec.net/intraweb',
+            	    'email' => 'intraweb@xtec.cat',
+            	    'documentRoot' => 'data',
+            	    'extensions' => 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt',
+            	    'maxsize', '1000000',
+            	    'usersvarslife' => '60',
+            	    'cronHeaderText' => $this->__('Header text of the cron automatic emails with the new things to see'),
+            	    'cronFooterText' => $this->__('Footer text of the email'),
+            	    'showHideFiles' => '0',
+            	    'captchaPrivateCode' => '',
+            	    'captchaPublicCode' => '',
+            	    'URLBase' => System::getBaseUrl());
 
-        // Delete unneeded vars
-        $del = array_diff($oldVarsNames, $newVarsNames);
-        foreach ($del as $i) {
-            $this->delVar($i);
-        }
+        	// Delete unneeded vars
+        	$del = array_diff($oldVarsNames, $newVarsNames);
+        	foreach ($del as $i) {
+            	    $this->delVar($i);
+        	}
 
-        // Add new vars
-        $add = array_diff($newVarsNames, $oldVarsNames);
-        foreach ($add as $i) {
-            $this->setVar($i, $newVars[$i]);
-        }
-
+        	// Add new vars
+        	$add = array_diff($newVarsNames, $oldVarsNames);
+        	foreach ($add as $i) {
+            	    $this->setVar($i, $newVars[$i]);
+        	}
+	    case '3.0.0':
+		// Clean upgrade. Only fix iwcron problems and table definitions to run with IWusers 3.1.0
+	    case '3.0.1':
+		// For future release
+	}
         return true;
     }
 

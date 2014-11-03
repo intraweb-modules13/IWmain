@@ -70,6 +70,7 @@ function IWmain_tables() {
         'cognom1' => 'iw_cognom1',
         'cognom2' => 'iw_cognom2',
         'naixement' => 'iw_naixement',
+	'code' => 'iw_code',
         'accio' => 'iw_accio',
         'sex' => 'iw_sex',
         'description' => 'iw_description',
