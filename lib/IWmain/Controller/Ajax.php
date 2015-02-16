@@ -51,7 +51,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller_AbstractAjax
 
         $view->assign('news', $news);
         $view->assign('ajax', 1);
-        $content = $view->fetch('IWmain_block_IWnews.htm');
+        $content = $view->fetch('IWmain_block_IWnews.tpl');
 
         return new Zikula_Response_Ajax(array('content' => $content,
                 ));
@@ -108,7 +108,7 @@ class IWmain_Controller_Ajax extends Zikula_Controller_AbstractAjax
         $view = Zikula_View::getInstance('IWmain', false);
 
         $view->assign('flags', $flags);
-        $content = $view->fetch('IWmain_block_iwflagged.htm');
+        $content = $view->fetch('IWmain_block_iwflagged.tpl');
 
         return new Zikula_Response_Ajax(array('content' => $content,
                 ));

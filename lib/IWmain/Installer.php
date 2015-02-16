@@ -30,7 +30,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
             return false;
 
         //Create module vars
-        $this->setVar('url', 'http://phobos.xtec.net/intraweb')
+        $this->setVar('url', 'https://github.com/intraweb-modules13/IWmain')
                 ->setVar('email', 'intraweb@xtec.cat')
                 ->setVar('documentRoot', 'data')
                 ->setVar('extensions', 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt')
@@ -41,7 +41,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->setVar('showHideFiles', '0')
                 ->setVar('captchaPrivateCode', '')
                 ->setVar('captchaPublicCode', '')
-                ->setVar('URLBase', System::getBaseUrl());
+                ->setVar('URLBase', System::getBaseUrl())
+				->setVar('cronPasswordActive', false)
+				->setVar('cronPasswrodString','');
 
         return true;
     }
@@ -67,7 +69,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->delVar('showHideFiles')
                 ->delVar('captchaPrivateCode')
                 ->delVar('captchaPublicCode')
-                ->delVar('URLBase');
+                ->delVar('URLBase')
+				->delVar('cronPasswordActive')
+				->delVar('cronPasswordString');
 
         //Deletion successfull
         return true;
@@ -126,7 +130,9 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 	    case '3.0.0':
 		// Clean upgrade. Only fix iwcron problems and table definitions to run with IWusers 3.1.0
 	    case '3.0.1':
-		// For future release
+			// Add new vars
+			$this->setVar('cronPasswordActive', false)
+				 ->setVar('cronPasswrodString','');
 	}
         return true;
     }

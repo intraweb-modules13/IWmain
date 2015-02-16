@@ -21,7 +21,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         //Check if the cron file exists
         if (!file_exists('iwcron.php')) {
             return $this->view->assign('noCron', true)
-                            ->fetch('IWmain_admin_main.htm');
+                            ->fetch('IWmain_admin_main.tpl');
         }
         //Check if module Mailer is active
         $modid = ModUtil::getIdFromName('Mailer');
@@ -30,7 +30,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         if ($modinfo['state'] != 3) {
             $this->view->assign('noMailer', true)
                     ->assign('noCron', false)
-                    ->fetch('IWmain_admin_main.htm');
+                    ->fetch('IWmain_admin_main.tpl');
         }
         //-100 really is not a user but represents the system user
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -50,13 +50,15 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                     'sv' => $sv));
         $elapsedTime = 24 * 60 * 60;
         $executeCron = ($lastCron < time() - $elapsedTime) ? 1 : 0;
-        $noCronTime = ($lastCronSuccessfull > time() - $elapsedTime) ? true : false;
+        //$noCronTime = ($lastCronSuccessfull > time() - $elapsedTime) ? true : false;
         return $this->view->assign('executeCron', $executeCron)
-                        ->assign('noCronTime', $noCronTime)
+                        //->assign('noCronTime', $noCronTime)
                         ->assign('cronResponse', $cronResponse)
                         ->assign('noCron', false)
                         ->assign('noMailer', false)
-                        ->fetch('IWmain_admin_main.htm');
+						->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
+						->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+                        ->fetch('IWmain_admin_main.tpl');
     }
 
     /**
@@ -94,7 +96,9 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('cronFooterText', $this->getVar('cronFooterText'))
                         ->assign('captchaPrivateCode', $this->getVar('captchaPrivateCode'))
                         ->assign('captchaPublicCode', $this->getVar('captchaPublicCode'))
-                        ->fetch('IWmain_admin_conf.htm');
+						->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
+						->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+                        ->fetch('IWmain_admin_conf.tpl');
     }
 
     /**

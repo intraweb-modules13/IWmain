@@ -85,7 +85,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         ->assign('gRefreshTime', $gRefreshTime)
                         ->assign('subscribeNews', $subscribeNews)
                         ->assign('userMail', $userMail)
-                        ->fetch('IWmain_user_main.htm');
+                        ->fetch('IWmain_user_main.tpl');
     }
 
     /**
@@ -463,7 +463,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
         }
 
         $news = $this->view->assign('newsArray', $newsArray)
-                ->fetch('IWmain_block_news.htm');
+                ->fetch('IWmain_block_news.tpl');
 
         $news = $before . $news . $after;
         $news = str_replace('\'', '&acute;', $news);
@@ -1527,7 +1527,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             // Create output object
             $view = Zikula_View::getInstance('IWmain', false);
             $view->assign('file', $folder . '/' . $fileName);
-            return $view->fetch('IWmain_user_file_not_found.htm');
+            return $view->fetch('IWmain_user_file_not_found.tpl');
         }
         // get file size
         $fileSize = filesize($folder . '/' . $fileNameInServer);
@@ -1570,7 +1570,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             // Create output object
             $view = Zikula_View::getInstance('IWmain', false);
             $view->assign('file', $fileName);
-            return $view->fetch('IWmain_user_file_not_found.htm');
+            return $view->fetch('IWmain_user_file_not_found.tpl');
         }
         // Get file extension
         $fileExtension = strtolower(substr(strrchr($fileName, "."), 1));

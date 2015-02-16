@@ -1,4 +1,4 @@
-{include file="IWmain_admin_menu.htm"}
+{include file="IWmain_admin_menu.tpl"}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='configure.png' set='icons/large' __alt="Configure module"}</div>
     <h2>{gt text="Modify the configuration"}</h2>

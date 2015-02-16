@@ -124,7 +124,7 @@ class IWmain_Block_IWnews extends Zikula_Controller_AbstractBlock {
         $this->view->assign('news', $news)
                 ->assign('flags', $flags);
 
-        $s = $this->view->fetch('IWmain_block_IWnews.htm');
+        $s = $this->view->fetch('IWmain_block_IWnews.tpl');
 
         $row['content'] = $s;
         return BlockUtil::themesideblock($row);
