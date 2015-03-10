@@ -38,12 +38,11 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->setVar('usersvarslife', '60')
                 ->setVar('cronHeaderText', $this->__('Header text of the cron automatic emails with the new things to see'))
                 ->setVar('cronFooterText', $this->__('Footer text of the email'))
-                ->setVar('showHideFiles', '0')
                 ->setVar('captchaPrivateCode', '')
                 ->setVar('captchaPublicCode', '')
                 ->setVar('URLBase', System::getBaseUrl())
-				->setVar('cronPasswordActive', false)
-				->setVar('cronPasswrodString','');
+		->setVar('cronPasswordActive', false)
+		->setVar('cronPasswrodString','');
 
         return true;
     }
@@ -66,12 +65,11 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->delVar('usersvarslife')
                 ->delVar('cronHeaderText')
                 ->delVar('cronFooterText')
-                ->delVar('showHideFiles')
                 ->delVar('captchaPrivateCode')
                 ->delVar('captchaPublicCode')
                 ->delVar('URLBase')
-				->delVar('cronPasswordActive')
-				->delVar('cronPasswordString');
+		->delVar('cronPasswordActive')
+		->delVar('cronPasswordString');
 
         //Deletion successfull
         return true;
@@ -103,7 +101,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
         	$newVarsNames = Array('url', 'email', 'documentRoot', 'extensions', 'maxsize', 'usersvarslife',
             	    'cronHeaderText', 'cronFooterText', 'showHideFiles', 'URLBase');
 
-        	$newVars = Array('url' => 'http://phobos.xtec.net/intraweb',
+        	$newVars = Array('url' => 'https://github.com/intraweb-modules13/IWmain',
             	    'email' => 'intraweb@xtec.cat',
             	    'documentRoot' => 'data',
             	    'extensions' => 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt',
@@ -132,7 +130,8 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 	    case '3.0.1':
 			// Add new vars
 			$this->setVar('cronPasswordActive', false)
-				 ->setVar('cronPasswrodString','');
+                             ->setVar('cronPasswrodString','')
+                             ->delVar('showHideFiles');
 	}
         return true;
     }

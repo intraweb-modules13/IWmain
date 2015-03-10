@@ -13,6 +13,9 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
      * @return:	The form for general configuration values of the Intraweb modules
      */
     public function main() {
+        $this->redirect(ModUtil::url($this->name, 'admin', 'conf'));
+    }
+    public function main2() {
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
@@ -56,8 +59,10 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('cronResponse', $cronResponse)
                         ->assign('noCron', false)
                         ->assign('noMailer', false)
-						->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
-						->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+			->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
+			->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+                        ->assign('cronHeaderText', $this->getVar('cronHeaderText'))
+                        ->assign('cronFooterText', $this->getVar('cronFooterText'))
                         ->fetch('IWmain_admin_main.tpl');
     }
 
@@ -92,15 +97,31 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('maxsize', $this->getVar('maxsize'))
                         ->assign('usersvarslife', $this->getVar('usersvarslife'))
                         ->assign('documentRoot', $this->getVar('documentRoot'))
-                        ->assign('cronHeaderText', $this->getVar('cronHeaderText'))
-                        ->assign('cronFooterText', $this->getVar('cronFooterText'))
                         ->assign('captchaPrivateCode', $this->getVar('captchaPrivateCode'))
                         ->assign('captchaPublicCode', $this->getVar('captchaPublicCode'))
-						->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
-						->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+			->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
+			->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
                         ->fetch('IWmain_admin_conf.tpl');
     }
+    public function updateCronConfig(){
+        // Security check
+        if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
+            throw new Zikula_Exception_Forbidden();
+        }
+        $cronPasswordActive = FormUtil::getPassedValue('cronPasswordActive', isset($args['cronPasswordActive']) ? $args['cronPasswordActive'] : false, 'POST');
+        $cronPasswordString = FormUtil::getPassedValue('cronPasswordString', isset($args['cronPasswordString']) ? $args['cronPasswordString'] : '', 'POST');
+        $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
+        $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
+        $this->checkCsrfToken();
+        $this->setVar('cronPasswordActive', $cronPasswordActive)
+             ->setVar('cronPasswordString', $cronPasswordString)
+             ->setVar('cronHeaderText', $cronHeaderText)
+             ->setVar('cronFooterText', $cronFooterText);
+        LogUtil::registerStatus($this->__('The configuration have been updated'));
+        return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
 
+
+    }
     /**
      * Show the module information
      * @author	Albert Pérez Monfort (aperezm@xtec.cat)
@@ -126,8 +147,6 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         $extensions = FormUtil::getPassedValue('extensions', isset($args['extensions']) ? $args['extensions'] : null, 'POST');
         $maxsize = FormUtil::getPassedValue('maxsize', isset($args['maxsize']) ? $args['maxsize'] : null, 'POST');
         $usersvarslife = FormUtil::getPassedValue('usersvarslife', isset($args['usersvarslife']) ? $args['usersvarslife'] : null, 'POST');
-        $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
-        $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
         $captchaPrivateCode = FormUtil::getPassedValue('captchaPrivateCode', isset($args['captchaPrivateCode']) ? $args['captchaPrivateCode'] : null, 'POST');
         $captchaPublicCode = FormUtil::getPassedValue('captchaPublicCode', isset($args['captchaPublicCode']) ? $args['captchaPublicCode'] : null, 'POST');
 
@@ -149,8 +168,6 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('maxsize', $maxsize)
                 ->setVar('usersvarslife', $usersvarslife)
                 ->setVar('usersPictureFolder', $usersPictureFolder)
-                ->setVar('cronHeaderText', $cronHeaderText)
-                ->setVar('cronFooterText', $cronFooterText)
                 ->setVar('captchaPrivateCode', $captchaPrivateCode)
                 ->setVar('captchaPublicCode', $captchaPublicCode)
                 ->setVar('URLBase', System::getBaseUrl());
@@ -176,66 +193,6 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         }
         // The current version is correct
         return true;
-    }
-
-    /**
-     * redirect administrator to IWfiles modules. The management files has been removed from the IWmain module
-     * @author:	Robert Barrera (rbarrer5@xtec.cat)
-     * @param:	args   Array with the folder name where list the files and subfolders
-     * @return:	The list of files and folders
-     */
-    public function filesList($args) {
-        return System::redirect(ModUtil::url('Files', 'user', 'main'));
-    }
-
-    /**
-     * List the information files in folder
-     * @author:	Robert Barrera (rbarrer5@xtec.cat)
-     * @param:	dir Folder Path
-     * @return:	Objects array of the files
-     */
-    public function dir_list($args) {
-        $folder = FormUtil::getPassedValue('folder', isset($args['folder']) ? $args['folder'] : null, 'POST');
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWfiles::', '::', ACCESS_ADMIN)) {
-            throw new Zikula_Exception_Forbidden();
-        }
-        $initFolderPath = ModUtil::getVar('IWmain', 'documentRoot');
-
-        //Check is the last character is a /
-        if (substr($folder, strlen($folder) - 1, 1) != '/')
-            $folder .= '/';
-        //Check is a directory
-        if (!is_dir($folder))
-            return array();
-        $dir_handle = opendir($folder);
-        $dir_objects = array();
-        while ($object = readdir($dir_handle)) {
-            if (!in_array($object, array('.', '..'))) {
-                $filename = $folder . $object;
-                // Get file extension
-                $fileExtension = strtolower(substr(strrchr($filename, "."), 1));
-                // get file icon
-                $ctypeArray = ModUtil::func('IWfiles', 'user', 'getMimetype', array('extension' => $fileExtension));
-                $fileIcon = $ctypeArray['icon'];
-                if (substr($filename, strrpos($filename, '/') + 1, 1) != '.' || ModUtil::getVar('IWfiles', 'showHideFiles') == 1) {
-                    $file_object = array('name' => $object,
-                        'size' => filesize($filename),
-                        'type' => filetype($filename),
-                        'time' => date("j F Y, H:i", filemtime($filename)),
-                        'fileIcon' => $fileIcon
-                    );
-                    if (is_dir($filename)) {
-                        $dir_objects['dir'][] = $file_object;
-                    } else {
-                        $dir_objects['file'][] = $file_object;
-                    }
-                }
-            }
-        }
-        closedir($dir_handle);
-        return $dir_objects;
     }
 
 }

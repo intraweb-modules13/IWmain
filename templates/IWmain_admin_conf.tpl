@@ -34,14 +34,6 @@
             <label for="usersvarslife">{gt text="Life time of users vars (days)"}</label>
             <input type="text" name="usersvarslife" value="{$usersvarslife}" size="10" maxlength="10" />
         </div>
-        <div class="z-formrow">
-            <label for="cronHeaderText">{gt text="Header text of the cron automatic emails with the new things to see"}</label>
-            <textarea name="cronHeaderText" cols="70" rows="5">{$cronHeaderText}</textarea>
-        </div>
-        <div class="z-formrow">
-            <label for="cronFooterText">{gt text="Footer text of the email"}</label>
-            <textarea name="cronFooterText" cols="70" rows="5">{$cronFooterText}</textarea>
-        </div>
         <fieldset>
             <legend>{gt text="Captcha system used in form for unregistered users"}</legend>
             <div class="z-formrow">
