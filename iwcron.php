@@ -3,22 +3,37 @@
 // init zikula engine
 include 'lib/bootstrap.php';
 $core->init();
-
 ModUtil::load('IWmain', 'admin');
-
 $langcode = ModUtil::getVar('ZConfig', 'language_i18n');
-
 ZLanguage::setLocale($langcode);
 ZLanguage::bindCoreDomain();
-
 $dom = ZLanguage::getModuleDomain('IWmain');
+
+//Checking cron password
+$passwordActive = ModUtil::getVar('IWmain','cronPasswordActive');
+if ($passwordActive) {
+    $passwordString = ModUtil::getVar('IWmain','cronPasswordString');
+    $passwordSended = FormUtil::getPassedValue('password',null,'GET');
+    if ($passwordString !== $passwordSended) {
+        print __("You can't execute iwcron", $dom);
+        Zikula_View_Theme::getInstance()->clear_all_cache();
+        Zikula_View_Theme::getInstance()->clear_compiled();
+        Zikula_View_Theme::getInstance()->clear_cssjscombinecache();
+        Zikula_View::getInstance()->clear_all_cache();
+        Zikula_View::getInstance()->clear_compiled();
+
+        System::shutdown();
+
+    }
+}
+
 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
 $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
             'name' => 'lastCronSuccessfull',
             'module' => 'IWmain_cron',
             'sv' => $sv));
-
 /*
+//Bloc comented init
 if ($lastCronSuccessfull > time() - 7 * 60 * 60) {
     if (isset($_REQUEST['return']) && $_REQUEST['return'] == 1) {
         LogUtil::registerError(__('The cron has been executed too recenty', $dom));
@@ -28,8 +43,8 @@ if ($lastCronSuccessfull > time() - 7 * 60 * 60) {
         exit;
     }
 }
+//Block comented end
 */
-
 //Check if module Mailer is active
 $modid = ModUtil::getIdFromName('Mailer');
 $modinfo = ModUtil::getInfo($modid);

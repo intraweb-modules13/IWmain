@@ -18,7 +18,7 @@
         <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
 	<div class="z-formrow">
             <label for="cronPasswordActive">{gt text="Activate password for iwcron.php execution"}</label>
-            <input type="checkbox" name="cronPasswordActive" {if $cronPasswordActive}selected{/if}/>
+            <input type="checkbox" value="true" name="cronPasswordActive" {if $cronPasswordActive}checked{/if}/>
         </div>
         <div class="z-formrow">
             <label for="cronPasswordString">{gt text="iwcron.php password"}</label>

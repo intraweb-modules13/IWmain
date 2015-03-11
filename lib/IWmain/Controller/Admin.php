@@ -60,7 +60,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('noCron', false)
                         ->assign('noMailer', false)
 			->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
-			->assign('cronPasswrodString', $this->getVar('cronPasswrodString'))
+			->assign('cronPasswordString', $this->getVar('cronPasswordString'))
                         ->assign('cronHeaderText', $this->getVar('cronHeaderText'))
                         ->assign('cronFooterText', $this->getVar('cronFooterText'))
                         ->fetch('IWmain_admin_main.tpl');
@@ -108,7 +108,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
         }
-        $cronPasswordActive = FormUtil::getPassedValue('cronPasswordActive', isset($args['cronPasswordActive']) ? $args['cronPasswordActive'] : false, 'POST');
+        $cronPasswordActive = FormUtil::getPassedValue('cronPasswordActive', false, 'POST')? true : false;
         $cronPasswordString = FormUtil::getPassedValue('cronPasswordString', isset($args['cronPasswordString']) ? $args['cronPasswordString'] : '', 'POST');
         $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
         $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
@@ -132,8 +132,12 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
         }
+        $cronURL = 'iwcron.php?full=1&return=1';
+        if ($this->getVar('cronPasswordActive')) {
+            $cronURL .= '&password='.$this->getVar('cronPasswordString');
+        }
         LogUtil::registerStatus($this->__('The cron has been executed'));
-        return System::redirect('iwcron.php?full=1&return=1');
+        return System::redirect($cronURL);
     }
 
     /**
