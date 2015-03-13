@@ -36,13 +36,19 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->setVar('extensions', 'odt|ods|odp|zip|pdf|doc|jpg|gif|txt')
                 ->setVar('maxsize', '1000000')
                 ->setVar('usersvarslife', '60')
-                ->setVar('cronHeaderText', $this->__('Header text of the cron automatic emails with the new things to see'))
-                ->setVar('cronFooterText', $this->__('Footer text of the email'))
+                ->setVar('cronHeaderText', '')
+                ->setVar('cronFooterText', '')
+                ->setVar('cronSubjectText', $this->__('User Reports'))
                 ->setVar('captchaPrivateCode', '')
                 ->setVar('captchaPublicCode', '')
                 ->setVar('URLBase', System::getBaseUrl())
 		->setVar('cronPasswordActive', false)
-		->setVar('cronPasswrodString','');
+		->setVar('cronPasswrodString','')
+                ->setVar('crAc_UserReports', false)
+                ->setVar('crAc_UR_IWforums', false)
+                ->setVar('crAc_UR_IWmessages', false)
+                ->setVar('crAc_UR_IWforms', false)
+                ->setVar('crAc_UR_IWnoteboard', false);
 
         return true;
     }
@@ -55,22 +61,8 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
     public function uninstall() {
         // Delete module table
         DBUtil::dropTable('IWmain');
-
         //Delete module vars
-        $this->delVar('url')
-                ->delVar('email')
-                ->delVar('documentRoot')
-                ->delVar('extensions')
-                ->delVar('maxsize')
-                ->delVar('usersvarslife')
-                ->delVar('cronHeaderText')
-                ->delVar('cronFooterText')
-                ->delVar('captchaPrivateCode')
-                ->delVar('captchaPublicCode')
-                ->delVar('URLBase')
-		->delVar('cronPasswordActive')
-		->delVar('cronPasswordString');
-
+        $this->delVars;
         //Deletion successfull
         return true;
     }
@@ -130,8 +122,14 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
 	    case '3.0.1':
 			// Add new vars
 			$this->setVar('cronPasswordActive', false)
-                             ->setVar('cronPasswrodString','')
-                             ->delVar('showHideFiles');
+                            ->setVar('cronPasswrodString','')
+                            ->delVar('showHideFiles')
+                            ->setVar('cronSubjectText', $this->__('User Reports'))
+                            ->setVar('crAc_UserReports', false)
+                            ->setVar('crAc_UR_IWforums', false)
+                            ->setVar('crAc_UR_IWmessages', false)
+                            ->setVar('crAc_UR_IWforms', false)
+                            ->setVar('crAc_UR_IWnoteboard', false);
 	}
         return true;
     }

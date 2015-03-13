@@ -61,8 +61,14 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('noMailer', false)
 			->assign('cronPasswordActive', $this->getVar('cronPasswordActive'))
 			->assign('cronPasswordString', $this->getVar('cronPasswordString'))
+                        ->assign('cronSubjectText', $this->getVar('cronSubjectText'))
                         ->assign('cronHeaderText', $this->getVar('cronHeaderText'))
                         ->assign('cronFooterText', $this->getVar('cronFooterText'))
+                        ->assign('crAc_UserReports', $this->getVar('crAc_UserReports'))
+                        ->assign('crAc_UR_IWforums', $this->getVar('crAc_UR_IWforums'))
+                        ->assign('crAc_UR_IWmessages', $this->getVar('crAc_UR_IWmessages'))
+                        ->assign('crAc_UR_IWforms', $this->getVar('crAc_UR_IWforms'))
+                        ->assign('crAc_UR_IWnoteboard', $this->getVar('crAc_UR_IWnoteboard'))
                         ->fetch('IWmain_admin_main.tpl');
     }
 
@@ -110,13 +116,25 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         }
         $cronPasswordActive = FormUtil::getPassedValue('cronPasswordActive', false, 'POST')? true : false;
         $cronPasswordString = FormUtil::getPassedValue('cronPasswordString', isset($args['cronPasswordString']) ? $args['cronPasswordString'] : '', 'POST');
+        $cronSubjectText = FormUtil::getPassedValue('cronSubjectText', isset($args['cronSubjectText']) ? $args['cronSubjectText'] : null, 'POST');
         $cronHeaderText = FormUtil::getPassedValue('cronHeaderText', isset($args['cronHeaderText']) ? $args['cronHeaderText'] : null, 'POST');
         $cronFooterText = FormUtil::getPassedValue('cronFooterText', isset($args['cronFooterText']) ? $args['cronFooterText'] : null, 'POST');
+        $crAc_UserReports = FormUtil::getPassedValue('crAc_UserReports', false, 'POST')? true : false;
+        $crAc_UR_IWforums = FormUtil::getPassedValue('crAc_UR_IWforums', false, 'POST')? true : false;
+        $crAc_UR_IWmessages = FormUtil::getPassedValue('crAc_UR_IWmessages', false, 'POST')? true : false;
+        $crAc_UR_IWforms = FormUtil::getPassedValue('crAc_UR_IWforms', false, 'POST')? true : false;
+        $crAc_UR_IWnoteboard = FormUtil::getPassedValue('crAc_UR_IWnoteboard', false, 'POST')? true : false;
         $this->checkCsrfToken();
         $this->setVar('cronPasswordActive', $cronPasswordActive)
              ->setVar('cronPasswordString', $cronPasswordString)
+             ->setVar('cronSubjectText', $cronSubjectText)
              ->setVar('cronHeaderText', $cronHeaderText)
-             ->setVar('cronFooterText', $cronFooterText);
+             ->setVar('cronFooterText', $cronFooterText)
+             ->setVar('crAc_UserReports', $crAc_UserReports)
+             ->setVar('crAc_UR_IWforums', $crAc_UR_IWforums)
+             ->setVar('crAc_UR_IWmessages', $crAc_UR_IWmessages)
+             ->setVar('crAc_UR_IWforms', $crAc_UR_IWforms)
+             ->setVar('crAc_UR_IWnoteboard', $crAc_UR_IWnoteboard);
         LogUtil::registerStatus($this->__('The configuration have been updated'));
         return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
 

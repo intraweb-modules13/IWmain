@@ -1,6 +1,6 @@
 <?php
 
-// init zikula engine
+//1. Init zikula engine
 include 'lib/bootstrap.php';
 $core->init();
 ModUtil::load('IWmain', 'admin');
@@ -9,43 +9,19 @@ ZLanguage::setLocale($langcode);
 ZLanguage::bindCoreDomain();
 $dom = ZLanguage::getModuleDomain('IWmain');
 
-//Checking cron password
+//2. Checking cron password
 $passwordActive = ModUtil::getVar('IWmain','cronPasswordActive');
 if ($passwordActive) {
     $passwordString = ModUtil::getVar('IWmain','cronPasswordString');
     $passwordSended = FormUtil::getPassedValue('password',null,'GET');
     if ($passwordString !== $passwordSended) {
         print __("You can't execute iwcron", $dom);
-        Zikula_View_Theme::getInstance()->clear_all_cache();
-        Zikula_View_Theme::getInstance()->clear_compiled();
-        Zikula_View_Theme::getInstance()->clear_cssjscombinecache();
-        Zikula_View::getInstance()->clear_all_cache();
-        Zikula_View::getInstance()->clear_compiled();
-
-        System::shutdown();
+        cronShutdown();
 
     }
 }
 
-$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-$lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
-            'name' => 'lastCronSuccessfull',
-            'module' => 'IWmain_cron',
-            'sv' => $sv));
-/*
-//Bloc comented init
-if ($lastCronSuccessfull > time() - 7 * 60 * 60) {
-    if (isset($_REQUEST['return']) && $_REQUEST['return'] == 1) {
-        LogUtil::registerError(__('The cron has been executed too recenty', $dom));
-        return System::redirect(ModUtil::url('IWmain', 'admin', 'main'));
-    } else {
-        print __('The cron has been executed too recenty', $dom);
-        exit;
-    }
-}
-//Block comented end
-*/
-//Check if module Mailer is active
+//3. Check if module Mailer is active - Calling userNews function
 $modid = ModUtil::getIdFromName('Mailer');
 $modinfo = ModUtil::getInfo($modid);
 //if it is active
@@ -57,6 +33,11 @@ if ($modinfo['state'] == 3) {
     $result = array('value' => '-1',
         'msg' => __('The Mailer module is not active. The cron can not send emails to users.', $dom));
 }
+
+//4. Cron times
+$time = time();
+$executeTime = date('M, d Y - H.i', $time);
+//Cron successfull time
 if ($result['value'] == 1 || $result['value'] == 0) {
     $time = time();
     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -65,19 +46,29 @@ if ($result['value'] == 1 || $result['value'] == 0) {
         'module' => 'IWmain_cron',
         'lifetime' => 1000 * 24 * 60 * 60,
         'sv' => $sv,
-        'value' => time()));
-}
-$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-$lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+        'value' => $time));
+    $lastCronSuccessfull = $time;
+} else {
+    $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+    $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
             'name' => 'lastCronSuccessfull',
             'module' => 'IWmain_cron',
             'sv' => $sv));
-$executeTime = date('M, d Y - H.i', time());
+}
 $lastCronSuccessfullTime = date('M, d Y - H.i', $lastCronSuccessfull);
-
 if ($lastCronSuccessfullTime == '')
     $lastCronSuccessfullTime = __('Never', $dom);
+//last cron time
+$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
+    'name' => 'lastCron',
+    'module' => 'IWmain_cron',
+    'lifetime' => 1000 * 24 * 60 * 60,
+    'sv' => $sv,
+    'value' => $time));
 
+
+//5. Cron response
 $cronResponse .= '<div>' . __('Last cron execution', $dom) . ': ' . $executeTime . '</div>';
 $cronResponse .= '<div>' . __('Last successful cron execution', $dom) . ': ' . $lastCronSuccessfullTime . '</div>';
 $cronResponse .= '<div>' . $result['msg'] . '</div>';
@@ -90,17 +81,7 @@ if ($result['value'] == 1) {
 } else {
     $cronResponse .= '<span style="color: red;">' . __('It has not worked', $dom) . '</span></div>';
 }
-if ($result['value'] == 1 || $result['value'] == 0) {
-    $time = time();
-    $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-    ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
-        'name' => 'lastCronSuccessfull',
-        'module' => 'IWmain_cron',
-        'lifetime' => 1000 * 24 * 60 * 60,
-        'sv' => $sv,
-        'value' => time()));
-}
-//-100 really is not a user but represents the system user
+//saving cronResponse
 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
 ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
     'name' => 'cronResponse',
@@ -108,26 +89,14 @@ ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
     'lifetime' => 1000 * 24 * 60 * 60,
     'sv' => $sv,
     'value' => $cronResponse));
-$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
-    'name' => 'lastCron',
-    'module' => 'IWmain_cron',
-    'lifetime' => 1000 * 24 * 60 * 60,
-    'sv' => $sv,
-    'value' => time()));
+
+//6. Ending
 if (isset($_REQUEST['return']) && $_REQUEST['return'] == 1) {
-    return System::redirect(ModUtil::url('IWmain', 'admin', 'main'));
+    return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
 } else {
     print $cronResponse;
 }
-
-Zikula_View_Theme::getInstance()->clear_all_cache();
-Zikula_View_Theme::getInstance()->clear_compiled();
-Zikula_View_Theme::getInstance()->clear_cssjscombinecache();
-Zikula_View::getInstance()->clear_all_cache();
-Zikula_View::getInstance()->clear_compiled();
-
-System::shutdown();
+cronShutdown();
 
 function userNews() {
 
@@ -136,7 +105,7 @@ function userNews() {
     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
     $usersMails = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('sv' => $sv,
                 'info' => 'e'));
-    $subject = __('This email is a resume of the new things to see in the site', $dom);
+    $subject = ModUtil::getVar('IWmain','cronSubjectText');
     $ok = 0;
     $ko = 0;
     foreach ($usersMails as $key => $value) {
@@ -225,4 +194,14 @@ function userNews() {
     $result = array('value' => $returnValue,
         'msg' => $msg);
     return $result;
+}
+function cronShutdown() {
+    Zikula_View_Theme::getInstance()->clear_all_cache();
+    Zikula_View_Theme::getInstance()->clear_compiled();
+    Zikula_View_Theme::getInstance()->clear_cssjscombinecache();
+    Zikula_View::getInstance()->clear_all_cache();
+    Zikula_View::getInstance()->clear_compiled();
+
+    System::shutdown();
+
 }

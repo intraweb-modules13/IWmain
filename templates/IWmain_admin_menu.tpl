@@ -1,6 +1,5 @@
 {ajaxheader modname=IWmain filename=IWmain.js}
 {pageaddvar name='javascript' value='jQuery'}
-{pageaddvar name='javascript' value='vendor/zikula1.4/bootstrap-zikula.js'}
 {admincategorymenu}
 <div class="z-adminbox">
     <h1>

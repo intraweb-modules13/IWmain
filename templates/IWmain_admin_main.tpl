@@ -28,13 +28,26 @@
         </div>
         </fieldset>
         <fieldset>
-            <legend>{gt text="User reports"}</legend>
+            <legend>{gt text="Cron actions"}</legend>
         <div class="z-formrow">
             <label for="crAc_UserReports">{gt text="User reports active"}</label>
             <input type="checkbox" value="true" id="crAc_UserReports_true" name="crAc_UserReports" {if $crAc_UserReports}checked{/if}/>
-            <!--<input type="radio" value="false" id="crAc_UserReports_false" name="crAc_UserReports" {if !$crAc_UserReports}checked{/if}/>-->
         </div>
          <div data-switch="crAc_UserReports" data-switch-value="true">
+         <fieldset>
+            <legend>{gt text="User reports"}</legend> 
+            <div class="z-formrow">
+            <label for="cronSubjectText">{gt text="Subject of user reports mail"}</label>
+            <input type="text" name="cronSubjectText" value="{$cronSubjectText}" />
+        </div>
+            <div class="z-formrow">
+            <label for="cronHeaderText">{gt text="Header text of the user reports mail"}</label>
+            <textarea name="cronHeaderText" cols="70" rows="5">{$cronHeaderText}</textarea>
+        </div>
+        <div class="z-formrow">
+            <label for="cronFooterText">{gt text="Footer text of the user reports mail"}</label>
+            <textarea name="cronFooterText" cols="70" rows="5">{$cronFooterText}</textarea>
+        </div> 
         <fieldset>
             <legend>{gt text="Modules reports"}</legend>
             <div class="z-formrow">
@@ -45,16 +58,20 @@
                 <label for="crAc_UR_IWmessages">{gt text="IWmessages"}</label>
             <input type="checkbox" value="true" name="crAc_UR_IWmessages" {if $crAc_UR_IWmessages}checked{/if}/>
             </div>
+            <div class="z-formrow">
+                <label for="crAc_UR_IWforms">{gt text="IWforms"}</label>
+            <input type="checkbox" value="true" name="crAc_UR_IWforms" {if $crAc_UR_IWforms}checked{/if}/>
+            </div>
+            <div class="z-formrow">
+                <label for="crAc_UR_IWnoteboard">{gt text="IWnoteboard"}</label>
+            <input type="checkbox" value="true" name="crAc_UR_IWnoteboard" {if $crAc_UR_IWnoteboard}checked{/if}/>
+            </div>
+            
         </fieldset>
-         </div>
-        <div class="z-formrow">
-            <label for="cronHeaderText">{gt text="Header text of the cron automatic emails with the new things to see"}</label>
-            <textarea name="cronHeaderText" cols="70" rows="5">{$cronHeaderText}</textarea>
+         
+        
         </div>
-        <div class="z-formrow">
-            <label for="cronFooterText">{gt text="Footer text of the email"}</label>
-            <textarea name="cronFooterText" cols="70" rows="5">{$cronFooterText}</textarea>
-        </div>
+        </fieldset>
         </fieldset>
 	<div class="z-center z-buttons">
             <a onclick="javascript:document.cronMain.submit();">{img modname='core' src='button_ok.png' set='icons/small'   __alt="Save changes" __title="Save changes"} {gt text="Save changes"}</a>
