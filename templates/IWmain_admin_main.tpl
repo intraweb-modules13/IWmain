@@ -51,20 +51,40 @@
         <fieldset>
             <legend>{gt text="Modules reports"}</legend>
             <div class="z-formrow">
-                <label for="crAc_UR_IWforums">{gt text="IWforums"}</label>
-            <input type="checkbox" value="true" name="crAc_UR_IWforums" {if $crAc_UR_IWforums}checked{/if}/>
+                <div>
+                <span style="float:left;width:100px"><label for="crAc_UR_IWforums">{gt text="IWforums"}</label></span>
+                <span><input type="checkbox" value="true" name="crAc_UR_IWforums" {if $crAc_UR_IWforums}checked{/if}/></span>
+                <span data-switch="crAc_UR_IWforums" data-switch-value="true"><label for="crAc_UR_IWforums_hd">{gt text="Header:"}</label>
+                    <input type="text" value="{$crAc_UR_IWforums_hd}" name="crAc_UR_IWforums_hd"/>
+                </span>
+                </div>
             </div>
             <div class="z-formrow">
-                <label for="crAc_UR_IWmessages">{gt text="IWmessages"}</label>
-            <input type="checkbox" value="true" name="crAc_UR_IWmessages" {if $crAc_UR_IWmessages}checked{/if}/>
+                <div>
+                    <span style="float:left;width:100px"><label for="crAc_UR_IWmessages">{gt text="IWmessages"}</label></span>
+                    <span><input type="checkbox" value="true" name="crAc_UR_IWmessages" {if $crAc_UR_IWmessages}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWmessages" data-switch-value="true"><label for="crAc_UR_IWmessages_hd">{gt text="Header:"}</label>
+                        <input type="text" value="{$crAc_UR_IWmessages_hd}" name="crAc_UR_IWmessages_hd"/>
+                    </span>
+                </div>
             </div>
             <div class="z-formrow">
-                <label for="crAc_UR_IWforms">{gt text="IWforms"}</label>
-            <input type="checkbox" value="true" name="crAc_UR_IWforms" {if $crAc_UR_IWforms}checked{/if}/>
+                <div>
+                    <span style="float:left;width:100px"><label for="crAc_UR_IWforms">{gt text="IWforms"}</label></span>
+                    <span><input type="checkbox" value="true" name="crAc_UR_IWforms" {if $crAc_UR_IWforms}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWforms" data-switch-value="true"><label for="crAc_UR_IWforms_hd">{gt text="Header:"}</label>
+                        <input type="text" value="{$crAc_UR_IWforms_hd}" name="crAc_UR_IWforms_hd"/>
+                    </span>
+                </div>
             </div>
             <div class="z-formrow">
-                <label for="crAc_UR_IWnoteboard">{gt text="IWnoteboard"}</label>
-            <input type="checkbox" value="true" name="crAc_UR_IWnoteboard" {if $crAc_UR_IWnoteboard}checked{/if}/>
+                <div>
+                    <span style="float:left;width:100px"><label for="crAc_UR_IWnoteboard">{gt text="IWnoteboard"}</label></span>
+                    <span><input type="checkbox" value="true" name="crAc_UR_IWnoteboard" {if $crAc_UR_IWnoteboard}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWnoteboard" data-switch-value="true"><label for="crAc_UR_IWnoteboard_hd">{gt text="Header:"}</label>
+                        <input type="text" value="{$crAc_UR_IWnoteboard_hd}" name="crAc_UR_IWnoteboard_hd"/>
+                    </span>
+                </div>
             </div>
             
         </fieldset>
