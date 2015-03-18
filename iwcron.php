@@ -1,6 +1,7 @@
 <?php
 
 //1. Init zikula engine
+$time = time();
 include 'lib/bootstrap.php';
 $core->init();
 ModUtil::load('IWmain', 'admin');
@@ -21,25 +22,15 @@ if ($passwordActive) {
     }
 }
 
-//3. Check if module Mailer is active - Calling userNews function
-$modid = ModUtil::getIdFromName('Mailer');
-$modinfo = ModUtil::getInfo($modid);
-//if it is active
-if ($modinfo['state'] == 3) {
-    $userNews = userNews();
-    $result = array('value' => $userNews['value'],
-        'msg' => $userNews['msg']);
-} else {
-    $result = array('value' => '-1',
-        'msg' => __('The Mailer module is not active. The cron can not send emails to users.', $dom));
-}
+//3. Cron actions
+$cronResponse = '<h2>'.__('Cron Actions', $dom).'</h2>';
+$crAc_UserReports = ModUtil::getVar('IWmain','crAc_UserReports');
+if ($crAc_UserReports) $result = ModUtil::func('IWmain', 'cron', 'userReports', array('time' => $time));
 
 //4. Cron times
-$time = time();
 $executeTime = date('M, d Y - H.i', $time);
 //Cron successfull time
 if ($result['value'] == 1 || $result['value'] == 0) {
-    $time = time();
     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
     ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
         'name' => 'lastCronSuccessfull',
@@ -68,7 +59,8 @@ ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
     'value' => $time));
 
 
-//5. Cron response
+//5. Global cron response
+$cronResponse .= '<h2>'.__('Cron Response', $dom).'</h2>';
 $cronResponse .= '<div>' . __('Last cron execution', $dom) . ': ' . $executeTime . '</div>';
 $cronResponse .= '<div>' . __('Last successful cron execution', $dom) . ': ' . $lastCronSuccessfullTime . '</div>';
 $cronResponse .= '<div>' . $result['msg'] . '</div>';

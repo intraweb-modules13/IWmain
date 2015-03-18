@@ -18,7 +18,9 @@ class IWmain_Controller_User extends Zikula_AbstractController {
             throw new Zikula_Exception_Forbidden();
         }
         $uid = UserUtil::getVar('uid');
-
+        $crAc_UserReports =$this->getVar('crAc_UserReports');
+        $everybodySubscribed = $this->getVar('everybodySubscribed');
+        
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $blockFlaggedDetails = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'blockFlaggedDetails',
                     'module' => 'IWmain_block_news',
@@ -31,60 +33,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                     'module' => 'IWmain_cron',
                     'uid' => $uid,
                     'sv' => $sv));
-        //get the last cron successfull response
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
-                    'name' => 'lastCronSuccessfull',
-                    'module' => 'IWmain_cron',
-                    'sv' => $sv));
-        $lastCronSuccessfullTime = ($lastCronSuccessfull <> '') ? date('M, d Y - H.i', $lastCronSuccessfull) : '';
-        $time = time();
-
-        $cronNotWorks = 0;
-        if ($lastCronSuccessfullTime == '' || $lastCronSuccessfull < $time - 5 * 24 * 60 * 60) {
-            $cronNotWorks = 1;
-        }
 
         //get user mail
-        //get the last cron successfull response
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $userMail = ModUtil::func('IWmain', 'user', 'getUserInfo', array('uid' => $uid,
-                    'sv' => $sv,
-                    'info' => 'e'));
-        // Checks if module IWagendas is installed. If it exists and the zend functions are available the google options are available
-        $modid = ModUtil::getIdFromName('IWagendas');
-        $modinfo = ModUtil::getInfo($modid);
-        $zendFuncAvailable = ($modinfo['state'] == 3 &&
-                $modinfo['version'] > '1.3' &&
-                ModUtil::getVar('IWagendas', 'allowGCalendar') == 1 &&
-                ModUtil::func('IWagendas', 'user', 'getGdataFunctionsAvailability')) ? true : false;
-
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gCalendarUse = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'gCalendarUse',
-                    'module' => 'IWagendas',
-                    'uid' => $uid,
-                    'sv' => $sv));
-        //get the last cron successfull response
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gUserName = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
-                    'name' => 'gUserName',
-                    'module' => 'IWagendas',
-                    'sv' => $sv));
-        //get the last cron successfull response
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $gRefreshTime = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => $uid,
-                    'name' => 'gRefreshTime',
-                    'module' => 'IWagendas',
-                    'sv' => $sv));
-
+        $userInfo = UserUtil::getVars($uid);
+        $userMail = $userInfo['email'];
         return $this->view->assign('cronNotWorks', $cronNotWorks)
-                        ->assign('zendFuncAvailable', $zendFuncAvailable)
                         ->assign('blockFlaggedDetails', $blockFlaggedDetails)
-                        ->assign('gCalendarUse', $gCalendarUse)
-                        ->assign('gUserName', $gUserName)
-                        ->assign('gRefreshTime', $gRefreshTime)
                         ->assign('subscribeNews', $subscribeNews)
                         ->assign('userMail', $userMail)
+                        ->assign('everybodySubscribed', $everybodySubscribed)
+                        ->assign('crAc_UserReports', $crAc_UserReports)
                         ->fetch('IWmain_user_main.tpl');
     }
 
@@ -94,22 +52,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      * @return: Return user to form
      */
     public function updateconfig($args) {
-        $details = FormUtil::getPassedValue('details', isset($args['details']) ? $args['details'] : null, 'POST');
-        $cron = FormUtil::getPassedValue('cron', isset($args['cron']) ? $args['cron'] : null, 'POST');
-        $cronWorks = FormUtil::getPassedValue('cronWorks', isset($args['cronWorks']) ? $args['cronWorks'] : null, 'POST');
-        $gCalendarUse = FormUtil::getPassedValue('gCalendarUse', isset($args['gCalendarUse']) ? $args['gCalendarUse'] : null, 'POST');
-        $gUserName = FormUtil::getPassedValue('gUserName', isset($args['gUserName']) ? $args['gUserName'] : null, 'POST');
-        $gUserPass = FormUtil::getPassedValue('gUserPass', isset($args['gUserPass']) ? $args['gUserPass'] : null, 'POST');
-        $gRefreshTime = FormUtil::getPassedValue('gRefreshTime', isset($args['gRefreshTime']) ? $args['gRefreshTime'] : null, 'POST');
         // Security check
         if (!SecurityUtil::checkPermission('IWmain::', "::", ACCESS_READ) || !UserUtil::isLoggedIn()) {
             throw new Zikula_Exception_Forbidden();
         }
-
+        $blockFlaggedDetails = FormUtil::getPassedValue('blockFlaggedDetails', false, 'POST')? true : false;
+        $subscribeNews = FormUtil::getPassedValue('subscribeNews', false, 'POST')? true : false;
         $this->checkCsrfToken();
 
         $uid = UserUtil::getVar('uid');
-        if ($details != null) {
+        if ($blockFlaggedDetails) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
                         'name' => 'blockFlaggedDetails',
@@ -123,57 +75,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                         'module' => 'IWmain_block_news',
                         'sv' => $sv));
         }
-        if ($gCalendarUse != null) {
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
-                        'name' => 'gCalendarUse',
-                        'module' => 'IWagendas',
-                        'sv' => $sv,
-                        'value' => '1'));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
-                        'name' => 'gUserName',
-                        'module' => 'IWagendas',
-                        'sv' => $sv,
-                        'value' => $gUserName));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
-                        'name' => 'gRefreshTime',
-                        'module' => 'IWagendas',
-                        'sv' => $sv,
-                        'value' => $gRefreshTime));
-            if ($gUserPass != '') {
-                $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
-                            'name' => 'gUserPass',
-                            'module' => 'IWagendas',
-                            'sv' => $sv,
-                            'value' => base64_encode($gUserPass)));
-            }
-        } else {
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
-                        'name' => 'gCalendarUse',
-                        'module' => 'IWagendas',
-                        'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
-                        'name' => 'gUserName',
-                        'module' => 'IWagendas',
-                        'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
-                        'name' => 'gUserPass',
-                        'module' => 'IWagendas',
-                        'sv' => $sv));
-            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
-                        'name' => 'gRefreshTime',
-                        'module' => 'IWagendas',
-                        'sv' => $sv));
-        }
-        if ($cronWorks != null) {
-            if ($cron != null) {
+            if ($subscribeNews) {
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
                 $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $uid,
                             'name' => 'subscribeNews',
@@ -187,20 +89,16 @@ class IWmain_Controller_User extends Zikula_AbstractController {
                             'module' => 'IWmain_cron',
                             'sv' => $sv));
             }
-        }
 
-        if ($errorMsg != '') {
-            LogUtil::registerError($errorMsg);
-        } else {
-            //Successfull
             LogUtil::registerStatus($this->__('The values have changed correctly'));
-        }
+        /*
         //delete flagged block content
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => UserUtil::getVar('uid'),
                     'name' => 'flagged',
                     'module' => 'IWmain_block_flagged',
                     'sv' => $sv));
+         */
         return System::redirect(ModUtil::url('IWmain', 'user', 'main'));
     }
 

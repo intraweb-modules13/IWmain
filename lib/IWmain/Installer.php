@@ -141,7 +141,7 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                             ->setVar('crAc_UR_IWforms_hd', '')
                             ->setVar('crAc_UR_IWnoteboard_hd', '')
                             ->setVar('everybodySubscribed', true)
-                            ->setVar('cronURfreq', '23.5');
+                            ->setVar('cronURfreq', '0');
 	}
         return true;
     }

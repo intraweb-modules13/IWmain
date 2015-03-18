@@ -245,5 +245,37 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         // The current version is correct
         return true;
     }
-
+    public function subscribeEverybody(){
+        // Security check
+        if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
+            throw new Zikula_Exception_Forbidden();
+        }
+        $users = UserUtil::getAll();
+        foreach ($users as $user) {
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $result = ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => $user['uid'],
+                            'name' => 'subscribeNews',
+                            'module' => 'IWmain_cron',
+                            'sv' => $sv,
+                            'value' => '1'));
+        }
+        LogUtil::registerStatus($this->__('All users are subscribed'));
+        return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
+    }
+    public function unsubscribeEverybody(){
+        // Security check
+        if (!SecurityUtil::checkPermission('IWmain::', '::', ACCESS_ADMIN)) {
+            throw new Zikula_Exception_Forbidden();
+        }
+        $users = UserUtil::getAll();
+        foreach ($users as $user) {
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $result = ModUtil::func('IWmain', 'user', 'userDelVar', array('uid' => $uid,
+                            'name' => 'subscribeNews',
+                            'module' => 'IWmain_cron',
+                            'sv' => $sv));
+        }
+        LogUtil::registerStatus($this->__('All users are unsubscribed'));
+        return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
+    }
 }
