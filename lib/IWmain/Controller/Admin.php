@@ -54,6 +54,16 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         $elapsedTime = 24 * 60 * 60;
         $executeCron = ($lastCron < time() - $elapsedTime) ? 1 : 0;
         //$noCronTime = ($lastCronSuccessfull > time() - $elapsedTime) ? true : false;
+        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+        $lastCronUR = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+                    'name' => 'lastCronUR',
+                    'module' => 'IWmain_cron',
+                    'sv' => $sv));
+        if ($lastCronUR == '') {
+            $lastCronUR = __("Never done");
+        }else{
+            $lastCronUR = date('M, d Y - H.i',$lastCronUR);
+        }
         return $this->view->assign('executeCron', $executeCron)
                         //->assign('noCronTime', $noCronTime)
                         ->assign('cronResponse', $cronResponse)
@@ -69,6 +79,13 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('crAc_UR_IWmessages', $this->getVar('crAc_UR_IWmessages'))
                         ->assign('crAc_UR_IWforms', $this->getVar('crAc_UR_IWforms'))
                         ->assign('crAc_UR_IWnoteboard', $this->getVar('crAc_UR_IWnoteboard'))
+                        ->assign('crAc_UR_IWforums_hd', $this->getVar('crAc_UR_IWforums_hd'))
+                        ->assign('crAc_UR_IWmessages_hd', $this->getVar('crAc_UR_IWmessages_hd'))
+                        ->assign('crAc_UR_IWforms_hd', $this->getVar('crAc_UR_IWforms_hd'))
+                        ->assign('crAc_UR_IWnoteboard_hd', $this->getVar('crAc_UR_IWnoteboard_hd'))
+                        ->assign('everybodySubscribed', $this->getVar('everybodySubscribed'))
+                        ->assign('cronURfreq', $this->getVar('cronURfreq'))
+                        ->assign('lastCronUR', $lastCronUR)
                         ->fetch('IWmain_admin_main.tpl');
     }
 
@@ -124,6 +141,12 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
         $crAc_UR_IWmessages = FormUtil::getPassedValue('crAc_UR_IWmessages', false, 'POST')? true : false;
         $crAc_UR_IWforms = FormUtil::getPassedValue('crAc_UR_IWforms', false, 'POST')? true : false;
         $crAc_UR_IWnoteboard = FormUtil::getPassedValue('crAc_UR_IWnoteboard', false, 'POST')? true : false;
+        $crAc_UR_IWforums_hd = FormUtil::getPassedValue('crAc_UR_IWforums_hd', isset($args['crAc_UR_IWforums_hd']) ? $args['cronPasswordString'] : '', 'POST');
+        $crAc_UR_IWmessages_hd = FormUtil::getPassedValue('crAc_UR_IWmessages_hd', isset($args['crAc_UR_IWmessages_hd']) ? $args['cronPasswordString'] : '', 'POST');
+        $crAc_UR_IWforms_hd = FormUtil::getPassedValue('crAc_UR_IWforms_hd', isset($args['crAc_UR_IWforms_hd']) ? $args['cronPasswordString'] : '', 'POST');
+        $crAc_UR_IWnoteboard_hd = FormUtil::getPassedValue('crAc_UR_IWnoteboard_hd', isset($args['crAc_UR_IWnoteboard_hd']) ? $args['cronPasswordString'] : '', 'POST');
+        $everybodySubscribed = FormUtil::getPassedValue('everybodySubscribed', false, 'POST')? true : false;
+        $cronURfreq = FormUtil::getPassedValue('cronURfreq', isset($args['cronURfreq']) ? $args['cronURfreq'] : '0', 'POST');
         $this->checkCsrfToken();
         $this->setVar('cronPasswordActive', $cronPasswordActive)
              ->setVar('cronPasswordString', $cronPasswordString)
@@ -134,7 +157,13 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
              ->setVar('crAc_UR_IWforums', $crAc_UR_IWforums)
              ->setVar('crAc_UR_IWmessages', $crAc_UR_IWmessages)
              ->setVar('crAc_UR_IWforms', $crAc_UR_IWforms)
-             ->setVar('crAc_UR_IWnoteboard', $crAc_UR_IWnoteboard);
+             ->setVar('crAc_UR_IWnoteboard', $crAc_UR_IWnoteboard)
+             ->setVar('crAc_UR_IWforums_hd', $crAc_UR_IWforums_hd)
+             ->setVar('crAc_UR_IWmessages_hd', $crAc_UR_IWmessages_hd)
+             ->setVar('crAc_UR_IWforms_hd', $crAc_UR_IWforms_hd)
+             ->setVar('crAc_UR_IWnoteboard_hd', $crAc_UR_IWnoteboard_hd)
+             ->setVar('everybodySubscribed', $everybodySubscribed)
+             ->setVar('cronURfreq', $cronURfreq);
         LogUtil::registerStatus($this->__('The configuration have been updated'));
         return System::redirect(ModUtil::url('IWmain', 'admin', 'main2'));
 

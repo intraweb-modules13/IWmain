@@ -48,7 +48,13 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                 ->setVar('crAc_UR_IWforums', false)
                 ->setVar('crAc_UR_IWmessages', false)
                 ->setVar('crAc_UR_IWforms', false)
-                ->setVar('crAc_UR_IWnoteboard', false);
+                ->setVar('crAc_UR_IWnoteboard', false)
+                ->setVar('crAc_UR_IWforums_hd', '')
+                ->setVar('crAc_UR_IWmessages_hd', '')
+                ->setVar('crAc_UR_IWforms_hd', '')
+                ->setVar('crAc_UR_IWnoteboard_hd', '')
+                ->setVar('everybodySubscribed', true)
+                ->setVar('cronURfreq', '23.5');
 
         return true;
     }
@@ -129,7 +135,13 @@ class IWmain_Installer extends Zikula_AbstractInstaller {
                             ->setVar('crAc_UR_IWforums', false)
                             ->setVar('crAc_UR_IWmessages', false)
                             ->setVar('crAc_UR_IWforms', false)
-                            ->setVar('crAc_UR_IWnoteboard', false);
+                            ->setVar('crAc_UR_IWnoteboard', false)
+                            ->setVar('crAc_UR_IWforums_hd', '')
+                            ->setVar('crAc_UR_IWmessages_hd', '')
+                            ->setVar('crAc_UR_IWforms_hd', '')
+                            ->setVar('crAc_UR_IWnoteboard_hd', '')
+                            ->setVar('everybodySubscribed', true)
+                            ->setVar('cronURfreq', '23.5');
 	}
         return true;
     }

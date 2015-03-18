@@ -51,44 +51,62 @@
         <fieldset>
             <legend>{gt text="Modules reports"}</legend>
             <div class="z-formrow">
-                <div>
-                <span style="float:left;width:100px"><label for="crAc_UR_IWforums">{gt text="IWforums"}</label></span>
-                <span><input type="checkbox" value="true" name="crAc_UR_IWforums" {if $crAc_UR_IWforums}checked{/if}/></span>
-                <span data-switch="crAc_UR_IWforums" data-switch-value="true"><label for="crAc_UR_IWforums_hd">{gt text="Header:"}</label>
-                    <input type="text" value="{$crAc_UR_IWforums_hd}" name="crAc_UR_IWforums_hd"/>
-                </span>
-                </div>
-            </div>
-            <div class="z-formrow">
-                <div>
-                    <span style="float:left;width:100px"><label for="crAc_UR_IWmessages">{gt text="IWmessages"}</label></span>
-                    <span><input type="checkbox" value="true" name="crAc_UR_IWmessages" {if $crAc_UR_IWmessages}checked{/if}/></span>
-                    <span data-switch="crAc_UR_IWmessages" data-switch-value="true"><label for="crAc_UR_IWmessages_hd">{gt text="Header:"}</label>
-                        <input type="text" value="{$crAc_UR_IWmessages_hd}" name="crAc_UR_IWmessages_hd"/>
+                <div style="padding:0px">
+                    <span style="float:left;width:100px;margin-left:20px"><label for="crAc_UR_IWforums">{gt text="IWforums"}</label></span>
+                    <span><input style="margin:0px;vertical-align:top" type="checkbox" value="true" name="crAc_UR_IWforums" {if $crAc_UR_IWforums}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWforums" data-switch-value="true"><label style="vertical-align:top" for="crAc_UR_IWforums_hd">{gt text="Header:"}</label>
+                        <textarea name="crAc_UR_IWforums_hd" cols="70" rows="2">{$crAc_UR_IWforums_hd}</textarea>
                     </span>
                 </div>
             </div>
             <div class="z-formrow">
-                <div>
-                    <span style="float:left;width:100px"><label for="crAc_UR_IWforms">{gt text="IWforms"}</label></span>
-                    <span><input type="checkbox" value="true" name="crAc_UR_IWforms" {if $crAc_UR_IWforms}checked{/if}/></span>
-                    <span data-switch="crAc_UR_IWforms" data-switch-value="true"><label for="crAc_UR_IWforms_hd">{gt text="Header:"}</label>
-                        <input type="text" value="{$crAc_UR_IWforms_hd}" name="crAc_UR_IWforms_hd"/>
+                <div style="padding:0px">
+                    <span style="float:left;width:100px;margin-left:20px"><label for="crAc_UR_IWmessages">{gt text="IWmessages"}</label></span>
+                    <span><input style="margin:0px;vertical-align:top" type="checkbox" value="true" name="crAc_UR_IWmessages" {if $crAc_UR_IWmessages}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWmessages" data-switch-value="true"><label style="vertical-align:top" for="crAc_UR_IWmessages_hd">{gt text="Header:"}</label>
+                        <textarea name="crAc_UR_IWmessages_hd" cols="70" rows="2">{$crAc_UR_IWmessages_hd}</textarea>
                     </span>
                 </div>
             </div>
             <div class="z-formrow">
-                <div>
-                    <span style="float:left;width:100px"><label for="crAc_UR_IWnoteboard">{gt text="IWnoteboard"}</label></span>
-                    <span><input type="checkbox" value="true" name="crAc_UR_IWnoteboard" {if $crAc_UR_IWnoteboard}checked{/if}/></span>
-                    <span data-switch="crAc_UR_IWnoteboard" data-switch-value="true"><label for="crAc_UR_IWnoteboard_hd">{gt text="Header:"}</label>
-                        <input type="text" value="{$crAc_UR_IWnoteboard_hd}" name="crAc_UR_IWnoteboard_hd"/>
+                <div style="padding:0px">
+                    <span style="float:left;width:100px;margin-left:20px"><label for="crAc_UR_IWforms">{gt text="IWforms"}</label></span>
+                    <span><input style="margin:0px;vertical-align:top" type="checkbox" value="true" name="crAc_UR_IWforms" {if $crAc_UR_IWforms}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWforms" data-switch-value="true"><label style="vertical-align:top" for="crAc_UR_IWforms_hd">{gt text="Header:"}</label>
+                        <textarea name="crAc_UR_IWforms_hd" cols="70" rows="2">{$crAc_UR_IWforms_hd}</textarea>
+                    </span>
+                </div>
+            </div>
+            <div class="z-formrow">
+                <div style="padding:0px">
+                    <span style="float:left;width:100px;margin-left:20px"><label for="crAc_UR_IWnoteboard">{gt text="IWnoteboard"}</label></span>
+                    <span><input style="margin:0px;vertical-align:top" type="checkbox" value="true" name="crAc_UR_IWnoteboard" {if $crAc_UR_IWnoteboard}checked{/if}/></span>
+                    <span data-switch="crAc_UR_IWnoteboard" data-switch-value="true"><label style="vertical-align:top" style="vertical-align:top" for="crAc_UR_IWnoteboard_hd">{gt text="Header:"}</label>
+                        <textarea name="crAc_UR_IWnoteboard_hd" cols="70" rows="2">{$crAc_UR_IWnoteboard_hd}</textarea>
                     </span>
                 </div>
             </div>
             
         </fieldset>
-         
+        <fieldset><legend>{gt text="Subscribers:"}</legend>
+            <div class="z-formrow">
+                <label for="cronEverybody">{gt text="All users subscribed"}</label>
+                <input type="checkbox" value="true" id="everybodySubscribed" name="everybodySubscribed" {if $everybodySubscribed}checked{/if}/>
+            </div>
+            <div class="z-formrow" data-switch="everybodySubscribed" data-switch-value="false">
+                <span style="float:left;margin-left:200px"><a href="{modurl modname='IWmain' type='admin' func='subscribeEverybody'}">{gt text="Subscribe everybody"}</a></span>
+                <span style="float:left;margin-left:40px"><a href="{modurl modname='IWmain' type='admin' func='unsubscribeEverybody'}">{gt text="Unsubscribe everybody"}</a></span>
+            </div>
+        </fieldset>
+        <fieldset><legend>{gt text="Frequency"}</legend>
+            <div class="z-formrow">
+                <label for="cronURfreq">{gt text="Minimum time between reports (hours)"}</label>
+                <span style="float:left"><input type="text" name="cronURfreq" value="{$cronURfreq}" size="3"/></span>
+            </div>
+            <div class="z-informationmsg">
+                {gt text="Last Users Report action: "}{$lastCronUR}
+            </div>
+        </fieldset> 
         
         </div>
         </fieldset>
