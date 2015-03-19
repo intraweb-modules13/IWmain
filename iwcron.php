@@ -25,7 +25,7 @@ if ($passwordActive) {
 //3. Cron actions
 $cronResponse = '<h2>'.__('Cron Actions', $dom).'</h2>';
 $crAc_UserReports = ModUtil::getVar('IWmain','crAc_UserReports');
-if ($crAc_UserReports) $result = ModUtil::func('IWmain', 'cron', 'userReports', array('time' => $time));
+if ($crAc_UserReports) $cronResponse .= ModUtil::func('IWmain', 'cron', 'userReports', array('time' => $time));
 
 //4. Cron times
 $executeTime = date('M, d Y - H.i', $time);
