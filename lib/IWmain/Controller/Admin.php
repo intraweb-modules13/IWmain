@@ -51,14 +51,12 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                     'name' => 'lastCronSuccessfull',
                     'module' => 'IWmain_cron',
                     'sv' => $sv));
+        $lastCronSuccessfullTime = date('M, d Y - H.i', $lastCronSuccessfull);
+        if ($lastCronSuccessfullTime == '')
+            $lastCronSuccessfullTime = __('Never', $dom);
         $elapsedTime = 24 * 60 * 60;
         $executeCron = ($lastCron < time() - $elapsedTime) ? 1 : 0;
         //$noCronTime = ($lastCronSuccessfull > time() - $elapsedTime) ? true : false;
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $lastCronUR = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
-                    'name' => 'lastCronUR',
-                    'module' => 'IWmain_cron',
-                    'sv' => $sv));
         if ($lastCronUR == '') {
             $lastCronUR = __("Never done");
         }else{
@@ -85,7 +83,7 @@ class IWmain_Controller_Admin extends Zikula_AbstractController {
                         ->assign('crAc_UR_IWnoteboard_hd', $this->getVar('crAc_UR_IWnoteboard_hd'))
                         ->assign('everybodySubscribed', $this->getVar('everybodySubscribed'))
                         ->assign('cronURfreq', $this->getVar('cronURfreq'))
-                        ->assign('lastCronUR', $lastCronUR)
+                        ->assign('lastCronSuccessfullTime', $lastCronSuccessfullTime)
                         ->fetch('IWmain_admin_main.tpl');
     }
 

@@ -23,14 +23,23 @@ if ($passwordActive) {
 }
 
 //3. Cron actions
+$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+$lastCronSuccessfull = ModUtil::func('IWmain', 'user', 'userGetVar', array('uid' => -100,
+            'name' => 'lastCronSuccessfull',
+            'module' => 'IWmain_cron',
+            'sv' => $sv));
+$dateTimeFrom = (int)$lastCronSuccessfull;
 $cronResponse = '<h2>'.__('Cron Actions', $dom).'</h2>';
+$exit = -2;
 $crAc_UserReports = ModUtil::getVar('IWmain','crAc_UserReports');
-if ($crAc_UserReports) $cronResponse .= ModUtil::func('IWmain', 'cron', 'userReports', array('time' => $time));
+if ($crAc_UserReports) $userReports = ModUtil::func('IWmain', 'cron', 'userReports', array('dateTimeFrom' => $dateTimeFrom, 'dateTimeTo' => $time));
+$cronResponse .= isset($userReports['cronResponse']) ? $userReports['cronResponse'] : '';
+$exit = isset($userReports['exit']) ? $userReports['exit'] : $exit;
 
 //4. Cron times
 $executeTime = date('M, d Y - H.i', $time);
 //Cron successfull time
-if ($result['value'] == 1 || $result['value'] == 0) {
+if ($exit == 1 || $exit == 0) {
     $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
     ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
         'name' => 'lastCronSuccessfull',
@@ -61,18 +70,20 @@ ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,
 
 //5. Global cron response
 $cronResponse .= '<h2>'.__('Cron Response', $dom).'</h2>';
-$cronResponse .= '<div>' . __('Last cron execution', $dom) . ': ' . $executeTime . '</div>';
-$cronResponse .= '<div>' . __('Last successful cron execution', $dom) . ': ' . $lastCronSuccessfullTime . '</div>';
-$cronResponse .= '<div>' . $result['msg'] . '</div>';
-$cronResponse .= '<div>&nbsp;</div>';
+$cronResponse .= '<div>' . __('Cron execution time', $dom) . ': ' . $executeTime . '</div><br><br>';
 $cronResponse .= '<div>' . __('Cron results', $dom) . ': ';
-if ($result['value'] == 1) {
+if ($exit == 1) {
     $cronResponse .= '<span style="color: green;">' . __('It has executed correctly', $dom) . '</span></div>';
-} elseif ($result['value'] == 0) {
-    $cronResponse .= '<span style="color: orange;">' . __('It has worked incorrectly', $dom) . '</span></div>';
-} else {
-    $cronResponse .= '<span style="color: red;">' . __('It has not worked', $dom) . '</span></div>';
+} elseif ($exit == 0) {
+    $cronResponse .= '<span style="color: orange;">' . __('User reports running without actions configured. Success time updated.', $dom) . '</span></div>';
+} elseif ($exit == -1) {
+    $cronResponse .= '<span style="color: red;">' . __('It has not worked. Some error ocurred.', $dom) . '</span></div>';
+} elseif ($exit == -3) {
+    $cronResponse .= '<span style="color: red;">' . __('It has not worked. Waiting for minimum time between reports.', $dom) . '</span></div>';
+} elseif ($exit == -2) {
+    $cronResponse .= '<span">' . __('User Reports disabled', $dom) . '</span></div>';
 }
+$cronResponse .= '<div>' . __('Last User Reports success execution', $dom) . ': ' . $lastCronSuccessfullTime . '</div>';
 //saving cronResponse
 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
 ModUtil::func('IWmain', 'user', 'userSetVar', array('uid' => -100,

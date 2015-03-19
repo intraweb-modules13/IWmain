@@ -104,7 +104,7 @@
                 <span style="float:left"><input type="text" name="cronURfreq" value="{$cronURfreq}" size="3"/></span>
             </div>
             <div class="z-informationmsg">
-                {gt text="Last Users Report action: "}{$lastCronUR}
+                {gt text="Last Users Report action: "}{$lastCronSuccessfullTime}
             </div>
         </fieldset> 
         
