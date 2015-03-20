@@ -40,6 +40,8 @@ public function UserReports($args) {
         //Getting News from modules
         $forumsNews = $IWforums ? ModUtil::apiFunc('IWmain', 'cron', 'getForumsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         $messagesNews = $IWmessages ? ModUtil::apiFunc('IWmain', 'cron', 'getMessagesNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
+        print_r($messagesNews);
+        exit();
         $formsNews = $IWforms ? ModUtil::apiFunc('IWmain', 'cron', 'getFormsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         $noteboardNews = $IWnoteboard ? ModUtil::apiFunc('IWmain', 'cron', 'getNoteboardNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         //News construction
