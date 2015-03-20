@@ -1,22 +1,22 @@
 {if $HeaderText}<div>{$HeaderText}</div><hr style="border: 1px solid #bbb">{/if}
-{if $IWforums && $userNews.forum}
+{if $IWforums && $userNews.IWforums}
     {if $IWforumsHd}<div style="margin-bottom:4px">{$IWforumsHd}</div>{/if}
-    <div>{$userNews.forum}</div>
+    <div>{$userNews.IWforums}</div>
     <hr style="border: 1px solid #eee">
 {/if}
-{if $IWmessages && $userNews.messages}
+{if $IWmessages && $userNews.IWmessages}
     {if $IWmessagesHd}<div style="margin-bottom:4px">{$IWmessagesHd}</div>{/if}
-    <div>{$userNews.messages}</div>
+    <div>{$userNews.IWmessages}</div>
     <hr style="border: 1px solid #eee">
 {/if}
-{if $IWforms && $userNews.forms}
+{if $IWforms && $userNews.IWforms}
     {if $IWformsHd}<div style="margin-bottom:4px">{$IWformsHd}</div>{/if}
-    <div>{$userNews.forms}</div>
+    <div>{$userNews.IWforms}</div>
     <hr style="border: 1px solid #eee">
 {/if}
-{if $IWnoteboard && $userNews.noteboard}
+{if $IWnoteboard && $userNews.IWnoteboard}
     {if $IWnoteboardHd}<div style="margin-bottom:4px">{$IWnoteboardHd}</div>{/if}
-    <div>{$userNews.noteboard}</div>
+    <div>{$userNews.IWnoteboard}</div>
     <hr style="border: 1px solid #eee">
 {/if}
 {if $FooterText}<div>{$FooterText}</div>{/if}

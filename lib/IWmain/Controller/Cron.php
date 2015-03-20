@@ -38,10 +38,10 @@ public function UserReports($args) {
         $msg .= $IWnoteboard ? '- IWnoteboard ' : '';
         $msg .= '</div><br>';
         //Getting News from modules
-        $forumsNews = $IWforums ? ModUtil::apiFunc('IWmain', 'cron', 'getForumNews', array('time' => $time)) : array();
-        $messagesNews = $IWmessages ? ModUtil::apiFunc('IWmain', 'cron', 'getMessagesNews', array('time' => $time)) : array();
-        $formsNews = $IWforms ? ModUtil::apiFunc('IWmain', 'cron', 'getFormsNews', array('time' => $time)) : array();
-        $noteboardNews = $IWnoteboard ? ModUtil::apiFunc('IWmain', 'cron', 'getNoteboardNews', array('time' => $time)) : array();
+        $forumsNews = $IWforums ? ModUtil::apiFunc('IWmain', 'cron', 'getForumsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
+        $messagesNews = $IWmessages ? ModUtil::apiFunc('IWmain', 'cron', 'getMessagesNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
+        $formsNews = $IWforms ? ModUtil::apiFunc('IWmain', 'cron', 'getFormsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
+        $noteboardNews = $IWnoteboard ? ModUtil::apiFunc('IWmain', 'cron', 'getNoteboardNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         //News construction
         $forumsNews = array_combine(array_map(function($a) {return '_' . $a;}, array_keys($forumsNews)), $forumsNews);
         $messagesNews = array_combine(array_map(function($a) {return '_' . $a;}, array_keys($messagesNews)), $messagesNews);
@@ -49,7 +49,6 @@ public function UserReports($args) {
         $noteboardNews = array_combine(array_map(function($a) {return '_' . $a;}, array_keys($noteboardNews)), $noteboardNews);
         $news = array_merge_recursive($forumsNews , $messagesNews , $formsNews , $noteboardNews);
         $news = array_combine(array_map(function($a) {return substr($a, 1);}, array_keys($news)), $news);
-        
         //Case no news
         if (empty($news)) {
             $exit = '1';

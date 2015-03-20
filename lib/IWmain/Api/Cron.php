@@ -12,9 +12,11 @@
  * @author jguille2
  */
 class IWmain_Api_Cron extends Zikula_AbstractApi {
-public function getForumNews($args) {
-    $time = $args['time'];
-    $result = array(2 => array ('IWforums' => 'html forum del 2'), 3 => array ('IWforums' => 'html forum del 3'));
+public function getForumsNews($args) {
+    $dateTimeFrom = $args['dateTimeFrom'];
+    $dateTimeTo = $args['dateTimeTo'];
+    $result = ModUtil::apiFunc('IWforums', 'user', 'getAllUnreadedMessages', array('dateTimeFrom' => $dateTimeFrom, 'dateTimeTo' => $dateTimeTo));
+//$result = array(2 => array ('IWforums' => 'html <b>forums</b> del 2'), 3 => array ('IWmessages' => 'html forum del 3'));
     return $result;
 }
 public function getMessagesNews($args) {
