@@ -3,38 +3,39 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: templates/IWmain_user_file_not_found.htm:1
+#: templates/IWmain_user_file_not_found.tpl:1
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zikula component\n"
+"Project-Id-Version: Zikula 1.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-25 16:08+0100\n"
+"POT-Creation-Date: 2015-03-23 10:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: iwcron.php:29 iwcron.php:32
-msgid "The cron has been executed too recenty"
+#: iwcron.php:19
+msgid "You can't execute iwcron"
 msgstr ""
 
-#: iwcron.php:46
-msgid "The Mailer module is not active. The cron can not send emails to users."
+#: iwcron.php:32
+msgid "Cron Actions"
 msgstr ""
 
-#: iwcron.php:68
+#: iwcron.php:60 lib/IWmain/Controller/Admin.php:56
 msgid "Never"
 msgstr ""
 
-#: iwcron.php:70
-msgid "Last cron execution"
+#: iwcron.php:72
+msgid "Cron Response"
 msgstr ""
 
-#: iwcron.php:71
-msgid "Last successful cron execution"
+#: iwcron.php:73
+msgid "Cron execution time"
 msgstr ""
 
 #: iwcron.php:74
@@ -46,243 +47,82 @@ msgid "It has executed correctly"
 msgstr ""
 
 #: iwcron.php:78
-msgid "It has worked incorrectly"
+msgid "User reports running without actions configured. Success time updated."
 msgstr ""
 
-#: iwcron.php:80 templates/IWmain_user_main.htm:14
-msgid "It has not worked"
+#: iwcron.php:80
+msgid "It has not worked. Some error ocurred."
 msgstr ""
 
-#: iwcron.php:125
-msgid "This email is a resume of the new things to see in the site"
+#: iwcron.php:82
+msgid "It has not worked. Waiting for minimum time between reports."
 msgstr ""
 
-#: iwcron.php:157 lib/IWmain/Controller/User.php:656
-msgid "Nothing to show"
+#: iwcron.php:84
+msgid "User Reports disabled"
 msgstr ""
 
-#: iwcron.php:175
+#: iwcron.php:86
+msgid "Last User Reports success execution"
+msgstr ""
+
+#: iwcron.php:173
 msgid ""
 "The 5 firsts tries of cron execution has failed. The cron execution has been "
 "aborted."
 msgstr ""
 
-#: iwcron.php:183
+#: iwcron.php:181
 msgid "Your site have users without email address. You should correct this."
 msgstr ""
 
-#: iwcron.php:188
+#: iwcron.php:186
 msgid "There have not found emails to send."
 msgstr ""
 
-#: iwcron.php:191
+#: iwcron.php:189
 msgid ""
 "The information about the new things to see has been send to users via email."
 msgstr ""
 
-#: iwcron.php:191
+#: iwcron.php:189
 msgid "The number of send emails has been of "
 msgstr ""
 
-#: iwcron.php:194
+#: iwcron.php:192
 msgid ""
 "Not has been possible to send all the resume messages with the new things to "
 "see to users. Some of them have failed."
 msgstr ""
 
-#: iwcron.php:194
+#: iwcron.php:192
 msgid "of"
 msgstr ""
 
-#: iwcron.php:197
+#: iwcron.php:195
 msgid ""
 "All the tries of sending messages have failed. The number of tries has been "
 "of"
 msgstr ""
 
-#: lib/IWmain/Api/User.php:15 lib/IWmain/Api/User.php:97
-#: lib/IWmain/Api/User.php:125 lib/IWmain/Api/User.php:150
-#: lib/IWmain/Api/User.php:178 lib/IWmain/Api/User.php:209
-#: lib/IWmain/Api/User.php:233 lib/IWmain/Api/User.php:266
-#: lib/IWmain/Api/User.php:308 lib/IWmain/Api/User.php:344
-#: lib/IWmain/Api/User.php:385 lib/IWmain/Api/User.php:419
-#: lib/IWmain/Api/User.php:452 lib/IWmain/Api/User.php:489
-#: lib/IWmain/Api/User.php:517 lib/IWmain/Api/User.php:544
-#: lib/IWmain/Api/User.php:575 lib/IWmain/Api/User.php:603
-#: lib/IWmain/Controller/User.php:1311 lib/IWmain/Controller/User.php:1515
-#: lib/IWmain/Controller/User.php:1539 lib/IWmain/Controller/User.php:1582
-#: lib/IWmain/Controller/User.php:1789
-msgid "You are not allowed to access to some information."
+#: lib/IWmain/Block/IWnews.php:30
+msgid "Show news of the user"
 msgstr ""
 
-#: lib/IWmain/Api/User.php:41 lib/IWmain/Api/User.php:80
-#: lib/IWmain/Api/User.php:107 lib/IWmain/Api/User.php:135
-#: lib/IWmain/Api/User.php:161 lib/IWmain/Api/User.php:216
-#: lib/IWmain/Api/User.php:248 lib/IWmain/Api/User.php:278
-#: lib/IWmain/Api/User.php:321 lib/IWmain/Api/User.php:357
-msgid "Error! Could not load items."
+#: lib/IWmain/Installer.php:41 lib/IWmain/Installer.php:133
+msgid "User Reports"
 msgstr ""
 
-#: lib/IWmain/Api/User.php:236 lib/IWmain/Api/User.php:312
-#: lib/IWmain/Api/User.php:348 lib/IWmain/Api/User.php:389
-#: lib/IWmain/Api/User.php:423 lib/IWmain/Api/User.php:456
-#: lib/IWmain/Api/User.php:493 lib/IWmain/Api/User.php:548
-#: lib/IWmain/Api/User.php:579 lib/IWmain/Api/User.php:607
-#: lib/IWmain/Controller/User.php:1233
-msgid "Error! Could not do what you wanted. Please check your input."
+#: lib/IWmain/Installer.php:108
+msgid "Header text of the cron automatic emails with the new things to see"
 msgstr ""
 
-#: lib/IWmain/Api/User.php:397
-msgid "Error! Creation attempt failed."
+#: lib/IWmain/Installer.php:109
+msgid "Footer text of the email"
 msgstr ""
 
-#: lib/IWmain/Api/User.php:430 lib/IWmain/Api/User.php:463
-#: lib/IWmain/Api/User.php:501
-msgid "Error! Update attempt failed."
-msgstr ""
-
-#: lib/IWmain/Api/User.php:524 lib/IWmain/Api/User.php:553
-#: lib/IWmain/Api/User.php:585 lib/IWmain/Api/User.php:612
-msgid "Error! Sorry! Deletion attempt failed."
-msgstr ""
-
-#: lib/IWmain/Api/Admin.php:13 templates/IWmain_admin_main.htm:4
-msgid "Programmed sequences information"
-msgstr ""
-
-#: lib/IWmain/Api/Admin.php:14
-msgid "Configure parameters"
-msgstr ""
-
-#: lib/IWmain/Api/Admin.php:15 templates/IWmain_admin_changeAvatarView.htm:4
-msgid "Avatar change request"
-msgstr ""
-
-#: lib/IWmain/Api/Admin.php:20
-msgid "Manage files"
-msgstr ""
-
-#: lib/IWmain/Api/Account.php:23 templates/IWmain_block_IWnews.htm:24
-msgid "Configure"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:13 lib/IWmain/Controller/User.php:168
-#: lib/IWmain/Controller/User.php:340 lib/IWmain/Controller/User.php:376
-#: lib/IWmain/Controller/User.php:970 lib/IWmain/Controller/Admin.php:126
-#: lib/IWmain/Controller/Ajax.php:12 lib/IWmain/Controller/Ajax.php:80
-#: lib/IWmain/Controller/Ajax.php:136
-msgid "Sorry! No authorization to access this module."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:271
-msgid ""
-"The information has been modified, but the uplaod of the avatar has failed "
-"because the file extension is not allowed. The allowed extensions are: png, "
-"jpg and gif"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:316
-msgid "The values have changed correctly"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:467 lib/IWmain/Controller/User.php:759
-msgid "Noteboard notes"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:495
-msgid "Personal agenda"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:522 lib/IWmain/Controller/User.php:794
-msgid "Private messages"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:562 lib/IWmain/Controller/User.php:849
-msgid "Forum"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:620 lib/IWmain/Controller/User.php:623
-#: lib/IWmain/Controller/User.php:901
-msgid "Form"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:643 templates/IWmain_user_main.htm:50
-msgid "Avatar replacement"
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:911
-msgid "sent at "
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:911
-msgid "by "
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1315
-msgid "The folder for attached files haven't been found."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1327
-msgid "The file extension is not allowed."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1332
-msgid "File size not allowed."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1351
-msgid "The attached file haven't been updated because an error."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1389
-msgid "You are not allowed to access to use this functionality."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1396
-msgid "Error! The parameters receiver are not correct."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1405 lib/IWmain/Controller/User.php:1437
-#: lib/IWmain/Controller/User.php:1446 lib/IWmain/Controller/User.php:1461
-#: lib/IWmain/Controller/User.php:1464 lib/IWmain/Controller/User.php:1469
-#: lib/IWmain/Controller/User.php:1472 lib/IWmain/Controller/User.php:1475
-#: lib/IWmain/Controller/User.php:1480 lib/IWmain/Controller/User.php:1492
-#: lib/IWmain/Controller/User.php:1495
-msgid "Error! Thumbnailing the image file."
-msgstr ""
-
-#: lib/IWmain/Controller/User.php:1518
-msgid "Failed to deleted"
-msgstr ""
-
-#: lib/IWmain/Controller/Admin.php:128
-msgid "The cron has been executed"
-msgstr ""
-
-#: lib/IWmain/Controller/Admin.php:159
-msgid "The value of the life time for users variables is incorrect"
-msgstr ""
-
-#: lib/IWmain/Controller/Admin.php:176
-msgid "The configuration have been updated"
-msgstr ""
-
-#: lib/IWmain/Controller/Admin.php:269
-msgid ""
-"The current version of IWmain module is incorrect. You must upgrade it "
-"before install, upgrade or use this module."
-msgstr ""
-
-#: lib/IWmain/Controller/Ajax.php:29
-msgid "Error deleting avatar"
-msgstr ""
-
-#: lib/IWmain/Controller/Ajax.php:52
-msgid "Error changing avatar"
-msgstr ""
-
-#: lib/IWmain/Version.php:7 templates/IWmain_user_menu.htm:2
-#: templates/IWmain_admin_menu.htm:6
+#: lib/IWmain/Version.php:7 templates/IWmain_admin_menu.tpl:7
+#: templates/IWmain_user_menu.tpl:4
 msgid "Intraweb"
 msgstr ""
 
@@ -295,279 +135,463 @@ msgstr ""
 msgid "IWmain"
 msgstr ""
 
-#: lib/IWmain/Installer.php:39 templates/IWmain_admin_conf.htm:71
-msgid "Header text of the cron automatic emails with the new things to see"
+#: lib/IWmain/Api/User.php:15 lib/IWmain/Api/User.php:97
+#: lib/IWmain/Api/User.php:125 lib/IWmain/Api/User.php:149
+#: lib/IWmain/Api/User.php:176 lib/IWmain/Api/User.php:206
+#: lib/IWmain/Api/User.php:230 lib/IWmain/Api/User.php:263
+#: lib/IWmain/Api/User.php:323 lib/IWmain/Api/User.php:359
+#: lib/IWmain/Api/User.php:400 lib/IWmain/Api/User.php:434
+#: lib/IWmain/Api/User.php:468 lib/IWmain/Api/User.php:505
+#: lib/IWmain/Api/User.php:533 lib/IWmain/Api/User.php:560
+#: lib/IWmain/Api/User.php:592 lib/IWmain/Api/User.php:620
+#: lib/IWmain/Controller/User.php:1195 lib/IWmain/Controller/User.php:1398
+#: lib/IWmain/Controller/User.php:1421 lib/IWmain/Controller/User.php:1463
+#: lib/IWmain/Controller/User.php:1669
+msgid "You are not allowed to access to some information."
 msgstr ""
 
-#: lib/IWmain/Installer.php:40 templates/IWmain_admin_conf.htm:75
-msgid "Footer text of the email"
+#: lib/IWmain/Api/User.php:42 lib/IWmain/Api/User.php:81
+#: lib/IWmain/Api/User.php:108 lib/IWmain/Api/User.php:135
+#: lib/IWmain/Api/User.php:160 lib/IWmain/Api/User.php:214
+#: lib/IWmain/Api/User.php:246 lib/IWmain/Api/User.php:277
+#: lib/IWmain/Api/User.php:337 lib/IWmain/Api/User.php:373
+#: lib/IWmain/Api/User.php:801
+msgid "Error! Could not load items."
 msgstr ""
 
-#: lib/IWmain/Block/IWnews.php:24
-msgid "Show news of the user"
+#: lib/IWmain/Api/User.php:233 lib/IWmain/Api/User.php:327
+#: lib/IWmain/Api/User.php:363 lib/IWmain/Api/User.php:404
+#: lib/IWmain/Api/User.php:438 lib/IWmain/Api/User.php:472
+#: lib/IWmain/Api/User.php:509 lib/IWmain/Api/User.php:564
+#: lib/IWmain/Api/User.php:596 lib/IWmain/Api/User.php:624
+#: lib/IWmain/Controller/User.php:1120
+msgid "Error! Could not do what you wanted. Please check your input."
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:3
+#: lib/IWmain/Api/User.php:412
+msgid "Error! Creation attempt failed."
+msgstr ""
+
+#: lib/IWmain/Api/User.php:446 lib/IWmain/Api/User.php:479
+#: lib/IWmain/Api/User.php:517
+msgid "Error! Update attempt failed."
+msgstr ""
+
+#: lib/IWmain/Api/User.php:540 lib/IWmain/Api/User.php:570
+#: lib/IWmain/Api/User.php:602 lib/IWmain/Api/User.php:630
+#: lib/IWmain/Api/User.php:816
+msgid "Error! Sorry! Deletion attempt failed."
+msgstr ""
+
+#: lib/IWmain/Api/Admin.php:13
+msgid "Configure parameters"
+msgstr ""
+
+#: lib/IWmain/Api/Admin.php:14 templates/IWmain_admin_main.tpl:6
+msgid "Programmed sequences information"
+msgstr ""
+
+#: lib/IWmain/Api/Account.php:23 templates/IWmain_block_IWnews.tpl:23
+msgid "Configure"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:14
+msgid "User reports enabled, but executed too recently"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:19 templates/IWmain_user_main.tpl:14
+#: templates/IWmain_admin_main.tpl:38
+msgid "User reports"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:29
+msgid "The Mailer module is not active. The cron can not send emails to users."
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:32
+msgid "There is no module connected to User Reports"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:34
+msgid "Modules connected:"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:55
+msgid "No news"
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:105
+msgid "users with news."
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:106
+msgid "of them subscribed."
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:107
+msgid "subscribers with email."
+msgstr ""
+
+#: lib/IWmain/Controller/Cron.php:108
+msgid "emails sended."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:93
+msgid "The values have changed correctly"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:206 lib/IWmain/Controller/User.php:468
+msgid "Noteboard notes"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:231
+msgid "Personal agenda"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:255 lib/IWmain/Controller/User.php:503
+msgid "Private messages"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:290 lib/IWmain/Controller/User.php:555
+msgid "Forum"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:341 lib/IWmain/Controller/User.php:604
+msgid "Form"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:357
+msgid "Avatar replacement"
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:618
+msgid "sent at "
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:618
+msgid "by "
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1199
+msgid "The folder for attached files haven't been found."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1211
+msgid "The file extension is not allowed."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1216
+msgid "File size not allowed."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1235
+msgid "The attached file haven't been updated because an error."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1272
+msgid "You are not allowed to access to use this functionality."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1279
+msgid "Error! The parameters receiver are not correct."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1288 lib/IWmain/Controller/User.php:1320
+#: lib/IWmain/Controller/User.php:1329 lib/IWmain/Controller/User.php:1344
+#: lib/IWmain/Controller/User.php:1347 lib/IWmain/Controller/User.php:1352
+#: lib/IWmain/Controller/User.php:1355 lib/IWmain/Controller/User.php:1358
+#: lib/IWmain/Controller/User.php:1363 lib/IWmain/Controller/User.php:1375
+#: lib/IWmain/Controller/User.php:1378
+msgid "Error! Thumbnailing the image file."
+msgstr ""
+
+#: lib/IWmain/Controller/User.php:1401
+msgid "Failed to deleted"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:61
+msgid "Never done"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:165 lib/IWmain/Controller/Admin.php:224
+msgid "The configuration have been updated"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:184
+msgid "The cron has been executed"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:211
+msgid "The value of the life time for users variables is incorrect"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:241
+msgid ""
+"The current version of IWmain module is incorrect. You must upgrade it "
+"before install, upgrade or use this module."
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:260
+msgid "All users are subscribed"
+msgstr ""
+
+#: lib/IWmain/Controller/Admin.php:276
+msgid "All users are unsubscribed"
+msgstr ""
+
+#: lib/IWmain/Controller/Ajax.php:7 lib/IWmain/Controller/Ajax.php:63
+msgid "Sorry! No authorization to access this module."
+msgstr ""
+
+#: templates/reports/IWmessages_user_report.tpl:1
+msgid "Messages"
+msgstr ""
+
+#: templates/reports/IWforums_user_report.tpl:17
+msgid "Everybody is subscribed"
+msgstr ""
+
+#: templates/reports/IWforums_user_report.tpl:20
+#: templates/reports/IWforums_user_report.tpl:23
+msgid "Cancel my subscription"
+msgstr ""
+
+#: templates/IWmain_user_file_not_found.tpl:2
+msgid "File not found"
+msgstr ""
+
+#: templates/IWmain_user_file_not_found.tpl:3
+msgid "File name"
+msgstr ""
+
+#: templates/IWmain_user_file_not_found.tpl:5
+msgid "Go back"
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:3
 msgid "Configure module"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:4
+#: templates/IWmain_admin_conf.tpl:4
 msgid "Modify the configuration"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:9
+#: templates/IWmain_admin_conf.tpl:9
 msgid "Server files directori"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:13
+#: templates/IWmain_admin_conf.tpl:13
 msgid "Attached files directory has not been found"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:18 templates/IWmain_admin_conf.htm:33
+#: templates/IWmain_admin_conf.tpl:18
 msgid "This folder is not writeable."
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:24
-msgid "Folder where to look for the users pictures"
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:28
-msgid "Users pictures directori hasn't been found"
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:39
-msgid "The users can change theirs avatars"
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:43
-msgid "The avatar replacement needs validation"
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:49
-msgid ""
-"The users can not change theirs avatars because the directori of pictures "
-"does not exist or it has not the correct permissions."
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:54
-msgid ""
-"The users can change theirs avatars because the php's gd extensión is not "
-"available."
-msgstr ""
-
-#: templates/IWmain_admin_conf.htm:59
+#: templates/IWmain_admin_conf.tpl:26
 msgid "Allowed extensions"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:63
+#: templates/IWmain_admin_conf.tpl:30
 msgid "Maximum size for uploaded files"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:67
+#: templates/IWmain_admin_conf.tpl:34
 msgid "Life time of users vars (days)"
 msgstr ""
 
-#: templates/IWmain_admin_conf.htm:79
+#: templates/IWmain_admin_conf.tpl:38
+msgid "Captcha system used in form for unregistered users"
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:40
+msgid "Private captcha code"
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:44
+msgid "Public captcha code"
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:49
+msgid ""
+"The captcha system prevents robots can send notes to forms automatically. "
+"With this module successfully activated and you get linked to when a user "
+"sends an unregistered entry, is obliged to recognize and write a set of "
+"characters that can not recognize an automated system."
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:52
+msgid "You can find more information about protection captcha system in"
+msgstr ""
+
+#: templates/IWmain_admin_conf.tpl:58 templates/IWmain_admin_main.tpl:115
 msgid "Save changes"
 msgstr ""
 
-#: templates/IWmain_user_menu.htm:2 templates/IWmain_user_main.htm:2
-#: templates/IWmain_admin_menu.htm:8
+#: templates/IWmain_user_main.tpl:2 templates/IWmain_admin_menu.tpl:9
+#: templates/IWmain_user_menu.tpl:6
 msgid "Intraweb main module"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:3
+#: templates/IWmain_user_main.tpl:3
 msgid "User configurable values"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:7
+#: templates/IWmain_user_main.tpl:7
 msgid "News and marked blocks"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:9
+#: templates/IWmain_user_main.tpl:9
 msgid "I want that block will show details"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:18
-msgid ""
-"If you want the system would be able to send you emails with a dayly resume "
-"of things to see, but it is not possible because your email has not been "
-"found. You can define your email address form"
+#: templates/IWmain_user_main.tpl:17
+msgid "Everybody is subscribed to user reports"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:19
-msgid "this link."
-msgstr ""
-
-#: templates/IWmain_user_main.htm:23
+#: templates/IWmain_user_main.tpl:21
 msgid "I want to be subscribed to thinks to see"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:25
+#: templates/IWmain_user_main.tpl:27
+msgid ""
+"The system would be able to send you emails with a dayly resume of news, but "
+"it is not possible because your email has not been found. You can define "
+"your email address in"
+msgstr ""
+
+#: templates/IWmain_user_main.tpl:30
 msgid "The subscrition mail is:"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:33
-msgid "Change your real name"
+#: templates/IWmain_user_main.tpl:31
+msgid "You can change your mail info in"
 msgstr ""
 
-#: templates/IWmain_user_main.htm:35
-msgid "Name"
+#: templates/IWmain_user_main.tpl:34
+msgid " this link."
 msgstr ""
 
-#: templates/IWmain_user_main.htm:39
-msgid "1st surname"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:43
-msgid "2nd surname"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:58
-#: templates/IWmain_admin_changeAvatarView.htm:36
-msgid "Delete"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:64
-msgid "Upload your avatar"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:66
-msgid "If you want, you can change your avatar from here:"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:70
-msgid "(The avatar change required administrator validation)"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:76
-msgid ""
-"Your avatar's image sizes must be 90x120 px aproximately with one of the "
-"next formats: jpg, gif or png."
-msgstr ""
-
-#: templates/IWmain_user_main.htm:81
-msgid ""
-"Your avatar changement request is waiting for an administrator validation."
-msgstr ""
-
-#: templates/IWmain_user_main.htm:92
-msgid "Google account"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:94
-msgid "Sincronize agenda with Google calendar"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:99
-msgid "Google e-mail"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:103
-msgid "Google password"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:107
-msgid "Refresh time for gCalendar sincronitation"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:116
-msgid ""
-"As many small this value the navigation into agendas will be slower. In any "
-"moment the automatical sincronization is possible"
-msgstr ""
-
-#: templates/IWmain_user_main.htm:124
+#: templates/IWmain_user_main.tpl:41
 msgid "OK"
 msgstr ""
 
-#: templates/IWmain_block_IWnews.htm:6
-msgid "Flagged items"
-msgstr ""
-
-#: templates/IWmain_block_IWnews.htm:19
-msgid "Regenerate"
-msgstr ""
-
-#: templates/IWmain_admin_main.htm:3
+#: templates/IWmain_admin_main.tpl:4
 msgid "Admin icon"
 msgstr ""
 
-#: templates/IWmain_admin_main.htm:7
+#: templates/IWmain_admin_main.tpl:9
 msgid ""
-"The cron.php file does not exists in the root directory of your site. The "
+"The iwcron.php file does not exists in the root directory of your site. The "
 "programmed sequences are not available. The programmed sequences improve the "
 "work of Intraweb modules."
 msgstr ""
 
-#: templates/IWmain_admin_main.htm:11
+#: templates/IWmain_admin_main.tpl:13
 msgid ""
 "The Mailer module is not active and the cron can not be executed. You should "
 "active the Mailer module and configure it properly."
 msgstr ""
 
-#: templates/IWmain_admin_main.htm:17
+#: templates/IWmain_admin_main.tpl:20
+msgid "Cron settings"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:22
+msgid "Activate password for iwcron.php execution"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:26
+msgid "iwcron.php password"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:31
+msgid "Cron actions"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:33
+msgid "User reports active"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:40
+msgid "Subject of user reports mail"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:44
+msgid "Header text of the user reports mail"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:48
+msgid "Footer text of the user reports mail"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:52
+msgid "Modules reports"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:55
+msgid "IWforums"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:57 templates/IWmain_admin_main.tpl:66
+#: templates/IWmain_admin_main.tpl:75 templates/IWmain_admin_main.tpl:84
+msgid "Header:"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:64
+msgid "IWmessages"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:73
+msgid "IWforms"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:82
+msgid "IWnoteboard"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:91
+msgid "Subscribers:"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:93
+msgid "All users subscribed"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:97
+msgid "Subscribe everybody"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:98
+msgid "Unsubscribe everybody"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:101
+msgid "Frequency"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:103
+msgid "Minimum time between reports (hours)"
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:107
+msgid "Last Users Report action: "
+msgstr ""
+
+#: templates/IWmain_admin_main.tpl:122
 msgid ""
 "The cron has not been executed for long time. Now could be a good moment to "
 "execute it."
 msgstr ""
 
-#: templates/IWmain_admin_main.htm:23
+#: templates/IWmain_admin_main.tpl:128
 msgid "Execute the cron now"
 msgstr ""
 
-#: templates/IWmain_user_file_not_found.htm:2
-msgid "File not found"
+#: templates/IWmain_block_IWnews.tpl:8
+msgid "Flagged items"
 msgstr ""
 
-#: templates/IWmain_user_file_not_found.htm:3
-msgid "File name"
-msgstr ""
-
-#: templates/IWmain_user_file_not_found.htm:5
-msgid "Go back"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:3
-msgid "Admin - change avatar"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:9
-msgid "User"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:10
-msgid "Current avatar"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:11
-msgid "New avatar"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:12
-msgid "Options"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:32
-msgid "Confirm the avatar change"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:33
-msgid "Approve the avatar changer"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:35
-msgid "Confirm the deletion"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:43
-msgid "Not requests found"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:51
-msgid "--- Deleting avatar ---"
-msgstr ""
-
-#: templates/IWmain_admin_changeAvatarView.htm:52
-msgid "--- Changing avatar ---"
+#: templates/IWmain_block_IWnews.tpl:18
+msgid "Regenerate"
 msgstr ""

@@ -18,7 +18,7 @@ public function getForumsNews($args) {
     $dateTimeTo = $args['dateTimeTo'];
     //Checking IWforums module
     $modinfo = ModUtil::getInfo(ModUtil::getIdFromName('IWforums'));
-    if ($modinfo['type'] != 2) return $result;
+    if ($modinfo['state'] != 3) return $result;
     if ($modinfo['version'] >= '3.1.0') {
         $result = ModUtil::apiFunc('IWforums', 'user', 'getAllUnreadedMessages', array('dateTimeFrom' => $dateTimeFrom, 'dateTimeTo' => $dateTimeTo));
     } else {
@@ -107,7 +107,7 @@ public function getMessagesNews($args) {
     $dateTimeTo = $args['dateTimeTo'];
     //Checking IWmessages module
     $modinfo = ModUtil::getInfo(ModUtil::getIdFromName('IWmessages'));
-    if ($modinfo['type'] != 2) return $result;
+    if ($modinfo['state'] != 3) return $result;
     
     if (!is_null($dateTimeFrom)) {
             $sql  = "SELECT iw_msg_id AS msg_id, iw_subject AS subject, UNIX_TIMESTAMP(iw_msg_time) AS msg_time, iw_to_userid AS to_userid, iw_from_userid AS from_userid, iw_read_msg AS read_msg";
@@ -117,7 +117,9 @@ public function getMessagesNews($args) {
             $messages = DBUtil::marshallObjects($query);
             $mes2 = array();
             foreach ($messages as $message) {
-                $message['to_username'] = UserUtil::
+                $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+                $fromUserInfo = ModUtil::func($this->name, 'user', 'getUserInfo', array('sv' => $sv, 'uid' => $message['from_userid'],'info'=> array('l','n','c1')));
+                $message['from_userName'] = ($fromUserInfo['n'] != '') ? $fromUserInfo['n']." ".$fromUserInfo['c1'] : $fromUserInfo['l'];
                 $message['msg_time_tx'] = date("d-m-Y / H:i",$message['msg_time']);
                 $mes2[$message['to_userid']][] = $message;
             }

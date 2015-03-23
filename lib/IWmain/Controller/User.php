@@ -908,7 +908,7 @@ class IWmain_Controller_User extends Zikula_AbstractController {
      * 			'c1' 	-> 1st surname
      * 			'c2'	-> 2nd surname
      * 			'ncc'	-> Full name
-     * 			'nc'	-> Name and 1st surname
+     * 			'cn'	-> Name and 1st surname
      * 			'cn'	-> Fullname with the name at the end
      * 			'ccn'	-> Fullname with the name at the end
      * 			'l'	-> Username

@@ -40,8 +40,6 @@ public function UserReports($args) {
         //Getting News from modules
         $forumsNews = $IWforums ? ModUtil::apiFunc('IWmain', 'cron', 'getForumsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         $messagesNews = $IWmessages ? ModUtil::apiFunc('IWmain', 'cron', 'getMessagesNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
-        print_r($messagesNews);
-        exit();
         $formsNews = $IWforms ? ModUtil::apiFunc('IWmain', 'cron', 'getFormsNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         $noteboardNews = $IWnoteboard ? ModUtil::apiFunc('IWmain', 'cron', 'getNoteboardNews', array('dateTimeTo' => $dateTimeTo, 'dateTimeFrom' => $dateTimeFrom)) : array();
         //News construction
@@ -57,11 +55,6 @@ public function UserReports($args) {
             $msg .= '<div>'.__('No news').'</div>';
             return array('cronResponse' => $msg, 'exit' => $exit);
         }
-        /*return $msg;
-        echo "<pre>";
-        print_r($news);
-        echo "</pre>";
-        exit();*/
         $subject = $this->getVar('cronSubjectText');
         $HeaderText = $this->getVar('cronHeaderText');
         $FooterText = $this->getVar('cronFooterText');
@@ -73,11 +66,6 @@ public function UserReports($args) {
         $uEmail = 0;
         $uOk = 0;
         foreach ($news as $userId => $userNews) {
-            /*echo $userId."<br>";
-            echo "<pre>";
-        print_r($userNews);
-        echo "</pre>";
-        exit();*/
             //get subscriber info
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             $subscribeNews = ModUtil::apiFunc('IWmain', 'user', 'userVarExists', array('name' => 'subscribeNews',

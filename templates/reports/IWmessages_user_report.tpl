@@ -1,8 +1,10 @@
-<a href="{modurl moname="IWmessages" type="user" func="main"}">{gt text="Messages"}</a>:<br>
+<!--<a href="{modurl modname="IWmessages" type="user" func="main"}">{gt text="Messages"}</a>:<br>-->
+<ul>
 {foreach from=$messages item="message"}
-<div>
-	<span style="float:left;width:100px">{$message.subject}</span>
-	<span style="float:left;width:100px"> from {$message.from_userid}</span>
-	<span> - &nbsp;{$message.msg_time_tx}</span>
-</div>
+    <li>
+	<span style="font-weight:bold;">{$message.subject}</span>
+        <span style="margin-left:20px;"> from  <span style="color:blue">{$message.from_userName}</span></span>
+	<span style="margin-left:10px;"> - &nbsp;{$message.msg_time_tx}</span>
+</li>
 {/foreach}
+</ul>
